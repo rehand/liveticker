@@ -1,0 +1,40 @@
+<template name="adminTeams">
+    {{> adminNavigation}}
+
+    <div class="page-header">
+        <h1>Teams</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <ul>
+            {{#each teams}}
+                {{> team}}
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <form class="new-team">
+                <div class="inputs">
+                    <h2>Neues Team</h2>
+                    <input type="text" class="form-control floating-label" name="name" placeholder="Name" />
+                    <input type="text" class="form-control floating-label" name="code" placeholder="Kürzel" />
+                    <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> OK</button>
+                    <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+
+<template name="team">
+    <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <a href="{{ pathFor 'adminTeamsDetail' }}"><span title="{{code}}">{{name}}</span></a>
+        <button class="btn btn-default btn-flat btn-xs delete-team" value="{{_id}}"><i class="mdi-navigation-close"></i></button>
+    </li>
+</template>

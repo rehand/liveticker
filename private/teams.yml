@@ -1,0 +1,30 @@
+STU:
+  name: SK Sturm Graz
+  code: STU
+SCR:
+  name: SK Rapid Wien
+  code: SCR
+RBS:
+  name: FC Red Bull Salzburg
+  code: RBS
+SVG:
+  name: SV Scholz Grödig
+  code: SVG
+FAK:
+  name: FK Austria Wien
+  code: FAK
+RIE:
+  name: SV Josko Ried
+  code: RIE
+WAC:
+  name: RZ Pellets WAC
+  code: WAC
+WRN:
+  name: SC Wiener Neustadt
+  code: WRN
+ADM:
+  name: FC Admira Wacker Mödling
+  code: ADM
+ALT:
+  name: CASHPOINT SCR Altach
+  code: ALT
