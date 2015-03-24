@@ -19,7 +19,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-4">
-            {{> newTeam}}
+            {{> insertTeamForm}}
         </div>
     </div>
 </template>
@@ -41,4 +41,16 @@
             <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
         </div>
     </form>
+</template>
+
+<template name="insertTeamForm">
+    {{#autoForm collection="Teams" id="insertTeamsForm" type="method" meteormethod="addTeam" validation="none"}}
+        <div class="inputs">
+            <h2>Neues Team</h2>
+            {{> afQuickField name='name'}}
+            {{> afQuickField name='code'}}
+            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> OK</button>
+            <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
+        </div>
+    {{/autoForm}}
 </template>
