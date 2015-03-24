@@ -44,7 +44,7 @@
 </template>
 
 <template name="insertTeamForm">
-    {{#autoForm collection="Teams" id="insertTeamsForm" type="method" meteormethod="addTeam" validation="none"}}
+    {{#autoForm collection="Teams" id="insertTeamsForm" type="method" meteormethod="addTeam"}}
         <div class="inputs">
             <h2>Neues Team</h2>
             {{> afQuickField name='name'}}
