@@ -15,7 +15,8 @@ Teams.attachSchema(
                     return new Date;
                 }
             },
-            denyUpdate: true
+            denyUpdate: true,
+            optional: true
         },
         updatedAt: {
             type: Date,
@@ -50,10 +51,7 @@ if (Meteor.isServer) {
             //    throw new Meteor.Error("not-authorized");
             //}
 
-            check(team, {
-                name: String,
-                code: String
-            });
+            check(team, Teams.simpleSchema());
 
             if (Teams.findOne({code: team.code}) != null) {
                 throw new Meteor.Error("team-duplicate-code", "Ein Team mit diesem Code existiert bereits!");
