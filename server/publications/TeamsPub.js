@@ -3,5 +3,6 @@ Meteor.publish('Teams', function () {
 });
 
 Meteor.publish('Team', function (code) {
+    check(code, String);
     return Teams.find({code: code});
 });
