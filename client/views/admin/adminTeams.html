@@ -31,18 +31,6 @@
     </li>
 </template>
 
-<template name="newTeam">
-    <form class="new-team">
-        <div class="inputs">
-            <h2>Neues Team</h2>
-            <input type="text" class="form-control floating-label" name="name" placeholder="Name" />
-            <input type="text" class="form-control floating-label" name="code" placeholder="Kürzel" />
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> OK</button>
-            <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
-        </div>
-    </form>
-</template>
-
 <template name="insertTeamForm">
     {{#autoForm collection="Teams" id="insertTeamsForm" type="method" meteormethod="addTeam"}}
         <div class="inputs">
