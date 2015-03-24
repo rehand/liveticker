@@ -59,8 +59,7 @@ if (Meteor.isServer) {
 
             Teams.insert({
                 name: team.name,
-                code: team.code,
-                createdAt: new Date()
+                code: team.code
             });
         },
         deleteTeam: function (id) {
