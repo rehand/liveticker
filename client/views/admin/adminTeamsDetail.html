@@ -20,11 +20,10 @@
 <template name="updateTeamForm">
     {{#autoForm collection="Teams" id="updateTeamsForm" type="method-update" meteormethod="updateTeam" doc=team}}
         <div class="inputs">
-            <h2>Update Team</h2>
+            <h2>Team ändern</h2>
             {{> afQuickField name='name'}}
             {{> afQuickField name='code'}}
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> OK</button>
-            <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
+            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
         </div>
     {{/autoForm}}
 </template>
