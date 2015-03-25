@@ -25,7 +25,7 @@ Teams.attachSchema(
                     return new Date();
                 }
             },
-            denyInsert: true,
+            //denyInsert: true,
             optional: true
         }
     })
@@ -71,28 +71,38 @@ if (Meteor.isServer) {
                 }
             });
         },
-        editTeam: function (team) {
-            check(team, {
-                _id: Meteor.Collection.ObjectID,
-                name: String,
-                code: String
-            });
+        updateTeam: function (team, teamId) {
+            check(team, Object);
+            check(team.$set, Teams.simpleSchema());
+            check(teamId, String);
 
-            if (Teams.findOne(team._id) == null) {
+            //SimpleSchema.messages({wrongPassword: "Wrong password"});
+            //Teams.simpleSchema().namedContext().addInvalidKeys([{name: "name", type: "notUnique"}]);
+
+            var thisTeam = Teams.findOne(teamId);
+            if (thisTeam == null) {
                 throw new Meteor.Error("team-not-found", "Team nicht gefunden!");
             }
 
-            if (Teams.findOne({code: team.code}) != null) {
+            var otherTeam = Teams.findOne({code: team.$set.code});
+            if (otherTeam != null && otherTeam._id !== teamId) {
                 throw new Meteor.Error("team-duplicate-code", "Ein Team mit diesem Code existiert bereits!");
             }
 
-            Teams.update(team._id, {
-                    $set: {
-                        name: team.name,
-                        code: team.code
-                    }
-                }
-            );
+            Teams.update(teamId, team);
+
+            var redirect = {};
+
+            if (thisTeam.code !== team.$set.code) {
+                redirect.template = 'adminTeamsDetail';
+                redirect.param = {
+                    code: team.$set.code
+                };
+            } else {
+                redirect.template = 'adminTeams';
+            }
+
+            return redirect;
         }
     });
 }
