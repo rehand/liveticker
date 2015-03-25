@@ -42,7 +42,7 @@ var hooksObject = {
 
     // Called when any submit operation fails
     onError: function(formType, error) {
-        if (error) {
+        if (error === Object(error) && error.reason) {
             throwError(error.reason);
         }
     }
