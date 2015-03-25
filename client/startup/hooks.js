@@ -30,6 +30,7 @@ var hooksObject = {
 
     // Called when any submit operation succeeds
     onSuccess: function(formType, result) {
+        clearErrors();
         if (result && result.template) {
             if (result.param) {
                 Router.go(result.template, result.param);
