@@ -112,14 +112,7 @@ if (Meteor.isServer) {
 
             var redirect = {};
 
-            if (thisTeam.code !== team.$set.code) {
-                redirect.template = 'adminTeamsDetail';
-                redirect.param = {
-                    code: team.$set.code
-                };
-            } else {
-                redirect.template = 'adminTeams';
-            }
+            redirect.template = 'adminTeams';
 
             return redirect;
         }
