@@ -1,5 +1,15 @@
 Teams = new Mongo.Collection('Teams');
 
+MembersSchema = new SimpleSchema({
+    position: {
+        type: String,
+        allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST']
+    },
+    name: {
+        type: String
+    }
+});
+
 Teams.attachSchema(
     new SimpleSchema({
         name: {
@@ -7,6 +17,10 @@ Teams.attachSchema(
         },
         code: {
             type: String
+        },
+        members: {
+            type: [MembersSchema],
+            optional: true
         },
         createdAt: {
             type: Date,
@@ -25,11 +39,19 @@ Teams.attachSchema(
                     return new Date();
                 }
             },
-            //denyInsert: true,
             optional: true
         }
     })
 );
+
+Teams.helpers({
+   countMembers: function() {
+       if (this.members) {
+           return Object.keys(this.members).length;
+       }
+       return 0;
+   }
+});
 
 if (Meteor.isServer) {
     Teams.allow({
@@ -75,9 +97,6 @@ if (Meteor.isServer) {
             check(team, Object);
             check(team.$set, Teams.simpleSchema());
             check(teamId, String);
-
-            //SimpleSchema.messages({wrongPassword: "Wrong password"});
-            //Teams.simpleSchema().namedContext().addInvalidKeys([{name: "name", type: "notUnique"}]);
 
             var thisTeam = Teams.findOne(teamId);
             if (thisTeam == null) {

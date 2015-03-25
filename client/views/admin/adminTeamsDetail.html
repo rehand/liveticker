@@ -9,10 +9,8 @@
         {{> errors}}
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-md-4">
-            {{> updateTeamForm }}
-        </div>
+    <div>
+        {{> updateTeamForm }}
     </div>
 
 </template>
@@ -23,6 +21,7 @@
             <h2>Team ändern</h2>
             {{> afQuickField name='name'}}
             {{> afQuickField name='code'}}
+            {{> afArrayField name='members' initialCount=team.countMembers}}
             <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
         </div>
     {{/autoForm}}
