@@ -1,25 +1,30 @@
 Teams = new Mongo.Collection('Teams');
 
-MembersSchema = new SimpleSchema({
+KickersSchema = new SimpleSchema({
     position: {
         type: String,
+        label: 'Position',
         allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST']
     },
     name: {
-        type: String
+        type: String,
+        label: 'Name'
     }
 });
 
 Teams.attachSchema(
     new SimpleSchema({
         name: {
-            type: String
+            type: String,
+            label: 'Name'
         },
         code: {
-            type: String
+            type: String,
+            label: 'Kürzel'
         },
-        members: {
-            type: [MembersSchema],
+        kickers: {
+            type: [KickersSchema],
+            label: 'Spieler',
             optional: true
         },
         createdAt: {
@@ -45,9 +50,9 @@ Teams.attachSchema(
 );
 
 Teams.helpers({
-   countMembers: function() {
-       if (this.members) {
-           return Object.keys(this.members).length;
+   countKickers: function() {
+       if (this.kickers) {
+           return Object.keys(this.kickers).length;
        }
        return 0;
    }

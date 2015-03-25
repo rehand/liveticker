@@ -10,7 +10,7 @@
     </div>
 
     <div>
-        {{> updateTeamForm }}
+        {{> updateTeamForm}}
     </div>
 
 </template>
@@ -21,7 +21,7 @@
             <h2>Team ändern</h2>
             {{> afQuickField name='name'}}
             {{> afQuickField name='code'}}
-            {{> afArrayField name='members' initialCount=team.countMembers}}
+            {{> afArrayField name='kickers' initialCount=team.countKickers}}
             <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
         </div>
     {{/autoForm}}
