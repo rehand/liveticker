@@ -5,7 +5,6 @@
 var hooksObject = {
     before: {
         'method-update': function(doc) {
-            console.log(JSON.stringify(doc));
             clearErrors();
             return doc;
         },
