@@ -21,7 +21,7 @@
             <h2>Team ändern</h2>
             {{> afQuickField name='name'}}
             {{> afQuickField name='code'}}
-            {{> afQuickField name='logo'}}
+            {{> afQuickField name='logo' placeholder="Bitte Logo auswählen" remove-label="Entfernen"}}
             {{> afArrayField name='kickers' initialCount=team.countKickers}}
             <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
         </div>

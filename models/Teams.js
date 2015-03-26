@@ -32,10 +32,10 @@ Teams.attachSchema(
             autoform: {
                 afFieldInput: {
                     type: 'fileUpload',
-                    collection: 'Images',
-                    label: 'Logo auswählen'
+                    collection: 'Images'
                 }
             },
+            label: 'Logo',
             optional: true
         },
         createdAt: {
