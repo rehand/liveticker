@@ -29,3 +29,6 @@ zimme:iron-router-active
 tmeasday:errors
 sacha:spin
 aldeed:autoform
+cfs:standard-packages
+cfs:gridfs
+gildaspk:autoform-file-materialize

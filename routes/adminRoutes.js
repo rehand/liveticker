@@ -19,7 +19,10 @@ if (Meteor.isClient) {
         this.route('adminTeamsDetail', {
             path: '/admin/teams/:code',
             waitOn: function() {
-                return [Meteor.subscribe('Team', this.params.code)];
+                return [
+                    Meteor.subscribe('Team', this.params.code),
+                    Meteor.subscribe('TeamLogo', this.params.code)
+                ];
             },
             notFoundTemplate: 'teamNotFound',
             data: function() {

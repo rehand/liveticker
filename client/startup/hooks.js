@@ -5,6 +5,7 @@
 var hooksObject = {
     before: {
         'method-update': function(doc) {
+            console.log(JSON.stringify(doc));
             clearErrors();
             return doc;
         },
@@ -22,10 +23,10 @@ var hooksObject = {
 
     // Called when form does not have a `type` attribute
     //onSubmit: function(insertDoc, updateDoc, currentDoc) {
-        // You must call this.done()!
-        //this.done(); // submitted successfully, call onSuccess
-        //this.done(new Error('foo')); // failed to submit, call onError with the provided error
-        //this.done(null, "foo"); // submitted successfully, call onSuccess with `result` arg set to "foo"
+    //    //You must call this.done()!
+    //    //this.done(); // submitted successfully, call onSuccess
+    //    //this.done(new Error('foo')); // failed to submit, call onError with the provided error
+    //    //this.done(null, "foo"); // submitted successfully, call onSuccess with `result` arg set to "foo"
     //},
 
     // Called when any submit operation succeeds

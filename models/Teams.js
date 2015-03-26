@@ -27,6 +27,17 @@ Teams.attachSchema(
             label: 'Spieler',
             optional: true
         },
+        logo: {
+            type: String,
+            autoform: {
+                afFieldInput: {
+                    type: 'fileUpload',
+                    collection: 'Images',
+                    label: 'Logo auswählen'
+                }
+            },
+            optional: true
+        },
         createdAt: {
             type: Date,
             autoValue: function () {
