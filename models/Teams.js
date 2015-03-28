@@ -84,10 +84,9 @@ if (Meteor.isServer) {
 
     Meteor.methods({
         addTeam: function (team) {
-            // Make sure the user is logged in before inserting a tea,
-            //if (!Meteor.userId()) {
-            //    throw new Meteor.Error("not-authorized");
-            //}
+            if (!Meteor.userId()) {
+                throw new Meteor.Error("not-authorized");
+            }
 
             check(team, Teams.simpleSchema());
 
@@ -101,6 +100,10 @@ if (Meteor.isServer) {
             });
         },
         deleteTeam: function (id) {
+            if (!Meteor.userId()) {
+                throw new Meteor.Error("not-authorized");
+            }
+
             check(id, String);
 
             Teams.remove(id, function (error) {
@@ -110,6 +113,10 @@ if (Meteor.isServer) {
             });
         },
         updateTeam: function (team, teamId) {
+            if (!Meteor.userId()) {
+                throw new Meteor.Error("not-authorized");
+            }
+
             check(team, Object);
             check(team.$set, Teams.simpleSchema());
             check(teamId, String);
