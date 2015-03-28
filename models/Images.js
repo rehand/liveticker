@@ -23,9 +23,11 @@ Images = new FS.Collection("images", {
 if (Meteor.isServer) {
     Images.allow({
         insert: function (userId, doc) {
+            //check(doc, Match.Any);
             return true;
         },
         update: function (userId, doc) {
+            //check(doc, Match.Any);
             return true;
         },
         download: function (userId) {

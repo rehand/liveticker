@@ -124,6 +124,15 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("team-duplicate-code", "Ein Team mit diesem Code existiert bereits!");
             }
 
+            // delete logo if changed/deleted
+            if ((team.$unset !== undefined && team.$unset.logo !== undefined) || (team.$set.logo !== undefined && thisTeam.logo !== team.$set.logo)) {
+                Images.remove(thisTeam.logo, function (error) {
+                    if (error) {
+                        throw new Error("logo-remove", "Während dem Löschen des Logos ist ein Fehler aufgetreten");
+                    }
+                });
+            }
+
             Teams.update(teamId, team);
 
             var redirect = {};
