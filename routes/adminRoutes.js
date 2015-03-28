@@ -40,5 +40,26 @@ if (Meteor.isClient) {
         this.route('adminUsers', {
             path: '/admin/users'
         });
+
+        this.route('adminLogin', {
+            path: '/admin/login'
+        });
+    });
+
+    var requireLogin = function () {
+        if (!Meteor.user()) {
+            if (Meteor.loggingIn()) {
+                return this.render(this.loadingTemplate);
+            } else {
+                return this.render('adminLogin');
+            }
+        } else {
+            this.next();
+        }
+    };
+
+    Router.onBeforeAction(requireLogin, {
+        except: [
+        ]
     });
 }
