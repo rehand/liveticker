@@ -12,53 +12,53 @@ KickersSchema = new SimpleSchema({
     }
 });
 
-Teams.attachSchema(
-    new SimpleSchema({
-        name: {
-            type: String,
-            label: 'Name'
+TeamsSchema = new SimpleSchema({
+    name: {
+        type: String,
+        label: 'Name'
+    },
+    code: {
+        type: String,
+        label: 'Kürzel'
+    },
+    kickers: {
+        type: [KickersSchema],
+        label: 'Spieler',
+        optional: true
+    },
+    logo: {
+        type: String,
+        autoform: {
+            afFieldInput: {
+                type: 'fileUpload',
+                collection: 'Images'
+            }
         },
-        code: {
-            type: String,
-            label: 'Kürzel'
+        label: 'Logo',
+        optional: true
+    },
+    createdAt: {
+        type: Date,
+        autoValue: function () {
+            if (this.isInsert) {
+                return new Date;
+            }
         },
-        kickers: {
-            type: [KickersSchema],
-            label: 'Spieler',
-            optional: true
+        denyUpdate: true,
+        optional: true
+    },
+    updatedAt: {
+        type: Date,
+        autoValue: function() {
+            if (this.isUpdate) {
+                return new Date();
+            }
         },
-        logo: {
-            type: String,
-            autoform: {
-                afFieldInput: {
-                    type: 'fileUpload',
-                    collection: 'Images'
-                }
-            },
-            label: 'Logo',
-            optional: true
-        },
-        createdAt: {
-            type: Date,
-            autoValue: function () {
-                if (this.isInsert) {
-                    return new Date;
-                }
-            },
-            denyUpdate: true,
-            optional: true
-        },
-        updatedAt: {
-            type: Date,
-            autoValue: function() {
-                if (this.isUpdate) {
-                    return new Date();
-                }
-            },
-            optional: true
-        }
-    })
-);
+        optional: true
+    }
+});
+
+Teams.attachSchema(TeamsSchema);
 
 Teams.helpers({
    countKickers: function() {

@@ -32,3 +32,4 @@ cfs:standard-packages
 cfs:gridfs
 gildaspk:autoform-file-materialize
 ian:accounts-ui-bootstrap-3
+momentjs:moment

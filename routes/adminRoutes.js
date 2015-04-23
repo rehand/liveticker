@@ -34,7 +34,22 @@ if (Meteor.isClient) {
 
         this.route('adminTickers', {
             path: '/admin/tickers',
-            data: function() { return Tickers.find(); }
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Tickers'),
+                    Meteor.subscribe('Teams')
+                ];
+            },
+            data: function() {
+                return {
+                    tickers: Tickers.find()
+                };
+            }
+        });
+
+        this.route('adminTickerDetail', {
+            path: '/admin/tickers/:_id',
+            notFoundTemplate: 'tickerNotFound'
         });
 
         this.route('adminUsers', {
