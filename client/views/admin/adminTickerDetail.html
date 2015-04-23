@@ -1,0 +1,31 @@
+<template name="adminTickerDetail">
+    {{> adminNavigation}}
+
+    <div class="page-header">
+        <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}<br/><small>{{kickoffDate ticker.kickoff}}</small></h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            {{#if ticker.getHomeTeam}}
+                {{#with ticker.getHomeTeam}}
+                    {{> teamLogo}}
+                {{/with}}
+            {{/if}}
+            {{#if ticker.getAwayTeam}}
+                {{#with ticker.getAwayTeam}}
+                    {{> teamLogo}}
+                {{/with}}
+            {{/if}}
+        </div>
+    </div>
+
+</template>
+
+<template name="teamLogo">
+    <img class="logo" src="{{getLogo.url}}" alt="Logo von {{name}}" />
+</template>

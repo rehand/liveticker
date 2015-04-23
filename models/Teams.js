@@ -61,12 +61,18 @@ TeamsSchema = new SimpleSchema({
 Teams.attachSchema(TeamsSchema);
 
 Teams.helpers({
-   countKickers: function() {
-       if (this.kickers) {
-           return Object.keys(this.kickers).length;
-       }
-       return 0;
-   }
+    countKickers: function () {
+        if (this.kickers) {
+            return Object.keys(this.kickers).length;
+        }
+        return 0;
+    },
+    getLogo: function () {
+        if (this.logo) {
+            return Images.findOne(this.logo);
+        }
+        return "";
+    }
 });
 
 if (Meteor.isServer) {
