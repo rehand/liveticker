@@ -2,7 +2,12 @@ function loadTeam(team) {
     var teamAlreadyExists = typeof Teams.findOne({ code : team.code }) === 'object';
 
   if (!teamAlreadyExists) {
-      Meteor.call("addTeam", team);
+      check(team, Teams.simpleSchema());
+
+      Teams.insert({
+          name: team.name,
+          code: team.code
+      });
   }
 }
 
