@@ -10,7 +10,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12">
             {{#if ticker.getHomeTeam}}
                 {{#with ticker.getHomeTeam}}
                     {{> teamLogo}}
@@ -24,8 +24,31 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-12 col-md-10">
+            <h2>Ticker:</h2>
+            {{#each ticker.entries}}
+                {{> tickerEntry}}
+            {{/each}}
+            {{> addTickerEntry}}
+        </div>
+    </div>
+
 </template>
 
 <template name="teamLogo">
     <img class="logo" src="{{getLogo.url}}" alt="Logo von {{name}}" />
+</template>
+
+<template name="tickerEntry">
+    {{timestamp}}: {{text}}<br/>
+</template>
+
+<template name="addTickerEntry">
+    <form class="add-ticker-entry">
+        <div class="inputs">
+            <input type="text" name="text" placeholder="Schreiben..." />
+            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-content-send"></i> Senden</button>
+        </div>
+    </form>
 </template>

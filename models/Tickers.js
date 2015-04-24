@@ -6,6 +6,27 @@ var teamsOptionMapper = function () {
     });
 };
 
+TickerEntries = new SimpleSchema({
+    timestamp: {
+        type: Date,
+        label: 'Minute',
+        optional: true,
+        autoValue: function () {
+            if (this.isInsert || this.isUpdate) {
+                return new Date();
+            }
+        }
+    },
+    text: {
+        type: String,
+        label: 'Text'
+    }/*,
+     type: {
+     type: String,
+     allowedValues: ['TEXT','TOR', 'GELB', 'ROT', 'PAUSE', 'ELFMETER', 'WECHSEL']
+     }*/
+});
+
 Tickers.attachSchema(
     new SimpleSchema({
         teamHome: {
@@ -36,7 +57,7 @@ Tickers.attachSchema(
             type: Date,
             autoValue: function () {
                 if (this.isInsert) {
-                    return new Date;
+                    return new Date();
                 }
             },
             denyUpdate: true,
@@ -49,6 +70,11 @@ Tickers.attachSchema(
                     return new Date();
                 }
             },
+            optional: true
+        },
+        entries: {
+            type: [TickerEntries],
+            defaultValue: [],
             optional: true
         }
     })
@@ -85,6 +111,26 @@ if (Meteor.isServer) {
             check(ticker, Tickers.simpleSchema());
 
             Tickers.insert(ticker);
+        },
+        addTickerEntry: function (data) {
+            if (!Meteor.userId()) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(data, Object);
+
+            var tickerId = data.tickerId;
+            check(tickerId, String);
+            var ticker = Tickers.findOne(tickerId);
+
+            if (ticker == null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            var tickerEntry = {text: data.tickerEntryText};
+            check(tickerEntry, TickerEntries);
+
+            Tickers.update(tickerId, {$push: {entries: tickerEntry}});
         }
         //deleteTicker: function (id) {
         //    if (!Meteor.userId()) {

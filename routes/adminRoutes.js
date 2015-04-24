@@ -61,6 +61,10 @@ if (Meteor.isClient) {
                 return {
                     ticker: Tickers.findOne(this.params._id)
                 };
+            },
+            onBeforeAction: function () {
+                Session.set('activeTickerId', this.params._id);
+                this.next();
             }
         });
 
