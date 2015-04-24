@@ -38,7 +38,11 @@
 </template>
 
 <template name="teamLogo">
-    <img class="logo" src="{{getLogo.url}}" alt="Logo von {{name}}" />
+    {{#if getLogo}}
+        <img class="logo" src="{{getLogo.url}}" alt="Logo von {{name}}" />
+    {{else}}
+        <img class="logo" src="dummy.jpg" alt="Logo von {{name}}" />
+    {{/if}}
 </template>
 
 <template name="tickerEntry">
