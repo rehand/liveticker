@@ -8,7 +8,7 @@ Template.addTickerEntry.events({
         var tickerEntryText = event.target.text.value;
         var tickerId = Session.get('activeTickerId');
 
-        Meteor.call("addTickerEntry", {tickerId: tickerId, tickerEntryText: tickerEntryText}, function(error) {
+        Meteor.call("addTickerEntry", {tickerId: tickerId, tickerEntryText: tickerEntryText}, function (error) {
             if (error) {
                 throwError(error.reason);
             }
@@ -16,6 +16,23 @@ Template.addTickerEntry.events({
 
         // Clear form
         event.target.text.value = "";
+
+        // Prevent default form submit
+        return false;
+    }
+});
+
+Template.removeLastTickerEntry.events({
+    "submit .remove-last-ticker-entry": function (event) {
+        event.preventDefault();
+
+        var tickerId = Session.get('activeTickerId');
+
+        Meteor.call("removeLastTickerEntry", tickerId, function(error) {
+            if (error) {
+                throwError(error.reason);
+            }
+        });
 
         // Prevent default form submit
         return false;
