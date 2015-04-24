@@ -138,7 +138,7 @@ if (Meteor.isServer) {
             }
 
             check(tickerId, String);
-            
+
             var ticker = Tickers.findOne(tickerId);
             if (ticker == null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
