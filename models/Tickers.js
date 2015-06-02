@@ -113,7 +113,7 @@ if (Meteor.isServer) {
             Tickers.insert(ticker);
         },
         addTickerEntry: function (data) {
-            if (!Meteor.userId()) {
+            if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
             }
 
@@ -133,7 +133,7 @@ if (Meteor.isServer) {
             Tickers.update(tickerId, {$push: {entries: tickerEntry}});
         },
         removeLastTickerEntry: function (tickerId) {
-            if (!Meteor.userId()) {
+            if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
             }
 

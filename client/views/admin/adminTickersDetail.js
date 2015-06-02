@@ -10,7 +10,8 @@ Template.addTickerEntry.events({
 
         Meteor.call("addTickerEntry", {tickerId: tickerId, tickerEntryText: tickerEntryText}, function (error) {
             if (error) {
-                throwError(error.reason);
+                console.error('error ' + error.reason);
+                //throwError(error.reason);
             }
         });
 
@@ -30,7 +31,8 @@ Template.removeLastTickerEntry.events({
 
         Meteor.call("removeLastTickerEntry", tickerId, function(error) {
             if (error) {
-                throwError(error.reason);
+                console.error('error ' + error.reason);
+                //throwError(error.reason);
             }
         });
 
