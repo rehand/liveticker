@@ -68,6 +68,27 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTickerEdit', {
+            path: '/admin/tickers/:_id/edit',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Ticker', this.params._id),
+                    Meteor.subscribe('Teams'),
+                    Meteor.subscribe('Images')
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params._id)
+                };
+            },
+            onBeforeAction: function () {
+                Session.set('activeTickerId', this.params._id);
+                this.next();
+            }
+        });
+
         this.route('adminUsers', {
             path: '/admin/users'
         });

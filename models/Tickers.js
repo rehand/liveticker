@@ -145,6 +145,29 @@ if (Meteor.isServer) {
             }
 
             Tickers.update(tickerId, {$pop: {entries: 1}});
+        },
+        updateTicker: function (ticker, tickerId) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(ticker, Object);
+            check(ticker.$set, Tickers.simpleSchema());
+            check(tickerId, String);
+
+            var thisTicker = Tickers.findOne(tickerId);
+            if (thisTicker == null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            Tickers.update(tickerId, ticker);
+
+            var redirect = {
+                template: 'adminTickerDetail',
+                param: {'_id': tickerId}
+            };
+
+            return redirect;
         }
         //deleteTicker: function (id) {
         //    if (!Meteor.userId()) {

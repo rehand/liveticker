@@ -2,7 +2,11 @@
     {{> adminNavigation}}
 
     <div class="page-header">
-        <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}<br/><small>{{kickoffDate ticker.kickoff}}</small></h1>
+        <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
+            <a href="{{ pathFor 'adminTickerEdit' _id=ticker._id}}" class="btn btn-primary btn-flat">
+                <i class="mdi-editor-mode-edit"></i> Bearbeiten
+            </a>
+            <br/><small>{{kickoffDate ticker.kickoff}}</small></h1>
     </div>
 
     <div class="row">
