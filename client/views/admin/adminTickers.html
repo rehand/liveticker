@@ -37,7 +37,7 @@
 </template>
 
 <template name="insertTickerForm">
-    {{#autoForm collection="Tickers" id="insertTickersForm" type="method" meteormethod="addTicker" validation="none"}}
+    {{#autoForm collection="Tickers" id="insertTickersForm" type="method" meteormethod="addTicker"}}
         <div class="inputs">
             <h2>Neuen Ticker erstellen</h2>
             {{> afQuickField name='teamHome'}}

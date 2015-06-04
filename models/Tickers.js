@@ -50,7 +50,7 @@ Tickers.attachSchema(
         },
         kickoff: {
             type: Date,
-            optional: true,
+            optional: false,
             label: 'Spieltermin'
         },
         createdAt: {
