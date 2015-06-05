@@ -1,7 +1,7 @@
 <template name="adminTickerDetail">
     {{> adminNavigation}}
 
-    <div class="page-header">
+    <div class="page-header col-xs-12">
         <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
             <a href="{{ pathFor 'adminTickerEdit' _id=ticker._id}}" class="btn btn-primary btn-flat">
                 <i class="mdi-content-create"></i> Bearbeiten
