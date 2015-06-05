@@ -155,7 +155,7 @@ if (Meteor.isServer) {
             Teams.update(teamId, team);
 
             var redirect = {
-                template: 'adminTeamsDetail',
+                template: 'adminTeamDetail',
                 param: {code: thisTeam.code}
             };
 

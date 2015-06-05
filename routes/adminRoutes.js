@@ -23,7 +23,7 @@ if (Meteor.isClient) {
             }
         });
 
-        this.route('adminTeamsDetail', {
+        this.route('adminTeamDetail', {
             path: '/admin/teams/:code',
             waitOn: function() {
                 return [
