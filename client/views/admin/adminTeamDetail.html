@@ -15,7 +15,19 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-6">
+            <h2>Spieler</h2>
+            <ul>
+                {{#each team.kickers}}
+                    <li>
+                        {{> kicker}}
+                    </li>
+                {{/each}}
+            </ul>
         </div>
     </div>
 
+</template>
+
+<template name="kicker">
+    <span>{{name}} ({{position}})</span>
 </template>
