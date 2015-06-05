@@ -154,9 +154,10 @@ if (Meteor.isServer) {
 
             Teams.update(teamId, team);
 
-            var redirect = {};
-
-            redirect.template = 'adminTeams';
+            var redirect = {
+                template: 'adminTeamsDetail',
+                param: {code: thisTeam.code}
+            };
 
             return redirect;
         }

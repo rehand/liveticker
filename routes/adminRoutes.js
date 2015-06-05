@@ -39,6 +39,22 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTeamEdit', {
+            path: '/admin/teams/:code/edit',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Team', this.params.code),
+                    Meteor.subscribe('TeamLogo', this.params.code)
+                ];
+            },
+            notFoundTemplate: 'teamNotFound',
+            data: function() {
+                return {
+                    team: Teams.findOne({code: this.params.code})
+                };
+            }
+        });
+
         this.route('adminTickers', {
             path: '/admin/tickers',
             waitOn: function() {

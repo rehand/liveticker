@@ -1,0 +1,31 @@
+<template name="adminTeamEdit">
+    {{> adminNavigation}}
+
+    <div class="page-header">
+        <h1>{{team.name}}</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {{> updateTeamForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="updateTeamForm">
+    {{#autoForm collection="Teams" id="updateTeamForm" type="method-update" meteormethod="updateTeam" doc=team}}
+        <div class="inputs">
+            <h2>Team ändern</h2>
+            {{> afQuickField name='name'}}
+            {{> afQuickField name='code'}}
+            {{> afQuickField name='logo' placeholder="Bitte Logo auswählen" remove-label="Entfernen"}}
+            {{> afArrayField name='kickers' initialCount=team.countKickers}}
+            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
+        </div>
+    {{/autoForm}}
+</template>
