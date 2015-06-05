@@ -47,6 +47,16 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTickerCreate', {
+            path: '/admin/tickers/create',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Tickers'),
+                    Meteor.subscribe('Teams')
+                ];
+            }
+        });
+
         this.route('adminTickerDetail', {
             path: '/admin/tickers/:_id',
             notFoundTemplate: 'tickerNotFound',

@@ -111,6 +111,12 @@ if (Meteor.isServer) {
             check(ticker, Tickers.simpleSchema());
 
             Tickers.insert(ticker);
+
+            var redirect = {
+                template: 'adminTickers'
+            };
+
+            return redirect;
         },
         addTickerEntry: function (data) {
             if (!this.userId) {

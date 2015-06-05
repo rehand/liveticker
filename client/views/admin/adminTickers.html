@@ -2,7 +2,11 @@
     {{> adminNavigation}}
 
     <div class="page-header">
-        <h1>Tickers</h1>
+        <h1>Tickers
+            <a href="{{ pathFor 'adminTickerCreate' _id=ticker._id}}" class="btn btn-primary btn-flat">
+                <i class="mdi-content-add"></i> Ticker erstellen
+            </a>
+        </h1>
     </div>
 
     <div class="row">
@@ -17,12 +21,6 @@
         </ul>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            {{> insertTickerForm}}
-        </div>
-    </div>
-
 </template>
 
 <template name="ticker">
@@ -34,19 +32,4 @@
         <button class="btn btn-default btn-flat btn-xs delete-ticker" value="{{_id}}"><i class="mdi-navigation-close"></i></button>
         -->
     </li>
-</template>
-
-<template name="insertTickerForm">
-    {{#autoForm collection="Tickers" id="insertTickersForm" type="method" meteormethod="addTicker"}}
-        <div class="inputs">
-            <h2>Neuen Ticker erstellen</h2>
-            {{> afQuickField name='teamHome'}}
-            {{> afQuickField name='teamAway'}}
-            {{> afQuickField name='kickoff' type="datetime-local"}}
-            {{> afQuickField name='published' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
-
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> OK</button>
-            <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
-        </div>
-    {{/autoForm}}
 </template>
