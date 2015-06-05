@@ -71,7 +71,7 @@ Teams.helpers({
         if (this.logo) {
             return Images.findOne(this.logo);
         }
-        return "";
+        return "dummy.jpg";
     }
 });
 

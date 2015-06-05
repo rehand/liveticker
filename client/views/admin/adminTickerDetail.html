@@ -14,16 +14,20 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-md-6">
             {{#if ticker.getHomeTeam}}
-                {{#with ticker.getHomeTeam}}
-                    {{> teamLogo}}
-                {{/with}}
+                <div class="col-xs-6">
+                    {{#with ticker.getHomeTeam}}
+                        {{> teamLogo}}
+                    {{/with}}
+                </div>
             {{/if}}
             {{#if ticker.getAwayTeam}}
-                {{#with ticker.getAwayTeam}}
-                    {{> teamLogo}}
-                {{/with}}
+                <div class="col-xs-6">
+                    {{#with ticker.getAwayTeam}}
+                        {{> teamLogo}}
+                    {{/with}}
+                </div>
             {{/if}}
         </div>
     </div>
@@ -39,14 +43,6 @@
         </div>
     </div>
 
-</template>
-
-<template name="teamLogo">
-    {{#if getLogo}}
-        <img class="logo" src="{{getLogo.url}}" alt="Logo von {{name}}" />
-    {{else}}
-        <img class="logo" src="dummy.jpg" alt="Logo von {{name}}" />
-    {{/if}}
 </template>
 
 <template name="tickerEntry">
