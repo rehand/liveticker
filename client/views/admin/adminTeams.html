@@ -2,7 +2,11 @@
     {{> adminNavigation}}
 
     <div class="page-header">
-        <h1>Teams</h1>
+        <h1>Teams
+            <a href="{{ pathFor 'adminTeamCreate'}}" class="btn btn-primary btn-flat">
+                <i class="mdi-content-add"></i> Team erstellen
+            </a>
+        </h1>
     </div>
 
     <div class="row">
@@ -16,12 +20,6 @@
             {{/each}}
         </ul>
     </div>
-
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            {{> insertTeamForm}}
-        </div>
-    </div>
 </template>
 
 <template name="team">
@@ -29,16 +27,4 @@
         <a href="{{ pathFor 'adminTeamsDetail' }}"><span title="{{code}}">{{name}}</span></a>
         <button class="btn btn-default btn-flat btn-xs delete-team" value="{{_id}}"><i class="mdi-navigation-close"></i></button>
     </li>
-</template>
-
-<template name="insertTeamForm">
-    {{#autoForm collection="Teams" id="insertTeamsForm" type="method" meteormethod="addTeam"}}
-        <div class="inputs">
-            <h2>Neues Team</h2>
-            {{> afQuickField name='name'}}
-            {{> afQuickField name='code'}}
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> OK</button>
-            <button class="btn btn-default btn-flat" type="reset"><i class="mdi-navigation-close"></i> Abbrechen</button>
-        </div>
-    {{/autoForm}}
 </template>

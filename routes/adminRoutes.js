@@ -16,6 +16,13 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTeamCreate', {
+            path: '/admin/teams/create',
+            waitOn: function() {
+                return [Meteor.subscribe('Teams')];
+            }
+        });
+
         this.route('adminTeamsDetail', {
             path: '/admin/teams/:code',
             waitOn: function() {

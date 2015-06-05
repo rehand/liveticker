@@ -104,6 +104,12 @@ if (Meteor.isServer) {
                 name: team.name,
                 code: team.code
             });
+
+            var redirect = {
+                template: 'adminTeams'
+            };
+
+            return redirect;
         },
         deleteTeam: function (id) {
             if (!Meteor.userId()) {
