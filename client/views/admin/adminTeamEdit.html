@@ -2,7 +2,11 @@
     {{> adminNavigation}}
 
     <div class="page-header col-xs-12">
-        <h1>{{team.name}}</h1>
+        <h1>{{team.name}}
+            <a href="{{ pathFor 'adminTeamDelete' code=team.code}}" class="btn btn-danger btn-flat">
+                <i class="mdi-action-delete"></i> Team löschen
+            </a>
+        </h1>
     </div>
 
     <div class="row">

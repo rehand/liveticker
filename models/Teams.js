@@ -111,19 +111,6 @@ if (Meteor.isServer) {
 
             return redirect;
         },
-        deleteTeam: function (id) {
-            if (!Meteor.userId()) {
-                throw new Meteor.Error("not-authorized");
-            }
-
-            check(id, String);
-
-            Teams.remove(id, function (error) {
-                if (error) {
-                    throw new Meteor.Error("team-remove", "Während dem Löschen ist ein Fehler aufgetreten!");
-                }
-            });
-        },
         updateTeam: function (team, teamId) {
             if (!Meteor.userId()) {
                 throw new Meteor.Error("not-authorized");
@@ -157,6 +144,25 @@ if (Meteor.isServer) {
             var redirect = {
                 template: 'adminTeamDetail',
                 param: {code: thisTeam.code}
+            };
+
+            return redirect;
+        },
+        deleteTeam: function (teamCode) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(teamCode, String);
+
+            Teams.remove({code: teamCode}, function (error) {
+                if (error) {
+                    throw new Meteor.Error("team-remove", "Während dem Löschen ist ein Fehler aufgetreten!");
+                }
+            });
+
+            var redirect = {
+                template: 'adminTeams'
             };
 
             return redirect;

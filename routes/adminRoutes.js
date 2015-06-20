@@ -36,6 +36,10 @@ if (Meteor.isClient) {
                 return {
                     team: Teams.findOne({code: this.params.code})
                 };
+            },
+            onBeforeAction: function () {
+                Session.set('activeTeamCode', this.params.code);
+                this.next();
             }
         });
 
@@ -52,6 +56,29 @@ if (Meteor.isClient) {
                 return {
                     team: Teams.findOne({code: this.params.code})
                 };
+            },
+            onBeforeAction: function () {
+                Session.set('activeTeamCode', this.params.code);
+                this.next();
+            }
+        });
+
+        this.route('adminTeamDelete', {
+            path: '/admin/teams/:code/delete',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Team', this.params.code),
+                ];
+            },
+            notFoundTemplate: 'teamNotFound',
+            data: function() {
+                return {
+                    team: Teams.findOne({code: this.params.code})
+                };
+            },
+            onBeforeAction: function () {
+                Session.set('activeTeamCode', this.params.code);
+                this.next();
             }
         });
 
