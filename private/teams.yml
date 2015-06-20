@@ -1,3 +1,4 @@
+# source: http://www.bundesliga.at/downloads/OEFBL_Klubnamen_2014_15.pdf
 STU:
   name: SK Sturm Graz
   code: STU
@@ -10,21 +11,21 @@ RBS:
 SVG:
   name: SV Scholz Grödig
   code: SVG
-FAK:
+AUS:
   name: FK Austria Wien
-  code: FAK
+  code: AUS
 RIE:
   name: SV Josko Ried
   code: RIE
 WAC:
   name: RZ Pellets WAC
   code: WAC
-WRN:
-  name: SC Wiener Neustadt
-  code: WRN
 ADM:
   name: FC Admira Wacker Mödling
   code: ADM
 ALT:
   name: CASHPOINT SCR Altach
   code: ALT
+MAT:
+  name: SV Mattersburg
+  code: MAT
