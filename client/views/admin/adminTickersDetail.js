@@ -6,7 +6,7 @@ Template.addTickerEntry.events({
         event.preventDefault();
 
         var tickerEntryText = event.target.text.value;
-        var tickerId = Session.get('activeTickerId');
+        var tickerId = Router.current().params._id;
 
         Meteor.call("addTickerEntry", {tickerId: tickerId, tickerEntryText: tickerEntryText}, function (error) {
             if (error) {
@@ -27,7 +27,7 @@ Template.removeLastTickerEntry.events({
     "submit .remove-last-ticker-entry": function (event) {
         event.preventDefault();
 
-        var tickerId = Session.get('activeTickerId');
+        var tickerId = Router.current().params._id;
 
         Meteor.call("removeLastTickerEntry", tickerId, function(error) {
             if (error) {

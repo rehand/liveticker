@@ -36,10 +36,6 @@ if (Meteor.isClient) {
                 return {
                     team: Teams.findOne({code: this.params.code})
                 };
-            },
-            onBeforeAction: function () {
-                Session.set('activeTeamCode', this.params.code);
-                this.next();
             }
         });
 
@@ -56,10 +52,6 @@ if (Meteor.isClient) {
                 return {
                     team: Teams.findOne({code: this.params.code})
                 };
-            },
-            onBeforeAction: function () {
-                Session.set('activeTeamCode', this.params.code);
-                this.next();
             }
         });
 
@@ -75,10 +67,6 @@ if (Meteor.isClient) {
                 return {
                     team: Teams.findOne({code: this.params.code})
                 };
-            },
-            onBeforeAction: function () {
-                Session.set('activeTeamCode', this.params.code);
-                this.next();
             }
         });
 
@@ -121,10 +109,6 @@ if (Meteor.isClient) {
                 return {
                     ticker: Tickers.findOne(this.params._id)
                 };
-            },
-            onBeforeAction: function () {
-                Session.set('activeTickerId', this.params._id);
-                this.next();
             }
         });
 
@@ -142,10 +126,6 @@ if (Meteor.isClient) {
                 return {
                     ticker: Tickers.findOne(this.params._id)
                 };
-            },
-            onBeforeAction: function () {
-                Session.set('activeTickerId', this.params._id);
-                this.next();
             }
         });
 
@@ -162,10 +142,6 @@ if (Meteor.isClient) {
                 return {
                     ticker: Tickers.findOne(this.params._id)
                 };
-            },
-            onBeforeAction: function () {
-                Session.set('activeTickerId', this.params._id);
-                this.next();
             }
         });
 

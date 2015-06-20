@@ -5,7 +5,7 @@ Template.adminTickerDelete.events({
     "click .cancel-button": function (event) {
         event.preventDefault();
 
-        Router.go('adminTickerEdit', {_id: Session.get('activeTickerId')});
+        Router.go('adminTickerEdit', {_id: Router.current().params._id});
 
         // Prevent default form submit
         return false;
@@ -16,7 +16,7 @@ Template.adminTickerDelete.events({
     "submit .deleteTickerForm": function (event) {
         event.preventDefault();
 
-        var tickerId = Session.get('activeTickerId');
+        var tickerId = Router.current().params._id;
 
         Meteor.call("deleteTicker", tickerId, function(error, data) {
             if (error) {

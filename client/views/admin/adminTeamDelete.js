@@ -16,7 +16,7 @@ Template.adminTeamDelete.events({
     "submit .deleteTeamForm": function (event) {
         event.preventDefault();
 
-        var teamCode = Session.get('activeTeamCode');
+        var teamCode = Router.current().params.code;
 
         Meteor.call("deleteTeam", teamCode, function(error, data) {
             if (error) {
