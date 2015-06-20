@@ -34,12 +34,14 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-10">
-            <h2>Ticker:</h2>
+            <h2>Ticker</h2>
+            {{> addTickerEntry}}
+            {{> removeLastTickerEntry}}
+        </div>
+        <div class="col-xs-12 col-md-10">
             {{#each ticker.entries}}
                 {{> tickerEntry}}
             {{/each}}
-            {{> addTickerEntry}}
-            {{> removeLastTickerEntry}}
         </div>
     </div>
 
@@ -50,17 +52,21 @@
 </template>
 
 <template name="addTickerEntry">
-    <form class="add-ticker-entry">
-        <div class="inputs">
-            <input type="text" name="text" placeholder="Schreiben..." />
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-content-send"></i> Senden</button>
+    <form class="add-ticker-entry form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-10">
+                <input type="text" class="form-control" name="text" placeholder="Schreiben..." />
+            </div>
+            <div class="col-xs-2">
+                <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-content-send"></i> Senden</button>
+            </div>
         </div>
     </form>
 </template>
 
 <template name="removeLastTickerEntry">
-    <form class="remove-last-ticker-entry">
-        <div class="inputs">
+    <form class="remove-last-ticker-entry form-horizontal">
+        <div class="form-group">
             <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-action-delete"></i> Letzten Eintrag entfernen</button>
         </div>
     </form>
