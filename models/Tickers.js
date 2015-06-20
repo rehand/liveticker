@@ -174,20 +174,26 @@ if (Meteor.isServer) {
             };
 
             return redirect;
+        },
+        deleteTicker: function (tickerId) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+
+            Tickers.remove(tickerId, function (error) {
+                if (error) {
+                    throw new Meteor.Error("ticker-remove", "Während dem Löschen ist ein Fehler aufgetreten!");
+                }
+            });
+
+            var redirect = {
+                template: 'adminTickers'
+            };
+
+            return redirect;
         }
-        //deleteTicker: function (id) {
-        //    if (!Meteor.userId()) {
-        //        throw new Meteor.Error("not-authorized");
-        //    }
-        //
-        //    check(id, String);
-        //
-        //    Teams.remove(id, function (error) {
-        //        if (error) {
-        //            throw new Meteor.Error("team-remove", "Während dem Löschen ist ein Fehler aufgetreten!");
-        //        }
-        //    });
-        //},
         //updateTicker: function (ticker, tickerId) {
         //    if (!Meteor.userId()) {
         //        throw new Meteor.Error("not-authorized");

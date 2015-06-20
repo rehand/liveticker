@@ -2,7 +2,11 @@
     {{> adminNavigation}}
 
     <div class="page-header col-xs-12">
-        <h1>Ticker bearbeiten</h1>
+        <h1>Ticker bearbeiten
+            <a href="{{ pathFor 'adminTickerDelete' _id=ticker._id}}" class="btn btn-danger btn-flat">
+                <i class="mdi-action-delete"></i> Ticker löschen
+            </a>
+        </h1>
     </div>
 
     <div class="row">
@@ -20,7 +24,6 @@
 <template name="updateTickerform">
     {{#autoForm collection="Tickers" id="updateTickerForm" type="method-update" meteormethod="updateTicker" doc=ticker}}
         <div class="inputs">
-            <h2>Ticker ändern</h2>
             {{> afQuickField name='teamHome'}}
             {{> afQuickField name='teamAway'}}
             {{> afQuickField name='kickoff' type="datetime-local"}}

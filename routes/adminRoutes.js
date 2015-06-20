@@ -122,6 +122,26 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTickerDelete', {
+            path: '/admin/tickers/:_id/delete',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Ticker', this.params._id),
+                    Meteor.subscribe('Teams'),
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params._id)
+                };
+            },
+            onBeforeAction: function () {
+                Session.set('activeTickerId', this.params._id);
+                this.next();
+            }
+        });
+
         this.route('adminUsers', {
             path: '/admin/users'
         });

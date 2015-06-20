@@ -1,0 +1,33 @@
+<template name="adminTickerDelete">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Ticker löschen</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            {{ >deleteTickerform}}
+        </div>
+    </div>
+
+</template>
+
+<template name="deleteTickerform">
+    <form class="deleteTickerForm">
+        <div class="col-xs-12">
+            <label>Soll der Ticker {{ticker.getHomeTeam.name}} ({{ticker.getHomeTeam.code}}) vs. {{ticker.getAwayTeam.name}}
+                ({{ticker.getAwayTeam.code}}) am {{ticker.kickoff}} unwideruflich gelöscht werden?</label>
+        </div>
+        <div class="col-xs-12">
+            <div class="inputs">
+                <button class="btn btn-danger btn-flat" type="submit"><i class="mdi-action-delete"></i> Ja</button>
+                <button class="btn btn-primary btn-flat cancel-button" type="button"><i class="mdi-navigation-close"></i> Nein</button>
+            </div>
+        </div>
+    </form>
+</template>
