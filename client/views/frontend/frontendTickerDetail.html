@@ -1,0 +1,55 @@
+<template name="frontendTickerDetail">
+    {{> frontendNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
+            <br/>
+            <small>{{kickoffDate ticker.kickoff}}</small>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="col-xs-6 text-center">
+                <div class="col-xs-12 block-center">
+                    {{#if ticker.getHomeTeam}}
+                        {{#with ticker.getHomeTeam}}
+                            {{> teamLogo}}
+                        {{/with}}
+                    {{/if}}
+                </div>
+                <div class="col-xs-12">
+                    <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
+                </div>
+            </div>
+            <div class="col-xs-6 text-center">
+                <div class="col-xs-12 block-center">
+                    {{#if ticker.getAwayTeam}}
+                        {{#with ticker.getAwayTeam}}
+                            {{> teamLogo}}
+                        {{/with}}
+                    {{/if}}
+                </div>
+                <div class="col-xs-12">
+                    <h1 class="inline-headers">{{ticker.scoreAway}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-10">
+            <h2>Ticker</h2>
+        </div>
+        <div class="col-xs-12 col-md-10">
+            {{#each ticker.entries}}
+                {{> tickerEntry}}
+            {{/each}}
+        </div>
+    </div>
+
+</template>

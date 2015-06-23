@@ -1,0 +1,27 @@
+<template name="frontendTickers">
+  {{> frontendNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Tickers</h1>
+    </div>
+
+    <div class="row">
+      {{> errors}}
+    </div>
+
+    <div class="row">
+        <ul>
+          {{#each tickers}}
+            {{> tickerFrontend}}
+          {{/each}}
+        </ul>
+    </div>
+</template>
+
+<template name="tickerFrontend">
+    <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <a href="{{ pathFor 'frontendTickerDetail' }}">
+            <span title="{{kickoffDate kickoff}}: {{getHomeTeam.code}} - {{getAwayTeam.code}}">{{kickoffDate kickoff}} Uhr: {{getHomeTeam.code}} - {{getAwayTeam.code}}</span>
+        </a>
+    </li>
+</template>
