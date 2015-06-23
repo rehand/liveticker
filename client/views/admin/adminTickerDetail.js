@@ -52,7 +52,7 @@ Template.adminTickerDetail.events({
 
         var currentScore = isHomeScore ? template.data.ticker.scoreHome : template.data.ticker.scoreAway;
 
-        if (currentScore + value >= 0) {
+        if (value > 0 || currentScore + value >= 0) {
             var tickerId = Router.current().params._id;
 
             Meteor.call("changeScore", tickerId, isHomeScore, value, function (error) {
