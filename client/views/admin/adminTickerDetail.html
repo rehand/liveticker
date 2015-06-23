@@ -15,20 +15,34 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-6">
-            {{#if ticker.getHomeTeam}}
-                <div class="col-xs-6">
-                    {{#with ticker.getHomeTeam}}
-                        {{> teamLogo}}
-                    {{/with}}
+            <div class="col-xs-6 text-center">
+                <div class="col-xs-12 block-center">
+                    {{#if ticker.getHomeTeam}}
+                        {{#with ticker.getHomeTeam}}
+                            {{> teamLogo}}
+                        {{/with}}
+                    {{/if}}
                 </div>
-            {{/if}}
-            {{#if ticker.getAwayTeam}}
-                <div class="col-xs-6">
-                    {{#with ticker.getAwayTeam}}
-                        {{> teamLogo}}
-                    {{/with}}
+                <div class="col-xs-12">
+                    <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="home-"></button>
+                    <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
+                    <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="home+"></button>
                 </div>
-            {{/if}}
+            </div>
+            <div class="col-xs-6 text-center">
+                <div class="col-xs-12 block-center">
+                    {{#if ticker.getAwayTeam}}
+                        {{#with ticker.getAwayTeam}}
+                            {{> teamLogo}}
+                        {{/with}}
+                    {{/if}}
+                </div>
+                <div class="col-xs-12">
+                    <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="away-"></button>
+                    <h1 class="inline-headers">{{ticker.scoreAway}}</h1>
+                    <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="away+"></button>
+                </div>
+            </div>
         </div>
     </div>
 

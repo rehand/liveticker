@@ -40,3 +40,28 @@ Template.removeLastTickerEntry.events({
         return false;
     }
 });
+
+Template.adminTickerDetail.events({
+    "click .score-button": function (event, template) {
+        event.preventDefault();
+
+        var type = event.target.getAttribute('data-type');
+
+        var isHomeScore = type.indexOf("home") > -1;
+        var value = ~type.indexOf("+") ? 1 : -1;
+
+        var currentScore = isHomeScore ? template.data.ticker.scoreHome : template.data.ticker.scoreAway;
+
+        if (currentScore + value >= 0) {
+            var tickerId = Router.current().params._id;
+
+            Meteor.call("changeScore", tickerId, isHomeScore, value, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
+
+        return false;
+    }
+});

@@ -53,6 +53,18 @@ Tickers.attachSchema(
             optional: false,
             label: 'Spieltermin'
         },
+        scoreHome: {
+            type: Number,
+            optional: true,
+            defaultValue: 0,
+            min: 0
+        },
+        scoreAway: {
+            type: Number,
+            optional: true,
+            defaultValue: 0,
+            min: 0
+        },
         createdAt: {
             type: Date,
             autoValue: function () {
@@ -193,6 +205,24 @@ if (Meteor.isServer) {
             };
 
             return redirect;
+        },
+        changeScore: function (tickerId, isHomeScore, value) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(isHomeScore, Boolean);
+            check(value, Number);
+
+            if (Math.abs(value) != 1) {
+                throw new Meteor.Error("ticker-changeScore", "Score kann nicht um " + value + " verändert werden!");
+            }
+
+            var inc = {};
+            inc[isHomeScore ? 'scoreHome' : 'scoreAway'] = value;
+
+            Tickers.update(tickerId, {$inc: inc});
         }
         //updateTicker: function (ticker, tickerId) {
         //    if (!Meteor.userId()) {
