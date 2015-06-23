@@ -16,14 +16,14 @@
     <div class="row">
         <ul>
             {{#each tickers}}
-                {{> ticker}}
+                {{> tickerAdmin}}
             {{/each}}
         </ul>
     </div>
 
 </template>
 
-<template name="ticker">
+<template name="tickerAdmin">
     <li class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <a href="{{ pathFor 'adminTickerDetail' }}">
             <span title="{{kickoffDate kickoff}}: {{getHomeTeam.code}} - {{getAwayTeam.code}}">{{kickoffDate kickoff}} Uhr: {{getHomeTeam.code}} - {{getAwayTeam.code}}</span>
