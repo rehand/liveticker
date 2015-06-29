@@ -22,9 +22,10 @@ if (Meteor.isClient) {
             path: '/tickers/:_id',
             notFoundTemplate: 'tickerNotFound',
             waitOn: function() {
+                var tickerId = this.params._id;
                 return [
-                    Meteor.subscribe('Ticker', this.params._id),
-                    Meteor.subscribe('Teams'),
+                    Meteor.subscribe('Ticker', tickerId, true),
+                    Meteor.subscribe('TickerTeams', tickerId, true),
                     Meteor.subscribe('Images')
                 ];
             },
