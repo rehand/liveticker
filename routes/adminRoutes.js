@@ -168,6 +168,8 @@ if (Meteor.isClient) {
 
     Router.onBeforeAction(requireLogin, {
         except: [
+            'frontendTickers',
+            'frontendTickerDetail'
         ]
     });
 }
