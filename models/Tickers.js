@@ -65,6 +65,22 @@ Tickers.attachSchema(
             defaultValue: 0,
             min: 0
         },
+        timeFirstHalfStart: {
+            type: Date,
+            optional: true
+        },
+        timeFirstHalfEnd: {
+            type: Date,
+            optional: true
+        },
+        timeSecondHalfStart: {
+            type: Date,
+            optional: true
+        },
+        timeSecondHalfEnd: {
+            type: Date,
+            optional: true
+        },
         createdAt: {
             type: Date,
             autoValue: function () {
@@ -223,6 +239,32 @@ if (Meteor.isServer) {
             inc[isHomeScore ? 'scoreHome' : 'scoreAway'] = value;
 
             Tickers.update(tickerId, {$inc: inc});
+        },
+        setTime: function (tickerId, timeField) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(timeField, String);
+
+            var data = {};
+            data[timeField] = new Date();
+
+            Tickers.update(tickerId, {$set: data});
+        },
+        resetTime: function (tickerId, timeField) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(timeField, String);
+
+            var data = {};
+            data[timeField] = null;
+
+            Tickers.update(tickerId, {$set: data});
         }
         //updateTicker: function (ticker, tickerId) {
         //    if (!Meteor.userId()) {

@@ -48,6 +48,37 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-10">
+            <h1>Steuerung:</h1>
+            {{#unless ticker.timeFirstHalfStart}}
+                <button class="btn btn-success time-button" data-type="timeFirstHalfStart">Spiel starten</button>
+            {{else}}
+                {{#unless ticker.timeFirstHalfEnd}}
+                    <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfStart">zurück zum Vorbericht</button>
+                    <button class="btn btn-success time-button" data-type="timeFirstHalfEnd">Pause</button>
+                {{else}}
+                    {{#unless ticker.timeSecondHalfStart}}
+                        <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfEnd">zurück zur 1. Halbzeit</button>
+                        <button class="btn btn-success time-button" data-type="timeSecondHalfStart">2. Halbzeit starten</button>
+                    {{else}}
+                        {{#unless ticker.timeSecondHalfEnd}}
+                            <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfStart">zurück zur Pause</button>
+                            <button class="btn btn-success time-button" data-type="timeSecondHalfEnd">Spiel beenden</button>
+                        {{else}}
+                            <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfEnd">zurück zur 2. Halbzeit</button>
+                        {{/unless}}
+                    {{/unless}}
+                {{/unless}}
+            {{/unless}}
+        </div>
+        <div class="col-xs-12 col-md-10">
+            {{#with ticker}}
+                Status: {{gameTime}}
+            {{/with}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-10">
             <h2>Ticker</h2>
             {{> addTickerEntry}}
             {{> removeLastTickerEntry}}
