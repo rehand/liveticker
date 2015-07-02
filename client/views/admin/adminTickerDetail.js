@@ -19,25 +19,46 @@ Template.adminTickerDetail.destroyed = function() {
     Meteor.clearInterval(timer);
 };
 
+Template.registerHelper("entryTime", function() {
+    var ticker = Template.parentData().ticker;
+    return getGameTimeStr(ticker, this.timestamp);
+});
+
 Template.registerHelper("gameTime", function() {
     gameTimeDep.depend();
 
-    serverOffset = serverOffset || 0;
+    if (!serverOffset) {
+        serverOffset = 0;
+    }
+
+    return getGameTimeStr(this);
+});
+
+Template.registerHelper("reverse", function() {
+    return [];
+});
+
+var getGameTimeStr = function (ticker, timeObj) {
+    var timeFrom = timeObj;
+    if (!timeFrom) {
+        timeFrom = new Date();
+    }
+    timeFrom = timeFrom.getTime();
 
     var gameTimeStr;
-    if (this.timeSecondHalfEnd) {
+    if (ticker.timeSecondHalfEnd && ticker.timeSecondHalfEnd.getTime() < timeFrom) {
         gameTimeStr = "Ende";
-    } else if (this.timeSecondHalfStart) {
-        var min = getMinute(this.timeSecondHalfStart, 45);
+    } else if (ticker.timeSecondHalfStart && ticker.timeSecondHalfStart.getTime() < timeFrom) {
+        var min = getMinute(ticker.timeSecondHalfStart, 45, timeFrom);
         if (min > 90) {
             gameTimeStr = "90. Minute + " + (min - 90);
         } else {
             gameTimeStr = min + ". Minute";
         }
-    } else if (this.timeFirstHalfEnd) {
+    } else if (ticker.timeFirstHalfEnd && ticker.timeFirstHalfEnd.getTime() < timeFrom) {
         gameTimeStr = "Pause";
-    } else if (this.timeFirstHalfStart) {
-        var min = getMinute(this.timeFirstHalfStart, 1);
+    } else if (ticker.timeFirstHalfStart && ticker.timeFirstHalfStart.getTime() < timeFrom) {
+        var min = getMinute(ticker.timeFirstHalfStart, 1, timeFrom);
         if (min > 45) {
             gameTimeStr = "45. Minute + " + (min - 45);
         } else {
@@ -48,14 +69,15 @@ Template.registerHelper("gameTime", function() {
     }
 
     return gameTimeStr;
-});
+};
 
-var getMinute = function (timeFrom, offset) {
+var getMinute = function (timeFrom, offset, timeObj) {
     if (!serverOffset) {
         serverOffset = 0;
     }
 
-    var currentTime = new Date().getTime();
+    var currentTime = timeObj;
+
     var timeFirstHalfStart = timeFrom.getTime();
     var result = (currentTime - timeFirstHalfStart - serverOffset) / 60000;
     result = ~~result;
