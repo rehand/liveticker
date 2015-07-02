@@ -164,7 +164,14 @@ if (Meteor.isServer) {
             var tickerEntry = {text: data.tickerEntryText};
             check(tickerEntry, TickerEntries);
 
-            Tickers.update(tickerId, {$push: {entries: tickerEntry}});
+            Tickers.update(tickerId, {
+                $push: {
+                    entries: {
+                        $each: [tickerEntry],
+                        $position: 0
+                    }
+                }
+            });
         },
         removeLastTickerEntry: function (tickerId) {
             if (!this.userId) {
@@ -178,7 +185,7 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            Tickers.update(tickerId, {$pop: {entries: 1}});
+            Tickers.update(tickerId, {$pop: {entries: -1}});
         },
         updateTicker: function (ticker, tickerId) {
             if (!this.userId) {
