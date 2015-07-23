@@ -14,7 +14,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-md-6">
+        <div class="col-xs-12 col-lg-1o">
             <div class="col-xs-4 text-center">
                 <div class="col-xs-12 block-center">
                     {{#if ticker.getHomeTeam}}
@@ -75,7 +75,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-md-10">
+        <div class="col-xs-12 col-lg-10">
             <h1>Steuerung:</h1>
             {{#unless ticker.timeFirstHalfStart}}
                 <button class="btn btn-success time-button" data-type="timeFirstHalfStart">Spiel starten</button>
@@ -104,12 +104,12 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-md-10">
+        <div class="col-xs-12 col-lg-10">
             <h2>Ticker</h2>
             {{> addTickerEntry}}
             {{> removeLastTickerEntry}}
         </div>
-        <div class="col-xs-12 col-md-10">
+        <div class="col-xs-12 col-lg-10">
             {{#each ticker.entries}}
                 {{> tickerEntry}}
             {{/each}}

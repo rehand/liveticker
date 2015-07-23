@@ -13,7 +13,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-md-6">
+        <div class="col-xs-12 col-lg-8">
             <div class="col-xs-4 text-center">
                 <div class="col-xs-12 block-center">
                     {{#if ticker.getHomeTeam}}
@@ -23,7 +23,7 @@
                     {{/if}}
                 </div>
                 <div class="col-xs-12">
-                    <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
+                    <div class="h2">{{ticker.scoreHome}}</div>
                 </div>
                 <div class="col-xs-12">
                     <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
@@ -51,7 +51,7 @@
                     {{/if}}
                 </div>
                 <div class="col-xs-12">
-                    <h1 class="inline-headers">{{ticker.scoreAway}}</h1>
+                    <div class="h2">{{ticker.scoreAway}}</div>
                 </div>
                 <div class="col-xs-12">
                     <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
@@ -69,10 +69,10 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-md-10">
+        <div class="col-xs-12 col-lg-10">
             <h2>Ticker</h2>
         </div>
-        <div class="col-xs-12 col-md-10">
+        <div class="col-xs-12 col-lg-10">
             {{#each ticker.entries}}
                 {{> tickerEntry}}
             {{/each}}
