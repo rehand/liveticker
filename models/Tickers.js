@@ -8,18 +8,19 @@ var teamsOptionMapper = function () {
 
 const POS_ERSATZBANK = "Ersatzbank";
 const POS_NA = "Nicht im Kader";
+const POSITIONS = ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST'];
 
 KickersFormationSchema = new SimpleSchema({
     gamePosition: {
         type: String,
         label: 'Spielposition',
-        allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST', POS_ERSATZBANK, POS_NA],
+        allowedValues: POSITIONS.concat(POS_ERSATZBANK, POS_NA),
         defaultValue: POS_NA
     },
     position: {
         type: String,
         label: 'Hauptposition',
-        allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST'],
+        allowedValues: POSITIONS,
         autoform: {
             readonly: true
         }
