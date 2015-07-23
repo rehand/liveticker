@@ -9,6 +9,11 @@ KickersSchema = new SimpleSchema({
     name: {
         type: String,
         label: 'Name'
+    },
+    number: {
+        type: Number,
+        label: 'Rückennummer',
+        optional: true
     }
 });
 
