@@ -3,5 +3,5 @@
  */
 Template.registerHelper("kickoffDate", function(timestamp) {
     var date = new Date(timestamp);
-    return moment(date).format('DD-MM-YYYY HH:mm');
+    return moment(date).format('DD.MM.YYYY HH:mm');
 });
