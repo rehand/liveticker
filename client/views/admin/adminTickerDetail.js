@@ -47,7 +47,7 @@ var getGameTimeStr = function (ticker, timeObj) {
 
     var gameTimeStr;
     if (ticker.timeSecondHalfEnd && ticker.timeSecondHalfEnd.getTime() < timeFrom) {
-        gameTimeStr = "Ende";
+        gameTimeStr = "Nachberichterstattung";
     } else if (ticker.timeSecondHalfStart && ticker.timeSecondHalfStart.getTime() < timeFrom) {
         var min = getMinute(ticker.timeSecondHalfStart, 45, timeFrom);
         if (min > 90) {
