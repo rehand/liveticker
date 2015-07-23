@@ -80,28 +80,32 @@ Template.adminTickerDetail.events({
     "click .time-button": function (event, template) {
         event.preventDefault();
 
-        var type = event.target.getAttribute('data-type');
-        var tickerId = Router.current().params._id;
+        if (confirm("Möchten Sie wirklich zur nächsten Spielphase wechseln?")) {
+            var type = event.target.getAttribute('data-type');
+            var tickerId = Router.current().params._id;
 
-        Meteor.call("setTime", tickerId, type, function (error) {
-            if (error) {
-                console.error('error ' + error.reason);
-            }
-        });
+            Meteor.call("setTime", tickerId, type, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
 
         return false;
     },
     "click .reset-time-button": function (event, template) {
         event.preventDefault();
 
-        var type = event.target.getAttribute('data-type');
-        var tickerId = Router.current().params._id;
+        if (confirm("Möchten Sie wirklich in die vorherige Spielphase zurückkehren?")) {
+            var type = event.target.getAttribute('data-type');
+            var tickerId = Router.current().params._id;
 
-        Meteor.call("resetTime", tickerId, type, function (error) {
-            if (error) {
-                console.error('error ' + error.reason);
-            }
-        });
+            Meteor.call("resetTime", tickerId, type, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
 
         return false;
     }
