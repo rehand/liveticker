@@ -7,10 +7,14 @@
 <template name="tickerFormationEntry">
     {{#if isInFormation gamePosition}}
         <div class="row">
-            <div class="col-xs-3">{{gamePosition}}</div>
-            <div class="col-xs-9">{{name}}
+            <div class="col-xs-3 text-right">{{gamePosition}}</div>
+            <div class="col-xs-9 text-left">
                 {{#if number}}
-                    ({{number}})
+                    {{number}}&nbsp;
+                {{/if}}
+                {{name}}
+                {{#if isCaptain}}
+                    <strong>(C)</strong>
                 {{/if}}
             </div>
         </div>

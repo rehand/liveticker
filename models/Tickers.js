@@ -29,6 +29,18 @@ KickersFormationSchema = new SimpleSchema({
         type: Number,
         label: 'Rückennummer',
         optional: true
+    },
+    isCaptain: {
+        type: Boolean,
+        label: 'Kapitän',
+        defaultValue: false,
+        autoform: {
+            afFieldInput: {
+                type: "boolean-select",
+                trueLabel: "Ja",
+                falseLabel: "Nein"
+            }
+        }
     }
 });
 
