@@ -145,6 +145,22 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTickerEditFormation', {
+            path: '/admin/tickers/:tickerId/formation',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Ticker', this.params.tickerId),
+                    Meteor.subscribe('Teams')
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params.tickerId)
+                };
+            }
+        });
+
         this.route('adminUsers', {
             path: '/admin/users'
         });

@@ -1,0 +1,34 @@
+<template name="adminTickerEditFormation">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Aufstellung</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        {{#autoForm collection="Tickers" id="updateTickerFormationForm" type="method-update" meteormethod="updateTicker" doc=ticker}}
+            <div class="col-xs-12 col-md-6">
+                <h2>{{ticker.getHomeTeam.name}}</h2>
+                <div class="inputs">
+                    {{> afArrayField name='teamHomeFormation' initialCount=team.countHomeFormation}}
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <h2>{{ticker.getAwayTeam.name}}</h2>
+                <div class="inputs">
+                    {{> afArrayField name='teamAwayFormation' initialCount=team.countAwayFormation}}
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+                <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
+                <button class="btn btn-danger btn-flat cancel-button" type="button"><i class="mdi-navigation-close"></i> Abbrechen</button>
+            </div>
+        {{/autoForm}}
+    </div>
+</template>

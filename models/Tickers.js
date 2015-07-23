@@ -6,6 +6,30 @@ var teamsOptionMapper = function () {
     });
 };
 
+const POS_ERSATZBANK = "Ersatzbank";
+const POS_NA = "Nicht im Kader";
+
+KickersFormationSchema = new SimpleSchema({
+    gamePosition: {
+        type: String,
+        label: 'Spielposition',
+        allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST', POS_ERSATZBANK, POS_NA],
+        defaultValue: POS_NA
+    },
+    position: {
+        type: String,
+        label: 'Hauptposition',
+        allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST'],
+        autoform: {
+            readonly: true
+        }
+    },
+    name: {
+        type: String,
+        label: 'Name'
+    }
+});
+
 TickerEntries = new SimpleSchema({
     timestamp: {
         type: Date,
@@ -104,6 +128,16 @@ Tickers.attachSchema(
             type: [TickerEntries],
             defaultValue: [],
             optional: true
+        },
+        teamHomeFormation: {
+            type: [KickersFormationSchema],
+            label: 'Aufstellung Heimmannschaft',
+            optional: true
+        },
+        teamAwayFormation: {
+            type: [KickersFormationSchema],
+            label: 'Aufstellung Auswärtsmannschaft',
+            optional: true
         }
     })
 );
@@ -114,6 +148,18 @@ Tickers.helpers({
     },
     getAwayTeam: function() {
         return Teams.findOne(this.teamAway);
+    },
+    countHomeFormation: function () {
+        if (this.teamHomeFormation) {
+            return Object.keys(this.teamHomeFormation).length;
+        }
+        return 0;
+    },
+    countAwayFormation: function () {
+        if (this.teamAwayFormation) {
+            return Object.keys(this.teamAwayFormation).length;
+        }
+        return 0;
     }
 });
 
@@ -137,6 +183,21 @@ if (Meteor.isServer) {
             }
 
             check(ticker, Tickers.simpleSchema());
+
+            var teamHome = Teams.findOne(ticker.teamHome);
+            var teamAway = Teams.findOne(ticker.teamAway);
+
+            if (!teamHome || !teamAway) {
+                throw new Meteor.Error("team-not-found", "Team nicht gefunden!");
+            }
+
+            var setPositionNotDefined = function (kicker) {
+                kicker.gameposition = POS_NA;
+                return kicker;
+            };
+
+            ticker.teamHomeFormation = teamHome.kickers.map(setPositionNotDefined);
+            ticker.teamAwayFormation = teamAway.kickers.map(setPositionNotDefined);
 
             Tickers.insert(ticker);
 
@@ -186,7 +247,6 @@ if (Meteor.isServer) {
             }
 
             check(ticker, Object);
-            check(ticker.$set, Tickers.simpleSchema());
             check(tickerId, String);
 
             var thisTicker = Tickers.findOne(tickerId);
