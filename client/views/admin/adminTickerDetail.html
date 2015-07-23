@@ -24,6 +24,17 @@
                     {{/if}}
                 </div>
                 <div class="col-xs-12">
+                    <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
+                        Aufstellung
+                        <i class="glyphicon glyphicon-collapse-up"></i>
+                    </div>
+                    <div id="teamHomeFormation" class="collapse in">
+                        {{#with ticker.teamHomeFormation}}
+                            {{> tickerFormation}}
+                        {{/with}}
+                    </div>
+                </div>
+                <div class="col-xs-12">
                     <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="home-"></button>
                     <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
                     <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="home+"></button>
@@ -42,6 +53,17 @@
                             {{> teamLogo}}
                         {{/with}}
                     {{/if}}
+                </div>
+                <div class="col-xs-12">
+                    <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
+                        Aufstellung
+                        <i class="glyphicon glyphicon-collapse-up"></i>
+                    </div>
+                    <div id="teamAwayFormation" class="collapse in">
+                        {{#with ticker.teamAwayFormation}}
+                            {{> tickerFormation}}
+                        {{/with}}
+                    </div>
                 </div>
                 <div class="col-xs-12">
                     <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="away-"></button>

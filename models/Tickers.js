@@ -6,10 +6,6 @@ var teamsOptionMapper = function () {
     });
 };
 
-const POS_ERSATZBANK = "Ersatzbank";
-const POS_NA = "Nicht im Kader";
-const POSITIONS = ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST'];
-
 KickersFormationSchema = new SimpleSchema({
     gamePosition: {
         type: String,

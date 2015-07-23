@@ -1,0 +1,18 @@
+<template name="tickerFormation">
+    {{#each sortFormation this}}
+        {{> tickerFormationEntry}}
+    {{/each}}
+</template>
+
+<template name="tickerFormationEntry">
+    {{#if isInFormation gamePosition}}
+        <div class="row">
+            <div class="col-xs-3">{{gamePosition}}</div>
+            <div class="col-xs-9">{{name}}
+                {{#if number}}
+                    ({{number}})
+                {{/if}}
+            </div>
+        </div>
+    {{/if}}
+</template>
