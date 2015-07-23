@@ -28,10 +28,7 @@ KickersFormationSchema = new SimpleSchema({
     number: {
         type: Number,
         label: 'Rückennummer',
-        optional: true,
-        autoform: {
-            readonly: true
-        }
+        optional: true
     }
 });
 
