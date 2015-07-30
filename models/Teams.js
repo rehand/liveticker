@@ -4,7 +4,7 @@ KickersSchema = new SimpleSchema({
     position: {
         type: String,
         label: 'Position',
-        allowedValues: ['TW','IV', 'LA', 'RA', 'ZDM', 'ZM', 'ZOM', 'LM', 'RM', 'ST']
+        allowedValues: POSITIONS
     },
     name: {
         type: String,
@@ -89,6 +89,9 @@ Teams.helpers({
             return Images.findOne(this.logo);
         }
         return "dummy.jpg";
+    },
+    getAddEventFormName: function () {
+        return "addEventForm" + this.code;
     }
 });
 

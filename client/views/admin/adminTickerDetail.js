@@ -110,3 +110,22 @@ Template.adminTickerDetail.events({
         return false;
     }
 });
+
+Template.addEvent.helpers({
+    mapFormation: function (formation) {
+        return formation.map(function (entry) {
+            return {
+                label: entry.name,
+                value: entry.id
+            };
+        });
+    },
+    getEventTypes: function () {
+        return EVENT_TYPES.map(function (eventType) {
+            return {
+                label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
+                value: eventType
+            };
+        });
+    }
+});

@@ -7,6 +7,20 @@ var teamsOptionMapper = function () {
 };
 
 KickersFormationSchema = new SimpleSchema({
+    id: {
+        type: Meteor.ObjectId,
+        autoform: {
+            type: "hidden",
+            label: false,
+            readonly: true
+        },
+        optional: true,
+        autoValue: function () {
+            if (!this.isSet) {
+                return new Mongo.ObjectID();
+            }
+        }
+    },
     gamePosition: {
         type: String,
         label: 'Spielposition',
@@ -50,7 +64,7 @@ TickerEntries = new SimpleSchema({
         label: 'Minute',
         optional: true,
         autoValue: function () {
-            if (this.isInsert || this.isUpdate) {
+            if (this.isInsert) {
                 return new Date();
             }
         }
@@ -58,11 +72,33 @@ TickerEntries = new SimpleSchema({
     text: {
         type: String,
         label: 'Text'
-    }/*,
-     type: {
-     type: String,
-     allowedValues: ['TEXT','TOR', 'GELB', 'ROT', 'PAUSE', 'ELFMETER', 'WECHSEL']
-     }*/
+    },
+    eventType: {
+        type: String,
+        allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT),
+        defaultValue: EVENT_TYPE_TEXT
+    },
+    kicker: {
+        type: [KickersFormationSchema],
+        optional: true
+    }
+});
+
+EventSchema = new SimpleSchema({
+    eventType: {
+        type: String,
+        allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT),
+        defaultValue: EVENT_TYPE_TEXT
+    },
+    kicker: {
+        type: String
+    },
+    teamId: {
+        type: String
+    },
+    tickerId: {
+        type: String
+    }
 });
 
 Tickers.attachSchema(
@@ -178,6 +214,15 @@ Tickers.helpers({
 });
 
 if (Meteor.isServer) {
+    function findKickerById(kickers, kickerId) {
+        for (var i = 0; i < kickers.length; i++) {
+            if (kickers[i].id == kickerId) {
+                return kickers[i];
+            }
+        }
+        return undefined;
+    };
+
     Tickers.allow({
         insert: function () {
             return true;
@@ -221,6 +266,43 @@ if (Meteor.isServer) {
 
             return redirect;
         },
+        addEvent: function (data) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(data, Object);
+
+            var tickerId = data.tickerId;
+            check(tickerId, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker == null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            var teamId = data.teamId;
+
+            console.log(JSON.stringify(ticker));
+
+            var kicker;
+            if (ticker.teamHome == teamId) {
+                kicker = findKickerById(ticker.teamHomeFormation, data.kicker);
+            } else if (ticker.teamAway == teamId) {
+                kicker = findKickerById(ticker.teamAwayFormation, data.kicker);
+            } else {
+                throw new Meteor.Error("kicker-not-found", "Spieler nicht gefunden");
+            }
+
+            var event = {
+                eventType: data.eventType,
+                kicker: [kicker],
+                text: data.eventType
+            };
+            check(event, TickerEntries);
+
+            Tickers.update(tickerId, {$push: {entries: event}});
+        },
         addTickerEntry: function (data) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
@@ -236,7 +318,7 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            var tickerEntry = {text: data.tickerEntryText};
+            var tickerEntry = {text: data.tickerEntryText, eventType: EVENT_TYPE_TEXT};
             check(tickerEntry, TickerEntries);
 
             Tickers.update(tickerId, {$push: {entries: tickerEntry}});
