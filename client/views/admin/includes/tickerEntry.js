@@ -1,23 +1,32 @@
 Template.tickerEntry.helpers({
-    isTextEntry: function (eventType) {
-        return eventType === EVENT_TYPE_TEXT;
+    isTextEntry: function () {
+        return this.eventType === EVENT_TYPE_TEXT;
     },
-    isGoalEntry: function (eventType) {
-        return eventType === EVENT_TYPE_GOAL;
+    isGoalEntry: function () {
+        return this.eventType === EVENT_TYPE_GOAL;
     },
-    isOwnGoalEntry: function (eventType) {
-        return eventType === EVENT_TYPE_OWN_GOAL;
+    isOwnGoalEntry: function () {
+        return this.eventType === EVENT_TYPE_OWN_GOAL;
     },
-    isPenaltyEntry: function (eventType) {
-        return eventType === EVENT_TYPE_PENALTY;
+    isPenaltyGoalEntry: function () {
+        return this.eventType == EVENT_TYPE_PENALTY_GOAL;
     },
-    isYellowEntry: function (eventType) {
-        return eventType === EVENT_TYPE_YELLOW_CARD;
+    isPenaltyEntry: function () {
+        return this.eventType === EVENT_TYPE_PENALTY;
     },
-    isYellowRedEntry: function (eventType) {
-        return eventType === EVENT_TYPE_YELLOW_RED_CARD;
+    isYellowEntry: function () {
+        return this.eventType === EVENT_TYPE_YELLOW_CARD;
     },
-    isRedEntry: function (eventType) {
-        return eventType === EVENT_TYPE_RED_CARD;
+    isYellowRedEntry: function () {
+        return this.eventType === EVENT_TYPE_YELLOW_RED_CARD;
+    },
+    isRedEntry: function () {
+        return this.eventType === EVENT_TYPE_RED_CARD;
+    },
+    getTeamName: function () {
+        return Teams.findOne(this.teamId).name;
+    },
+    getTeamCode: function () {
+        return Teams.findOne(this.teamId).code;
     }
 });

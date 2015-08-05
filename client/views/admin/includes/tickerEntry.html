@@ -2,23 +2,31 @@
     <div class="tickerEntry row">
         <div class="col-xs-12 col-sm-3">{{entryTime}}:</div>
         <div class="col-xs-offset-1 col-xs-11 col-sm-offset-0 col-sm-9">
-            {{#if isTextEntry eventType}}
+            {{#if isTextEntry}}
                 {{text}}
             {{else}}
-                {{#if isGoalEntry eventType}}
-                    Tor von {{kicker.[0].name}}!
+                {{#if isGoalEntry}}
+                    Tor von {{kicker.[0].name}} ({{getTeamCode}})!
                 {{else}}
-                    {{#if isOwnGoalEntry eventType}}
-                        Eigentor von {{kicker.[0].name}}!
+                    {{#if isOwnGoalEntry}}
+                        Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!
                     {{else}}
-                        {{#if isYellowEntry eventType}}
-                            Gelbe Karte für {{kicker.[0].name}}!
+                        {{#if isPenaltyGoalEntry}}
+                            Elfmetertor von {{kicker.[0].name}} ({{getTeamCode}})!
                         {{else}}
-                            {{#if isYellowRedEntry eventType}}
-                                Gelb-Rot für {{kicker.[0].name}}!
+                            {{#if isYellowEntry}}
+                                Gelbe Karte für {{kicker.[0].name}} ({{getTeamCode}})!
                             {{else}}
-                                {{#if isRedEntry eventType}}
-                                    Rote Karte für {{kicker.[0].name}}!
+                                {{#if isYellowRedEntry}}
+                                    Gelb-Rot für {{kicker.[0].name}} ({{getTeamCode}})!
+                                {{else}}
+                                    {{#if isRedEntry}}
+                                        Rote Karte für {{kicker.[0].name}} ({{getTeamCode}})!
+                                    {{else}}
+                                        {{#if isPenaltyEntry}}
+                                            Elfmeter für {{getTeamName}}!
+                                        {{/if}}
+                                    {{/if}}
                                 {{/if}}
                             {{/if}}
                         {{/if}}
