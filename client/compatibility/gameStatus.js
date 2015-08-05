@@ -10,7 +10,7 @@ function calcGameTime() {
 }
 
 Template.registerHelper("entryTime", function() {
-    var ticker = Template.parentData().ticker;
+    var ticker = Template.parentData(3).ticker;
     return getGameTimeStr(ticker, this.timestamp);
 });
 
