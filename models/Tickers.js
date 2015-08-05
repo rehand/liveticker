@@ -64,7 +64,7 @@ TickerEntries = new SimpleSchema({
         label: 'Minute',
         optional: true,
         autoValue: function () {
-            if (this.isInsert) {
+            if (!this.isSet) {
                 return new Date();
             }
         }
