@@ -164,8 +164,8 @@
                             {{> afFieldInput name="kicker" type="select" options=this}}
                         {{/with}}
 
-                        {{> afFieldInput name="teamId" value=team._id class="hidden"}}
-                        {{> afFieldInput name="tickerId" value=ticker._id class="hidden"}}
+                        {{> afFieldInput name="teamId" type="hidden" value=team._id }}
+                        {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
