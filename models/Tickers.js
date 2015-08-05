@@ -59,6 +59,20 @@ KickersFormationSchema = new SimpleSchema({
 });
 
 TickerEntries = new SimpleSchema({
+    id: {
+        type: Meteor.ObjectId,
+        autoform: {
+            type: "hidden",
+            label: false,
+            readonly: true
+        },
+        optional: true,
+        autoValue: function () {
+            if (!this.isSet) {
+                return new Mongo.ObjectID();
+            }
+        }
+    },
     timestamp: {
         type: Date,
         label: 'Minute',
