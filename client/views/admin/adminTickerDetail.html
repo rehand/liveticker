@@ -116,7 +116,7 @@
             {{> removeLastTickerEntry}}
         </div>
         <div class="col-xs-12 col-lg-10">
-            {{#each ticker.entries}}
+            {{#each reverseArray ticker.entries}}
                 {{> tickerEntry}}
             {{/each}}
         </div>
