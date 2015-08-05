@@ -81,6 +81,10 @@ TickerEntries = new SimpleSchema({
     kicker: {
         type: [KickersFormationSchema],
         optional: true
+    },
+    teamId: {
+        type: String,
+        optional: true
     }
 });
 
@@ -221,7 +225,17 @@ if (Meteor.isServer) {
             }
         }
         return undefined;
-    };
+    }
+
+    function getChangeScoreUpdateValue(value, isHomeScore) {
+        if (Math.abs(value) != 1) {
+            throw new Meteor.Error("ticker-changeScore", "Score kann nicht um " + value + " verändert werden!");
+        }
+
+        var inc = {};
+        inc[isHomeScore ? 'scoreHome' : 'scoreAway'] = value;
+        return inc;
+    }
 
     Tickers.allow({
         insert: function () {
@@ -283,11 +297,10 @@ if (Meteor.isServer) {
 
             var teamId = data.teamId;
 
-            console.log(JSON.stringify(ticker));
-
-            var kicker;
+            var kicker, isHomeScore = false;
             if (ticker.teamHome == teamId) {
                 kicker = findKickerById(ticker.teamHomeFormation, data.kicker);
+                isHomeScore = true;
             } else if (ticker.teamAway == teamId) {
                 kicker = findKickerById(ticker.teamAwayFormation, data.kicker);
             } else {
@@ -297,11 +310,18 @@ if (Meteor.isServer) {
             var event = {
                 eventType: data.eventType,
                 kicker: [kicker],
-                text: data.eventType
+                text: data.eventType,
+                teamId: teamId
             };
             check(event, TickerEntries);
 
-            Tickers.update(tickerId, {$push: {entries: event}});
+            var updateData = {$push: {entries: event}};
+
+            if (event.eventType === EVENT_TYPE_GOAL || event.eventType === EVENT_TYPE_PENALTY_GOAL || event.eventType === EVENT_TYPE_OWN_GOAL) {
+                updateData['$inc'] = getChangeScoreUpdateValue(1, event.eventType === EVENT_TYPE_OWN_GOAL ? !isHomeScore : isHomeScore);
+            }
+
+            Tickers.update(tickerId, updateData);
         },
         addTickerEntry: function (data) {
             if (!this.userId) {
@@ -387,12 +407,7 @@ if (Meteor.isServer) {
             check(isHomeScore, Boolean);
             check(value, Number);
 
-            if (Math.abs(value) != 1) {
-                throw new Meteor.Error("ticker-changeScore", "Score kann nicht um " + value + " verändert werden!");
-            }
-
-            var inc = {};
-            inc[isHomeScore ? 'scoreHome' : 'scoreAway'] = value;
+            var inc = getChangeScoreUpdateValue(value, isHomeScore);
 
             Tickers.update(tickerId, {$inc: inc});
         },
