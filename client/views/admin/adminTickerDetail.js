@@ -129,3 +129,11 @@ Template.addEvent.helpers({
         });
     }
 });
+
+Template.addEvent.events({
+    "submit .addEventForm": function (event, template) {
+        var formId = event.target.id;
+        AutoForm.resetForm(formId, template);
+        $('#' + formId).find('button.close').click();
+    }
+});

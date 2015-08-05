@@ -152,7 +152,7 @@
     <div class="modal fade" id="eventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="eventModal{{team.code}}Label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                {{#autoForm schema="EventSchema" id=team.getAddEventFormName type="method" meteormethod="addEvent"}}
+                {{#autoForm schema="EventSchema" id=team.getAddEventFormName class="addEventForm" type="method" meteormethod="addEvent"}}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="eventModal{{team.code}}Label">Event {{team.name}}</h4>
@@ -168,7 +168,7 @@
                         {{> afFieldInput name="tickerId" value=ticker._id class="hidden"}}
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-flat" type="submit" ><i class="mdi-navigation-check"></i> Speichern</button>
+                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
                         <button class="btn btn-danger btn-flat" type="button" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
                     </div>
                 {{/autoForm}}
