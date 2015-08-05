@@ -24,10 +24,6 @@ Template.registerHelper("gameTime", function() {
     return getGameTimeStr(this);
 });
 
-Template.registerHelper("reverse", function() {
-    return [];
-});
-
 var getGameTimeStr = function (ticker, timeObj) {
     var timeFrom = timeObj;
     if (!timeFrom) {
