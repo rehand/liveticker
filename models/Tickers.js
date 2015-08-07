@@ -78,7 +78,7 @@ TickerEntries = new SimpleSchema({
         label: 'Minute',
         optional: true,
         autoValue: function () {
-            if (!this.isSet) {
+            if (!this.isSet && this.operator !== "$pull") {
                 return new Date();
             }
         }
@@ -305,7 +305,7 @@ if (Meteor.isServer) {
             check(tickerId, String);
 
             var ticker = Tickers.findOne(tickerId);
-            if (ticker == null) {
+            if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
@@ -348,7 +348,7 @@ if (Meteor.isServer) {
             check(tickerId, String);
 
             var ticker = Tickers.findOne(tickerId);
-            if (ticker == null) {
+            if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
@@ -366,12 +366,12 @@ if (Meteor.isServer) {
             check(entryId, String);
 
             var ticker = Tickers.findOne(tickerId);
-            if (ticker == null) {
+            if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
             //console.log(JSON.stringify({$pull: {'entries': {'id': entryId}}}));
-            Tickers.update({id: tickerId}, {$pull: {'entries': {'id': entryId}}});
+            Tickers.update({_id: tickerId}, {$pull: {'entries': {'id': entryId}}});
         },
         removeLastTickerEntry: function (tickerId) {
             if (!this.userId) {
@@ -381,7 +381,7 @@ if (Meteor.isServer) {
             check(tickerId, String);
 
             var ticker = Tickers.findOne(tickerId);
-            if (ticker == null) {
+            if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
@@ -396,7 +396,7 @@ if (Meteor.isServer) {
             check(tickerId, String);
 
             var thisTicker = Tickers.findOne(tickerId);
-            if (thisTicker == null) {
+            if (thisTicker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
