@@ -113,7 +113,6 @@
         <div class="col-xs-12 col-lg-10">
             <h2>Ticker</h2>
             {{> addTickerEntry}}
-            {{> removeLastTickerEntry}}
         </div>
         <div class="col-xs-12 col-lg-10">
             {{#each reverseArray ticker.entries}}
@@ -133,14 +132,6 @@
             <div class="col-xs-2">
                 <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-content-send"></i> Senden</button>
             </div>
-        </div>
-    </form>
-</template>
-
-<template name="removeLastTickerEntry">
-    <form class="remove-last-ticker-entry form-horizontal">
-        <div class="form-group">
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-action-delete"></i> Letzten Eintrag entfernen</button>
         </div>
     </form>
 </template>

@@ -393,20 +393,6 @@ if (Meteor.isServer) {
 
             Tickers.update({_id: tickerId}, updateData);
         },
-        removeLastTickerEntry: function (tickerId) {
-            if (!this.userId) {
-                throw new Meteor.Error("not-authorized");
-            }
-
-            check(tickerId, String);
-
-            var ticker = Tickers.findOne(tickerId);
-            if (ticker === null) {
-                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
-            }
-
-            Tickers.update(tickerId, {$pop: {entries: 1}});
-        },
         updateTicker: function (ticker, tickerId) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");

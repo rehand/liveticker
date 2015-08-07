@@ -36,24 +36,6 @@ Template.addTickerEntry.events({
     }
 });
 
-Template.removeLastTickerEntry.events({
-    "submit .remove-last-ticker-entry": function (event) {
-        event.preventDefault();
-
-        var tickerId = Router.current().params._id;
-
-        Meteor.call("removeLastTickerEntry", tickerId, function(error) {
-            if (error) {
-                console.error('error ' + error.reason);
-                //throwError(error.reason);
-            }
-        });
-
-        // Prevent default form submit
-        return false;
-    }
-});
-
 Template.adminTickerDetail.events({
     "click .score-button": function (event, template) {
         event.preventDefault();
