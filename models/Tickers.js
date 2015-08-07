@@ -8,7 +8,7 @@ var teamsOptionMapper = function () {
 
 KickersFormationSchema = new SimpleSchema({
     id: {
-        type: Meteor.ObjectId,
+        type: String,
         autoform: {
             type: "hidden",
             label: false,
@@ -17,7 +17,7 @@ KickersFormationSchema = new SimpleSchema({
         optional: true,
         autoValue: function () {
             if (!this.isSet) {
-                return new Mongo.ObjectID();
+                return new Mongo.Collection.ObjectID()._str;
             }
         }
     },
@@ -60,7 +60,7 @@ KickersFormationSchema = new SimpleSchema({
 
 TickerEntries = new SimpleSchema({
     id: {
-        type: Meteor.ObjectId,
+        type: String,
         autoform: {
             type: "hidden",
             label: false,
@@ -69,7 +69,7 @@ TickerEntries = new SimpleSchema({
         optional: true,
         autoValue: function () {
             if (!this.isSet) {
-                return new Mongo.ObjectID();
+                return new Mongo.Collection.ObjectID()._str;
             }
         }
     },
@@ -356,6 +356,22 @@ if (Meteor.isServer) {
             check(tickerEntry, TickerEntries);
 
             Tickers.update(tickerId, {$push: {entries: tickerEntry}});
+        },
+        deleteTickerEntry: function (tickerId, entryId) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(entryId, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker == null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            //console.log(JSON.stringify({$pull: {'entries': {'id': entryId}}}));
+            Tickers.update({id: tickerId}, {$pull: {'entries': {'id': entryId}}});
         },
         removeLastTickerEntry: function (tickerId) {
             if (!this.userId) {

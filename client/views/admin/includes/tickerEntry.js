@@ -30,3 +30,23 @@ Template.tickerEntry.helpers({
         return Teams.findOne(this.teamId).code;
     }
 });
+
+Template.adminTickerDetail.events({
+    "click .delete-entry": function (event, template) {
+        event.preventDefault();
+
+        var entryId = event.target.getAttribute('data-entry-id');
+
+        if (confirm("Möchten Sie den Eintrag wirklich unwiderruflich löschen?")) {
+            var tickerId = Router.current().params._id;
+
+            Meteor.call("deleteTickerEntry", tickerId, entryId, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
+
+        return false;
+    }
+});

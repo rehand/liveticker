@@ -3,7 +3,7 @@
         <div class="col-xs-12 col-sm-3">
             {{#if showButtons }}
                 <button class="btn btn-default btn-xs mdi-content-create no-margin"></button>
-                <button class="btn btn-default btn-xs mdi-action-delete no-margin"></button>
+                <button class="btn btn-default btn-xs mdi-action-delete no-margin delete-entry" data-entry-id="{{entry.id}}"></button>
             {{/if}}
             {{#with entry}}
                 {{entryTime}}:
