@@ -232,6 +232,10 @@ Tickers.helpers({
 });
 
 if (Meteor.isServer) {
+    function isGoalEvent(event) {
+        return event.eventType === EVENT_TYPE_GOAL || event.eventType === EVENT_TYPE_PENALTY_GOAL || event.eventType === EVENT_TYPE_OWN_GOAL;
+    }
+
     function findKickerById(kickers, kickerId) {
         for (var i = 0; i < kickers.length; i++) {
             if (kickers[i].id == kickerId) {
@@ -331,7 +335,7 @@ if (Meteor.isServer) {
 
             var updateData = {$push: {entries: event}};
 
-            if (event.eventType === EVENT_TYPE_GOAL || event.eventType === EVENT_TYPE_PENALTY_GOAL || event.eventType === EVENT_TYPE_OWN_GOAL) {
+            if (isGoalEvent(event)) {
                 updateData['$inc'] = getChangeScoreUpdateValue(1, event.eventType === EVENT_TYPE_OWN_GOAL ? !isHomeScore : isHomeScore);
             }
 
@@ -370,8 +374,24 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            //console.log(JSON.stringify({$pull: {'entries': {'id': entryId}}}));
-            Tickers.update({_id: tickerId}, {$pull: {'entries': {'id': entryId}}});
+            var updateData = {$pull: {'entries': {'id': entryId}}};
+
+            var entries_filtered = ticker.entries.filter(function (entry) {
+                return entry.id === entryId;
+            });
+
+            if (entries_filtered.length > 0) {
+                var event = entries_filtered[0];
+                // reduce score if goal event
+                if (event.teamId && isGoalEvent(event)) {
+                    var isHomeScore = event.teamId === ticker.teamHome && event.eventType !== EVENT_TYPE_OWN_GOAL;
+                    if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
+                        updateData['$inc'] = getChangeScoreUpdateValue(-1, isHomeScore);
+                    }
+                }
+            }
+
+            Tickers.update({_id: tickerId}, updateData);
         },
         removeLastTickerEntry: function (tickerId) {
             if (!this.userId) {
