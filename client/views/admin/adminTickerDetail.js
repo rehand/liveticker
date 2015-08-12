@@ -118,3 +118,29 @@ Template.addEvent.events({
         $('#' + formId).find('button.close').click();
     }
 });
+
+Template.addTeamEvent.helpers({
+    mapTeams: function (ticker) {
+        return [ticker.getHomeTeam(), ticker.getAwayTeam()].map(function (team) {
+            return {
+                label: team.name,
+                value: team._id
+            };
+        });
+    },
+    getTeamEventTypes: function () {
+        return [EVENT_TYPE_PENALTY].map(function (eventType) {
+            return {
+                label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
+                value: eventType
+            };
+        });
+    }
+});
+
+Template.addTeamEvent.events({
+    "submit .addTeamEventForm": function (event, template) {
+        var formId = event.target.id;
+        $('#' + formId).find('button.close').click();
+    }
+});

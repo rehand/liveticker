@@ -106,6 +106,8 @@
 
             <a href="{{ pathFor 'adminTickerEditFormation' _id=ticker._id}}" class="btn btn-primary">Aufstellung</a>
 
+            {{> addTeamEvent ticker=ticker}}
+
         </div>
     </div>
 
@@ -156,6 +158,38 @@
                         {{/with}}
 
                         {{> afFieldInput name="teamId" type="hidden" value=team._id }}
+                        {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
+                        <button class="btn btn-danger btn-flat" type="button" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                    </div>
+                {{/autoForm}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="addTeamEvent">
+    <button class="btn btn-primary team-event-button" data-toggle="modal" data-target="#teamEventModal">
+        <i class="fa fa-futbol-o"></i> Elfmeter
+    </button>
+    <div class="modal fade" id="teamEventModal" tabindex="-1" role="dialog" aria-labelledby="teamEventModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{#autoForm schema="EventSchema" id="teamEventModalForm" class="addTeamEventForm" type="method" meteormethod="addEvent"}}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="teamEventModalLabel">Elfmeter</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{> afFieldInput name="eventType" options=getTeamEventTypes type="select" noselect="true"}}
+
+                        {{#with mapTeams ticker}}
+                            {{> afFieldInput name="teamId" type="select" options=this}}
+                        {{/with}}
+
+                        {{> afFieldInput name="kicker" type="hidden" value=KICKER_ID_DUMMY}}
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">

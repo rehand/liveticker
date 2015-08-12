@@ -315,19 +315,21 @@ if (Meteor.isServer) {
 
             var teamId = data.teamId;
 
-            var kicker, isHomeScore = false;
-            if (ticker.teamHome == teamId) {
-                kicker = findKickerById(ticker.teamHomeFormation, data.kicker);
-                isHomeScore = true;
-            } else if (ticker.teamAway == teamId) {
-                kicker = findKickerById(ticker.teamAwayFormation, data.kicker);
-            } else {
-                throw new Meteor.Error("kicker-not-found", "Spieler nicht gefunden");
+            var kicker = [], isHomeScore = false;
+            if (data.kicker !== KICKER_ID_DUMMY) {
+                if (ticker.teamHome == teamId) {
+                    kicker = [findKickerById(ticker.teamHomeFormation, data.kicker)];
+                    isHomeScore = true;
+                } else if (ticker.teamAway == teamId) {
+                    kicker = [findKickerById(ticker.teamAwayFormation, data.kicker)];
+                } else {
+                    throw new Meteor.Error("kicker-not-found", "Spieler nicht gefunden");
+                }
             }
 
             var event = {
                 eventType: data.eventType,
-                kicker: [kicker],
+                kicker: kicker,
                 text: data.eventType,
                 teamId: teamId
             };
