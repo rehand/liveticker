@@ -183,13 +183,13 @@
                         <h4 class="modal-title" id="teamEventModalLabel">Elfmeter</h4>
                     </div>
                     <div class="modal-body">
-                        {{> afFieldInput name="eventType" options=getTeamEventTypes type="select" noselect="true"}}
+                        {{> afFieldInput name="eventType" options=getTeamEventTypes type="select-radio-inline"}}
 
                         {{#with mapTeams ticker}}
-                            {{> afFieldInput name="teamId" type="select" options=this}}
+                            {{> afFieldInput name="teamId" type="select-radio-inline" options=this}}
                         {{/with}}
 
-                        {{> afFieldInput name="kicker" type="hidden" value=KICKER_ID_DUMMY}}
+                        {{> afFieldInput name="kicker" type="hidden" value="NULL"}}
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">
