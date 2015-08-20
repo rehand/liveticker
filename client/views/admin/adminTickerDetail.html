@@ -26,7 +26,6 @@
                 <div class="col-xs-12">
                     <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
                         Aufstellung
-                        <i class="glyphicon glyphicon-collapse-up"></i>
                     </div>
                     <div id="teamHomeFormation" class="collapse in">
                         {{#with ticker.teamHomeFormation}}
@@ -61,7 +60,6 @@
                 <div class="col-xs-12">
                     <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
                         Aufstellung
-                        <i class="glyphicon glyphicon-collapse-up"></i>
                     </div>
                     <div id="teamAwayFormation" class="collapse in">
                         {{#with ticker.teamAwayFormation}}
@@ -84,40 +82,45 @@
 
     <div class="row">
         <div class="col-xs-12 col-lg-10">
-            <h1>Steuerung:</h1>
-            {{#unless ticker.timeFirstHalfStart}}
-                <button class="btn btn-success time-button" data-type="timeFirstHalfStart">Spiel starten</button>
-            {{else}}
-                {{#unless ticker.timeFirstHalfEnd}}
-                    <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfStart">zurück zum Vorbericht</button>
-                    <button class="btn btn-success time-button" data-type="timeFirstHalfEnd">Pause</button>
+            <div data-toggle="collapse" data-target="#tickerControl">
+                <h1>Steuerung</h1>
+            </div>
+
+            <div class="collapse in" id="tickerControl">
+                {{#unless ticker.timeFirstHalfStart}}
+                    <button class="btn btn-success time-button" data-type="timeFirstHalfStart">Spiel starten</button>
                 {{else}}
-                    {{#unless ticker.timeSecondHalfStart}}
-                        <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfEnd">zurück zur 1. Halbzeit</button>
-                        <button class="btn btn-success time-button" data-type="timeSecondHalfStart">2. Halbzeit starten</button>
+                    {{#unless ticker.timeFirstHalfEnd}}
+                        <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfStart">zurück zum Vorbericht</button>
+                        <button class="btn btn-success time-button" data-type="timeFirstHalfEnd">Pause</button>
                     {{else}}
-                        {{#unless ticker.timeSecondHalfEnd}}
-                            <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfStart">zurück zur Pause</button>
-                            <button class="btn btn-success time-button" data-type="timeSecondHalfEnd">Spiel beenden</button>
+                        {{#unless ticker.timeSecondHalfStart}}
+                            <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfEnd">zurück zur 1. Halbzeit</button>
+                            <button class="btn btn-success time-button" data-type="timeSecondHalfStart">2. Halbzeit starten</button>
                         {{else}}
-                            <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfEnd">zurück zur 2. Halbzeit</button>
+                            {{#unless ticker.timeSecondHalfEnd}}
+                                <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfStart">zurück zur Pause</button>
+                                <button class="btn btn-success time-button" data-type="timeSecondHalfEnd">Spiel beenden</button>
+                            {{else}}
+                                <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfEnd">zurück zur 2. Halbzeit</button>
+                            {{/unless}}
                         {{/unless}}
                     {{/unless}}
                 {{/unless}}
-            {{/unless}}
 
-            <a href="{{ pathFor 'adminTickerEditFormation' _id=ticker._id}}" class="btn btn-primary">Aufstellung</a>
+                <a href="{{ pathFor 'adminTickerEditFormation' _id=ticker._id}}" class="btn btn-primary">Aufstellung</a>
 
-            {{> addTeamEvent ticker=ticker}}
+                {{> addTeamEvent ticker=ticker}}
+            </div>
 
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-lg-10">
-            <h2>Kommentare</h2>
+        <div class="col-xs-12 col-lg-10" data-toggle="collapse" data-target="#tickerComments">
+            <h2>Kommentare <span class="badge">{{ticker.comments.length}}</span></h2>
         </div>
-        <div class="col-xs-12 col-lg-10">
+        <div class="col-xs-12 col-lg-10 collapse in" id="tickerComments">
             {{#each ticker.comments}}
                 {{> tickerComment}}
             {{else}}
@@ -127,11 +130,11 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-lg-10">
+        <div class="col-xs-12 col-lg-10" data-toggle="collapse" data-target="#tickerEntries">
             <h2>Ticker</h2>
-            {{> addTickerEntry}}
         </div>
-        <div class="col-xs-12 col-lg-10">
+        <div class="col-xs-12 col-lg-10 collapse in" id="tickerEntries">
+            {{> addTickerEntry}}
             {{#each reverseArray ticker.entries}}
                 {{> tickerEntry entry=this showButtons=true}}
             {{/each}}
