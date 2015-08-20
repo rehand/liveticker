@@ -17,6 +17,7 @@
                     {{text}}
                 {{else}}
                     {{#if isGoalEntry}}
+                        <i class="fa fa-futbol-o"></i>
                         {{#if isSturmGraz}}
                             TOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR
                         {{else}}
@@ -25,9 +26,11 @@
                         von {{kicker.[0].name}} ({{getTeamCode}})!
                     {{else}}
                         {{#if isOwnGoalEntry}}
+                            <i class="fa fa-futbol-o"></i>
                             Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!
                         {{else}}
                             {{#if isPenaltyGoalEntry}}
+                                <i class="fa fa-futbol-o"></i>
                                 Elfmetertor von {{kicker.[0].name}} ({{getTeamCode}})!
                             {{else}}
                                 {{#if isYellowEntry}}
