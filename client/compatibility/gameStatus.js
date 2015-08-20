@@ -42,7 +42,7 @@ var getGameTimeStr = function (ticker, timeObj) {
             gameTimeStr = min + ". Minute";
         }
     } else if (ticker.timeFirstHalfEnd && ticker.timeFirstHalfEnd.getTime() < timeFrom) {
-        gameTimeStr = "Pause";
+        gameTimeStr = "Halbzeit";
     } else if (ticker.timeFirstHalfStart && ticker.timeFirstHalfStart.getTime() < timeFrom) {
         var min = getMinute(ticker.timeFirstHalfStart, 1, timeFrom);
         if (min > 45) {
