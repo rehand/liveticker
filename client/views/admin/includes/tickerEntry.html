@@ -36,6 +36,10 @@
                                         {{else}}
                                             {{#if isPenaltyEntry}}
                                                 Elfmeter für {{getTeamName}}!
+                                            {{else}}
+                                                {{#if isSubstitutionEntry}}
+                                                    Spielerwechsel bei {{getTeamName}}: <span class="line-through">{{kicker.[0].name}}</span> ↔ {{kicker.[1].name}}
+                                                {{/if}}
                                             {{/if}}
                                         {{/if}}
                                     {{/if}}

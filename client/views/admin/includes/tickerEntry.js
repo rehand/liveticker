@@ -23,6 +23,9 @@ Template.tickerEntry.helpers({
     isRedEntry: function () {
         return this.eventType === EVENT_TYPE_RED_CARD;
     },
+    isSubstitutionEntry: function () {
+        return this.eventType === EVENT_TYPE_SUBSTITUTION;
+    },
     getTeamName: function () {
         return Teams.findOne(this.teamId).name;
     },
