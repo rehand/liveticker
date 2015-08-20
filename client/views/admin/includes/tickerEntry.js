@@ -34,6 +34,9 @@ Template.tickerEntry.helpers({
     },
     getTeamCode: function () {
         return Teams.findOne(this.teamId).code;
+    },
+    isSturmGraz: function () {
+        return Teams.findOne(this.teamId).code === TEAM_CODE_STURM_GRAZ;
     }
 });
 

@@ -17,7 +17,12 @@
                     {{text}}
                 {{else}}
                     {{#if isGoalEntry}}
-                        Tor von {{kicker.[0].name}} ({{getTeamCode}})!
+                        {{#if isSturmGraz}}
+                            TOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR
+                        {{else}}
+                            Tor
+                        {{/if}}
+                        von {{kicker.[0].name}} ({{getTeamCode}})!
                     {{else}}
                         {{#if isOwnGoalEntry}}
                             Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!
