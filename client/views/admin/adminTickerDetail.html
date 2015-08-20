@@ -41,6 +41,7 @@
                 </div>
                 <div class="col-xs-12">
                     {{> addEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
+                    {{> addSubstitutionEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
                 </div>
             </div>
             <div class="col-xs-4 text-center tickerStatus">
@@ -75,6 +76,7 @@
                 </div>
                 <div class="col-xs-12">
                     {{> addEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
+                    {{> addSubstitutionEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
                 </div>
             </div>
         </div>
@@ -190,6 +192,42 @@
                         {{/with}}
 
                         {{> afFieldInput name="kicker" type="hidden" value="NULL"}}
+                        {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
+                        <button class="btn btn-danger btn-flat" type="button" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                    </div>
+                {{/autoForm}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="addSubstitutionEvent">
+    <button class="btn btn-primary substitution-event-button" data-toggle="modal" data-target="#substitutionEventModal{{team.code}}">
+        <i class="fa fa-futbol-o"></i> Spielerwechsel
+    </button>
+    <div class="modal fade" id="substitutionEventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="substitutionEventModal{{team.code}}Label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{#autoForm schema="EventSchema" id=team.getSubstitionEventFormName class="substitutionEventForm" type="method" meteormethod="addEvent"}}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="substitutionEventModal{{team.code}}Label">Spielerwechsel {{team.name}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{> afFieldInput name="eventType" options=getSubstitutionEventTypes type="select-radio-inline"}}
+
+                        {{#with mapPlayingFormation formation}}
+                            {{> afFieldInput name="kicker" type="select" options=this}}
+                        {{/with}}
+
+                        {{#with mapSubstitutionFormation formation}}
+                            {{> afFieldInput name="kicker2" type="select" options=this required="required"}}
+                        {{/with}}
+
+                        {{> afFieldInput name="teamId" type="hidden" value=team._id }}
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">

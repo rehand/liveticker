@@ -111,6 +111,10 @@ EventSchema = new SimpleSchema({
     kicker: {
         type: String
     },
+    kicker2: {
+        type: String,
+        optional: true
+    },
     teamId: {
         type: String
     },
@@ -324,6 +328,18 @@ if (Meteor.isServer) {
                     kicker = [findKickerById(ticker.teamAwayFormation, data.kicker)];
                 } else {
                     throw new Meteor.Error("kicker-not-found", "Spieler nicht gefunden");
+                }
+            }
+
+            if (data.eventType === EVENT_TYPE_SUBSTITUTION) {
+                if (!data.kicker2) {
+                    throw new Meteor.Error("kicker-not-found", "2. Spieler nicht gefunden");
+                }
+
+                kicker.push(findKickerById(isHomeScore ? ticker.teamHomeFormation : ticker.teamAwayFormation, data.kicker2));
+
+                if (kicker[0] === kicker[1]) {
+                    throw new Meteor.Error("kicker-unique", "Spieler kann nicht mit sich selbst getauscht werden");
                 }
             }
 

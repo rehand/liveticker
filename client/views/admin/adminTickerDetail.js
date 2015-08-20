@@ -93,30 +93,36 @@ Template.adminTickerDetail.events({
     }
 });
 
+var mapFormation = function (formation) {
+    return formation.map(function (entry) {
+        return {
+            label: entry.name,
+            value: entry.id
+        };
+    });
+};
+
+var mapEventType = function (eventType) {
+    return {
+        label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
+        value: eventType
+    };
+};
+
+var closeModal = function (event, template) {
+    var formId = event.target.id;
+    $('#' + formId).find('button.close').click();
+};
+
 Template.addEvent.helpers({
-    mapFormation: function (formation) {
-        return formation.map(function (entry) {
-            return {
-                label: entry.name,
-                value: entry.id
-            };
-        });
-    },
+    mapFormation: mapFormation,
     getEventTypes: function () {
-        return EVENT_TYPES.map(function (eventType) {
-            return {
-                label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
-                value: eventType
-            };
-        });
+        return EVENT_TYPES.map(mapEventType);
     }
 });
 
 Template.addEvent.events({
-    "submit .addEventForm": function (event, template) {
-        var formId = event.target.id;
-        $('#' + formId).find('button.close').click();
-    }
+    "submit .addEventForm": closeModal
 });
 
 Template.addTeamEvent.helpers({
@@ -129,18 +135,31 @@ Template.addTeamEvent.helpers({
         });
     },
     getTeamEventTypes: function () {
-        return [EVENT_TYPE_PENALTY].map(function (eventType) {
-            return {
-                label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
-                value: eventType
-            };
-        });
+        return [EVENT_TYPE_PENALTY].map(mapEventType);
     }
 });
 
 Template.addTeamEvent.events({
-    "submit .addTeamEventForm": function (event, template) {
-        var formId = event.target.id;
-        $('#' + formId).find('button.close').click();
+    "submit .addTeamEventForm": closeModal
+});
+
+Template.addSubstitutionEvent.helpers({
+    getSubstitutionEventTypes: function () {
+        return [EVENT_TYPE_SUBSTITUTION].map(mapEventType);
+    },
+    mapPlayingFormation: function (formation) {
+        return mapFormation(formation.filter(function (entry) {
+            //return POSITIONS.indexOf(entry.gamePosition) !== -1;
+            return entry.gamePosition !== POS_NA;
+        }));
+    },
+    mapSubstitutionFormation: function (formation) {
+        return mapFormation(formation.filter(function (entry) {
+            return entry.gamePosition === POS_ERSATZBANK;
+        }));
     }
+});
+
+Template.addSubstitutionEvent.events({
+    "submit .substitutionEventForm": closeModal
 });

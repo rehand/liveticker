@@ -92,6 +92,9 @@ Teams.helpers({
     },
     getAddEventFormName: function () {
         return "addEventForm" + this.code;
+    },
+    getSubstitionEventFormName: function () {
+        return "changeEventForm" + this.code;
     }
 });
 
