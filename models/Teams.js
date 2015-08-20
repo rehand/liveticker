@@ -163,6 +163,13 @@ if (Meteor.isServer) {
                 });
             }
 
+            // remove null values from kickers array
+            if (team.$set.kickers && Array.isArray(team.$set.kickers)) {
+                team.$set.kickers = team.$set.kickers.filter(function (kicker) {
+                    return kicker !== null;
+                });
+            }
+
             Teams.update(teamId, team);
 
             var redirect = {

@@ -253,11 +253,13 @@ Tickers.attachSchema(
         },
         teamHomeFormation: {
             type: [KickersFormationSchema],
+            defaultValue: [],
             label: 'Aufstellung Heimmannschaft',
             optional: true
         },
         teamAwayFormation: {
             type: [KickersFormationSchema],
+            defaultValue: [],
             label: 'Aufstellung Auswärtsmannschaft',
             optional: true
         }
@@ -307,6 +309,12 @@ if (Meteor.isServer) {
         var inc = {};
         inc[isHomeScore ? 'scoreHome' : 'scoreAway'] = value;
         return inc;
+    }
+
+    function cleanFormation (formation) {
+        return formation.filter(function (formation) {
+            return formation !== null;
+        });
     }
 
     Tickers.allow({
@@ -481,6 +489,16 @@ if (Meteor.isServer) {
             var thisTicker = Tickers.findOne(tickerId);
             if (thisTicker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            // remove null values from home formation array
+            if (ticker.$set.teamHomeFormation && Array.isArray(ticker.$set.teamHomeFormation)) {
+                ticker.$set.teamHomeFormation = cleanFormation(ticker.$set.teamHomeFormation);
+            }
+
+            // remove null values from aray formation array
+            if (ticker.$set.teamAwayFormation && Array.isArray(ticker.$set.teamAwayFormation)) {
+                ticker.$set.teamAwayFormation = cleanFormation(ticker.$set.teamAwayFormation);
             }
 
             Tickers.update(tickerId, ticker);
