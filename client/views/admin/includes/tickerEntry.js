@@ -26,6 +26,9 @@ Template.tickerEntry.helpers({
     isSubstitutionEntry: function () {
         return this.eventType === EVENT_TYPE_SUBSTITUTION;
     },
+    isCommentEntry: function () {
+        return this.eventType === EVENT_TYPE_COMMENT;
+    },
     getTeamName: function () {
         return Teams.findOne(this.teamId).name;
     },

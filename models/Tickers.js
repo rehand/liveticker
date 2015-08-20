@@ -89,7 +89,7 @@ TickerEntries = new SimpleSchema({
     },
     eventType: {
         type: String,
-        allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT),
+        allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT, EVENT_TYPE_COMMENT),
         defaultValue: EVENT_TYPE_TEXT
     },
     kicker: {
@@ -97,6 +97,48 @@ TickerEntries = new SimpleSchema({
         optional: true
     },
     teamId: {
+        type: String,
+        optional: true
+    }
+});
+
+TickerComments = new SimpleSchema({
+    id: {
+        type: String,
+        autoform: {
+            type: "hidden",
+            label: false,
+            readonly: true
+        },
+        optional: true,
+        autoValue: function () {
+            if (!this.isSet) {
+                return new Mongo.Collection.ObjectID()._str;
+            }
+        }
+    },
+    timestamp: {
+        type: Date,
+        optional: true,
+        autoValue: function () {
+            if (!this.isSet && this.operator !== "$pull") {
+                return new Date();
+            }
+        }
+    },
+    name: {
+        type: String,
+        label: 'Name'
+    },
+    text: {
+        type: String,
+        label: 'Text'
+    },
+    approved: {
+        type: Boolean,
+        defaultValue: false
+    },
+    tickerId: {
         type: String,
         optional: true
     }
@@ -201,6 +243,11 @@ Tickers.attachSchema(
         },
         entries: {
             type: [TickerEntries],
+            defaultValue: [],
+            optional: true
+        },
+        comments: {
+            type: [TickerComments],
             defaultValue: [],
             optional: true
         },
@@ -493,6 +540,84 @@ if (Meteor.isServer) {
             data[timeField] = null;
 
             Tickers.update(tickerId, {$set: data});
+        },
+        addTickerComment: function (data) {
+            check(data, Object);
+
+            var tickerId = data.tickerId;
+            check(tickerId, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            } else if (ticker.timeSecondHalfEnd && ticker.timeSecondHalfEnd !== null) {
+                throw new Meteor.Error("ticker-finished", "Kommentar kann nicht hinzugefügt werden!");
+            }
+
+            var tickerComment = {
+                name: data.name,
+                text: data.text,
+                approved: false
+            };
+
+            check(tickerComment, TickerComments);
+
+            Tickers.update(tickerId, {$push: {comments: tickerComment}});
+        },
+        approveTickerComment: function (tickerId, commentId) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(commentId, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            var comments_filtered = ticker.comments.filter(function (comment) {
+                return comment.id === commentId;
+            });
+
+            if (comments_filtered.length !== 1) {
+                throw new Meteor.Error("comment-not-found", "Kommentar nicht gefunden!");
+            }
+
+            var comment = comments_filtered[0];
+
+            var text = comment.name + ": " + comment.text;
+
+            var tickerEntry = {text: text, eventType: EVENT_TYPE_COMMENT};
+            check(tickerEntry, TickerEntries);
+
+            Tickers.update(tickerId, {
+                $push: { // add comment to entries
+                    entries: tickerEntry
+                },
+                $pull: { // remove comment from comments
+                    comments: {
+                        id: commentId
+                    }
+                }
+            });
+        },
+        deleteTickerComment: function (tickerId, commentId) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(commentId, String);
+
+            Tickers.update(tickerId, {
+                $pull: { // remove comment from comments
+                    comments: {
+                        id: commentId
+                    }
+                }
+            });
         }
         //updateTicker: function (ticker, tickerId) {
         //    if (!Meteor.userId()) {

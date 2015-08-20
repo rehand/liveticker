@@ -36,6 +36,31 @@ Template.addTickerEntry.events({
     }
 });
 
+Template.tickerComment.events({
+    "click .delete-comment": function (event) {
+        return commentEvent(event, "deleteTickerComment");
+    },
+    "click .approve-comment": function (event) {
+        return commentEvent(event, "approveTickerComment");
+    }
+});
+
+var commentEvent = function (event, method) {
+    event.preventDefault();
+
+    var commentId = event.target.getAttribute('data-comment-id');
+    var tickerId = Router.current().params._id;
+
+    Meteor.call(method, tickerId, commentId, function (error) {
+        if (error) {
+            console.error('error ' + error.reason);
+        }
+    });
+
+    // Prevent default form submit
+    return false;
+};
+
 Template.adminTickerDetail.events({
     "click .score-button": function (event, template) {
         event.preventDefault();

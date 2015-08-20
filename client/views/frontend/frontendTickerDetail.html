@@ -66,6 +66,17 @@
         </div>
     </div>
 
+    {{#unless ticker.timeSecondHalfEnd}}
+        <div class="row">
+            <div class="col-xs-12 col-lg-10">
+                <h2>Kommentar</h2>
+            </div>
+            <div class="col-xs-12 col-lg-10">
+                {{> commentForm}}
+            </div>
+        </div>
+    {{/unless}}
+
     <div class="row">
         <div class="col-xs-12 col-lg-10">
             <h2>Ticker</h2>
@@ -77,4 +88,14 @@
         </div>
     </div>
 
+</template>
+
+<template name="commentForm">
+    {{#autoForm schema="TickerComments" id="addTickerComment" class="addTickerCommentForm form-inline" type="method" meteormethod="addTickerComment"}}
+        {{> afQuickField name='name'}}
+        {{> afQuickField name='text'}}
+        {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
+
+        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-content-send"></i> Senden</button>
+    {{/autoForm}}
 </template>

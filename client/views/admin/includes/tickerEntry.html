@@ -39,6 +39,10 @@
                                             {{else}}
                                                 {{#if isSubstitutionEntry}}
                                                     Spielerwechsel {{getTeamName}}: <s>{{kicker.[0].name}}</s> ↔ {{kicker.[1].name}}
+                                                {{else}}
+                                                    {{#if isCommentEntry}}
+                                                        <i>Userkommentar von {{text}}</i>
+                                                    {{/if}}
                                                 {{/if}}
                                             {{/if}}
                                         {{/if}}
