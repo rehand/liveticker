@@ -106,17 +106,20 @@ EventSchema = new SimpleSchema({
     eventType: {
         type: String,
         allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT),
-        defaultValue: EVENT_TYPE_TEXT
+        defaultValue: EVENT_TYPE_TEXT,
+        label: 'Eventtyp'
     },
     kicker: {
-        type: String
+        type: String,
+        label: 'Spieler'
     },
     kicker2: {
         type: String,
         optional: true
     },
     teamId: {
-        type: String
+        type: String,
+        label: 'Mannschaft'
     },
     tickerId: {
         type: String

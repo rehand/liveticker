@@ -153,10 +153,10 @@
                         <h4 class="modal-title" id="eventModal{{team.code}}Label">Event {{team.name}}</h4>
                     </div>
                     <div class="modal-body">
-                        {{> afFieldInput name="eventType" options=getEventTypes type="select"}}
+                        {{> afQuickField name="eventType" options=getEventTypes type="select"}}
 
                         {{#with mapFormation formation}}
-                            {{> afFieldInput name="kicker" type="select" options=this}}
+                            {{> afQuickField name="kicker" type="select" options=this}}
                         {{/with}}
 
                         {{> afFieldInput name="teamId" type="hidden" value=team._id }}
@@ -185,10 +185,10 @@
                         <h4 class="modal-title" id="teamEventModalLabel">Elfmeter</h4>
                     </div>
                     <div class="modal-body">
-                        {{> afFieldInput name="eventType" options=getTeamEventTypes type="select-radio-inline"}}
+                        {{> afQuickField name="eventType" options=getTeamEventTypes type="select-radio-inline"}}
 
                         {{#with mapTeams ticker}}
-                            {{> afFieldInput name="teamId" type="select-radio-inline" options=this}}
+                            {{> afQuickField name="teamId" type="select-radio-inline" options=this}}
                         {{/with}}
 
                         {{> afFieldInput name="kicker" type="hidden" value="NULL"}}
@@ -217,14 +217,14 @@
                         <h4 class="modal-title" id="substitutionEventModal{{team.code}}Label">Spielerwechsel {{team.name}}</h4>
                     </div>
                     <div class="modal-body">
-                        {{> afFieldInput name="eventType" options=getSubstitutionEventTypes type="select-radio-inline"}}
+                        {{> afQuickField name="eventType" options=getSubstitutionEventTypes type="select-radio-inline"}}
 
                         {{#with mapPlayingFormation formation}}
-                            {{> afFieldInput name="kicker" type="select" options=this}}
+                            {{> afQuickField name="kicker" type="select" options=this label="Auswechselspieler ↓"}}
                         {{/with}}
 
                         {{#with mapSubstitutionFormation formation}}
-                            {{> afFieldInput name="kicker2" type="select" options=this}}
+                            {{> afQuickField name="kicker2" type="select" options=this label="Einwechselspieler ↑"}}
                         {{/with}}
 
                         {{> afFieldInput name="teamId" type="hidden" value=team._id }}
