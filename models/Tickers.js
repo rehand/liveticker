@@ -194,6 +194,14 @@ Tickers.attachSchema(
             optional: false,
             label: 'Spieltermin'
         },
+        description: {
+            type: String,
+            optional: true,
+            label: 'Zusatzinformationen',
+            autoform: {
+                rows: 10
+            }
+        },
         scoreHome: {
             type: Number,
             optional: true,

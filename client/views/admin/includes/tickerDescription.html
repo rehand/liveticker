@@ -1,0 +1,12 @@
+<template name="tickerDescription">
+    {{#if ticker.description}}
+        <div class="row">
+            <div class="col-xs-12 col-lg-10" data-toggle="collapse" data-target="#tickerDescription">
+                <h2>Beschreibung</h2>
+            </div>
+            <div class="col-xs-12 col-lg-10 collapse in" id="tickerDescription">
+                {{{ticker.description}}}
+            </div>
+        </div>
+    {{/if}}
+</template>
