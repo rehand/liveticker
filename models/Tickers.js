@@ -341,8 +341,17 @@ if (Meteor.isServer) {
                 return kicker;
             };
 
-            ticker.teamHomeFormation = teamHome.kickers.map(setPositionNotDefined);
-            ticker.teamAwayFormation = teamAway.kickers.map(setPositionNotDefined);
+            if (Array.isArray(teamHome.kickers)) {
+                ticker.teamHomeFormation = teamHome.kickers.map(setPositionNotDefined);
+            } else {
+                ticker.teamHomeFormation = [];
+            }
+
+            if (Array.isArray(teamAway.kickers)) {
+                ticker.teamAwayFormation = teamAway.kickers.map(setPositionNotDefined);
+            } else {
+                ticker.teamAwayFormation = [];
+            }
 
             Tickers.insert(ticker);
 

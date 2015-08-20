@@ -40,6 +40,7 @@ TeamsSchema = new SimpleSchema({
     },
     kickers: {
         type: [KickersSchema],
+        defaultValue: [],
         label: 'Spieler',
         optional: true
     },
