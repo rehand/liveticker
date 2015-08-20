@@ -51,7 +51,7 @@ var getGameTimeStr = function (ticker, timeObj) {
             gameTimeStr = min + ". Minute";
         }
     } else {
-        gameTimeStr = "Vorberichterstattung";
+        gameTimeStr = "Vorbericht";
     }
 
     return gameTimeStr;
