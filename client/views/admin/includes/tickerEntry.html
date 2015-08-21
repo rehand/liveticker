@@ -43,10 +43,12 @@
                                             Rote Karte für {{kicker.[0].name}} ({{getTeamCode}})!
                                         {{else}}
                                             {{#if isPenaltyEntry}}
+                                                <i class="fa fa-bolt"></i>
                                                 Elfmeter für {{getTeamName}}!
                                             {{else}}
                                                 {{#if isSubstitutionEntry}}
-                                                    Spielerwechsel {{getTeamName}}: <s>{{kicker.[0].name}}</s> ↔ {{kicker.[1].name}}
+                                                    <i class="fa fa-exchange"></i>
+                                                    Spielerwechsel {{getTeamName}}: <span style="color:red"><s>{{kicker.[0].name}}</s>↓</span> <span style="color:darkgreen">↑ {{kicker.[1].name}}</span>
                                                 {{else}}
                                                     {{#if isCommentEntry}}
                                                         <i>Userkommentar von {{text}}</i>
