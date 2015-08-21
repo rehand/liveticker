@@ -161,6 +161,9 @@ Template.addTeamEvent.helpers({
     },
     getTeamEventTypes: function () {
         return [EVENT_TYPE_PENALTY].map(mapEventType);
+    },
+    getTeamDefaultEventType: function () {
+        return EVENT_TYPE_PENALTY;
     }
 });
 
@@ -171,6 +174,9 @@ Template.addTeamEvent.events({
 Template.addSubstitutionEvent.helpers({
     getSubstitutionEventTypes: function () {
         return [EVENT_TYPE_SUBSTITUTION].map(mapEventType);
+    },
+    getSubstitutionDefaultEventType: function () {
+        return EVENT_TYPE_SUBSTITUTION;
     },
     mapPlayingFormation: function (formation) {
         return mapFormation(formation.filter(function (entry) {

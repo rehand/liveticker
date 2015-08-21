@@ -230,7 +230,7 @@
                         <h4 class="modal-title" id="teamEventModalLabel">Elfmeter</h4>
                     </div>
                     <div class="modal-body">
-                        {{> afQuickField name="eventType" options=getTeamEventTypes type="select-radio-inline"}}
+                        {{> afQuickField name="eventType" value=getTeamDefaultEventType options=getTeamEventTypes type="select-radio-inline"}}
 
                         {{#with mapTeams ticker}}
                             {{> afQuickField name="teamId" type="select-radio-inline" options=this}}
@@ -262,7 +262,7 @@
                         <h4 class="modal-title" id="substitutionEventModal{{team.code}}Label">Spielerwechsel {{team.name}}</h4>
                     </div>
                     <div class="modal-body">
-                        {{> afQuickField name="eventType" options=getSubstitutionEventTypes type="select-radio-inline"}}
+                        {{> afQuickField name="eventType" value=getSubstitutionDefaultEventType options=getSubstitutionEventTypes type="select-radio-inline"}}
 
                         {{#with mapPlayingFormation formation}}
                             {{> afQuickField name="kicker" type="select" options=this label="Auswechselspieler ↓"}}
