@@ -89,7 +89,7 @@ TickerEntries = new SimpleSchema({
     },
     eventType: {
         type: String,
-        allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT, EVENT_TYPE_COMMENT),
+        allowedValues: ALL_EVENT_TYPES,
         defaultValue: EVENT_TYPE_TEXT
     },
     kicker: {
@@ -147,7 +147,7 @@ TickerComments = new SimpleSchema({
 EventSchema = new SimpleSchema({
     eventType: {
         type: String,
-        allowedValues: EVENT_TYPES.concat(EVENT_TYPE_TEXT),
+        allowedValues: ALL_EVENT_TYPES,
         defaultValue: EVENT_TYPE_TEXT,
         label: 'Eventtyp'
     },
