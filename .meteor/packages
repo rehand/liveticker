@@ -21,7 +21,6 @@ meteorhacks:fast-render
 
 semantic:ui-css
 
-fezvrasta:bootstrap-material-design
 iron:router
 multiply:iron-router-progress
 zimme:iron-router-active
@@ -35,3 +34,4 @@ ian:accounts-ui-bootstrap-3
 momentjs:moment
 mizzao:timesync
 fortawesome:fontawesome
+fezvrasta:bootstrap-material-design
