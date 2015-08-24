@@ -256,7 +256,7 @@
     <div class="modal fade" id="substitutionEventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="substitutionEventModal{{team.code}}Label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                {{#autoForm schema="EventSchema" id=team.getSubstitionEventFormName class="substitutionEventForm" type="method" meteormethod="addEvent"}}
+                {{#autoForm schema="SubstitutionEventSchema" id=team.getSubstitionEventFormName class="substitutionEventForm" type="method" meteormethod="addEvent"}}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="substitutionEventModal{{team.code}}Label">Spielerwechsel {{team.name}}</h4>

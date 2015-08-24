@@ -148,7 +148,6 @@ EventSchema = new SimpleSchema({
     eventType: {
         type: String,
         allowedValues: ALL_EVENT_TYPES,
-        defaultValue: EVENT_TYPE_TEXT,
         label: 'Eventtyp'
     },
     kicker: {
@@ -167,6 +166,13 @@ EventSchema = new SimpleSchema({
         type: String
     }
 });
+
+SubstitutionEventSchema = new SimpleSchema([EventSchema, {
+    kicker2: {
+        type: String,
+        optional: false
+    }
+}]);
 
 Tickers.attachSchema(
     new SimpleSchema({
