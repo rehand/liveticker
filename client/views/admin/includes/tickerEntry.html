@@ -34,12 +34,15 @@
                                 Elfmetertor von {{kicker.[0].name}} ({{getTeamCode}})!
                             {{else}}
                                 {{#if isYellowEntry}}
+                                    <img class="entryIcon" src="/images/yellow.png"/>
                                     Gelbe Karte für {{kicker.[0].name}} ({{getTeamCode}})!
                                 {{else}}
                                     {{#if isYellowRedEntry}}
+                                        <img class="entryIcon" src="/images/yellowred.png"/>
                                         Gelb-Rot für {{kicker.[0].name}} ({{getTeamCode}})!
                                     {{else}}
                                         {{#if isRedEntry}}
+                                            <img class="entryIcon" src="/images/red.png"/>
                                             Rote Karte für {{kicker.[0].name}} ({{getTeamCode}})!
                                         {{else}}
                                             {{#if isPenaltyEntry}}
@@ -48,7 +51,9 @@
                                             {{else}}
                                                 {{#if isSubstitutionEntry}}
                                                     <i class="fa fa-exchange"></i>
-                                                    Spielerwechsel {{getTeamName}}: <span style="color:red"><s>{{kicker.[0].name}}</s>↓</span> <span style="color:darkgreen">↑ {{kicker.[1].name}}</span>
+                                                    Spielerwechsel {{getTeamName}}:
+                                                    <span style="color:red"><s>{{kicker.[0].name}}</s></span> <img class="entryIcon" src="/images/out.png"/>
+                                                    <img class="entryIcon" src="/images/in.png"/> <span style="color:darkgreen">{{kicker.[1].name}}</span>
                                                 {{else}}
                                                     {{#if isCommentEntry}}
                                                         <i>Userkommentar von {{text}}</i>
