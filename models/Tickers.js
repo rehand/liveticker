@@ -216,18 +216,22 @@ Tickers.attachSchema(
         },
         timeFirstHalfStart: {
             type: Date,
+            label: 'Beginn 1. Halbzeit',
             optional: true
         },
         timeFirstHalfEnd: {
             type: Date,
+            label: 'Ende 1. Halbzeit',
             optional: true
         },
         timeSecondHalfStart: {
             type: Date,
+            label: 'Beginn 2. Halbzeit',
             optional: true
         },
         timeSecondHalfEnd: {
             type: Date,
+            label: 'Ende 2. Halbzeit',
             optional: true
         },
         createdAt: {
