@@ -20,12 +20,14 @@
                         <i class="fa fa-futbol-o"></i>
                         {{#if isSturmGraz}}
                             TOOOOOOOOOOOOOOOOOOOOOOOR
-                            {{#if isCurrentEntry}}
-                                <div class="hidden">
-                                    <audio autoplay>
-                                        <source src="/audio/hymne_sturm.mp3" type="audio/mpeg">
-                                    </audio>
-                                </div>
+                            {{#if playAudio}}
+                                {{#if isCurrentEntry}}
+                                    <div class="hidden">
+                                        <audio autoplay>
+                                            <source src="{{getAnthemSturmGraz}}" type="audio/mpeg">
+                                        </audio>
+                                    </div>
+                                {{/if}}
                             {{/if}}
                         {{else}}
                             Tor

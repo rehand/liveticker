@@ -48,6 +48,12 @@ Template.tickerEntry.helpers({
         }
 
         return false;
+    },
+    getAnthemSturmGraz: function () {
+        return TEAM_ANTHEM_STURM_GRAZ;
+    },
+    playAudio: function () {
+        return Session.get(SESSION_PLAY_AUDIO);
     }
 });
 

@@ -8,6 +8,8 @@ Template.adminTickerDetail.created = function() {
     serverOffset = TimeSync.serverOffset();
     calcGameTime();
     timer = Meteor.setInterval(calcGameTime, 1000);
+
+    Session.setDefault(SESSION_PLAY_AUDIO, false);
 };
 
 Template.adminTickerDetail.destroyed = function() {
