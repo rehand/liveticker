@@ -37,6 +37,17 @@ Template.tickerEntry.helpers({
     },
     isSturmGraz: function () {
         return Teams.findOne(this.teamId).code === TEAM_CODE_STURM_GRAZ;
+    },
+    isCurrentEntry: function () {
+        var currentDate = new Date();
+        var diff = currentDate - this.timestamp;
+
+        if (diff <= 10000 && !this.goalPlayed) {
+            this.goalPlayed = true;
+            return true;
+        }
+
+        return false;
     }
 });
 
