@@ -204,6 +204,9 @@ Tickers.attachSchema(
             type: String,
             optional: true,
             label: 'Zusatzinformationen',
+            defaultValue: '<iframe width="420" height="315" src="https://www.youtube.com/embed/brLRjzqrazU?rel=0&amp;'
+                            + 'showinfo=0" frameborder="0" allowfullscreen></iframe><br/><a target="_blank" '
+                            + 'href="https://www.youtube.com/watch?v=brLRjzqrazU">Gruabn Song - Video von Alex Rehak</a>',
             autoform: {
                 rows: 10
             }
