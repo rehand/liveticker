@@ -57,6 +57,20 @@ Template.tickerEntry.helpers({
     },
     playAudio: function () {
         return Session.get(SESSION_PLAY_AUDIO);
+    },
+    getMinuteClasses: function () {
+        if (this.showButtons) {
+            return "col-xs-12 col-sm-3";
+        } else {
+            return "col-xs-12 col-sm-2";
+        }
+    },
+    getEntryClasses: function () {
+        if (this.showButtons) {
+            return "col-xs-offset-1 col-xs-11 col-sm-offset-0 col-sm-9";
+        } else {
+            return "col-xs-offset-1 col-xs-11 col-sm-offset-0 col-sm-10";
+        }
     }
 });
 
