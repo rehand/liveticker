@@ -1,7 +1,13 @@
 Template.tickerFormation.helpers({
     sortFormation: function (formation) {
+        var offset = POSITIONS.length;
         var getValue = function(value) {
             var pos = POSITIONS.indexOf(value.gamePosition);
+
+            if (pos < 0) {
+                pos = offset + POSITIONS.indexOf(value.position);
+            }
+
             return pos < 0 ? 9999 : 1 + pos;
         };
 
