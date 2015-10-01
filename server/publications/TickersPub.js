@@ -1,5 +1,5 @@
 Meteor.publish('Tickers', function () {
-    return Tickers.find();
+    return Tickers.find({}, {sort: {kickoff: -1}});
 });
 
 Meteor.publish('Ticker', function (_id, onlyPublic) {
@@ -19,5 +19,5 @@ Meteor.publish('Ticker', function (_id, onlyPublic) {
 });
 
 Meteor.publish('PublicTickers', function () {
-    return Tickers.find({published: true});
+    return Tickers.find({published: true}, {sort: {kickoff: -1}});
 });
