@@ -22,11 +22,7 @@
                             TOOOOOOOOOOOOOOOOOOOOOOOR
                             {{#if playAudio}}
                                 {{#if isCurrentEntry}}
-                                    <div class="hidden">
-                                        <audio autoplay>
-                                            <source src="{{getAnthemSturmGraz}}" type="audio/mpeg">
-                                        </audio>
-                                    </div>
+                                    {{playAnthemSturmGraz}}
                                 {{/if}}
                             {{/if}}
                         {{else}}

@@ -49,8 +49,11 @@ Template.tickerEntry.helpers({
 
         return false;
     },
-    getAnthemSturmGraz: function () {
-        return TEAM_ANTHEM_STURM_GRAZ;
+    playAnthemSturmGraz: function () {
+        var anthemSturmGraz = new Howl({
+            src: [TEAM_ANTHEM_STURM_GRAZ]
+        });
+        anthemSturmGraz.play();
     },
     playAudio: function () {
         return Session.get(SESSION_PLAY_AUDIO);
