@@ -20,25 +20,27 @@
                 {{else}}
                     {{#if isGoalEntry}}
                         <i class="fa fa-futbol-o"></i>
-                        {{#if isSturmGraz}}
-                            TOOOOOOOOOOOOOOOOOOOOOOOR
-                            {{#if playAudio}}
-                                {{#if isCurrentEntry}}
-                                    {{playAnthemSturmGraz}}
+                        <strong>
+                            {{#if isSturmGraz}}
+                                TOOOOOOOOOOOOOOOOOOOOOOOR
+                                {{#if playAudio}}
+                                    {{#if isCurrentEntry}}
+                                        {{playAnthemSturmGraz}}
+                                    {{/if}}
                                 {{/if}}
+                            {{else}}
+                                Tor
                             {{/if}}
-                        {{else}}
-                            Tor
-                        {{/if}}
-                        von {{kicker.[0].name}} ({{getTeamCode}})!
+                            von {{kicker.[0].name}} ({{getTeamCode}})!
+                        </strong>
                     {{else}}
                         {{#if isOwnGoalEntry}}
                             <i class="fa fa-futbol-o"></i>
-                            Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!
+                            <strong>Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!</strong>
                         {{else}}
                             {{#if isPenaltyGoalEntry}}
                                 <i class="fa fa-futbol-o"></i>
-                                Elfmetertor von {{kicker.[0].name}} ({{getTeamCode}})!
+                                <strong>Elfmetertor von {{kicker.[0].name}} ({{getTeamCode}})!</strong>
                             {{else}}
                                 {{#if isYellowEntry}}
                                     <img class="entryIcon" src="/images/yellow.png"/>
