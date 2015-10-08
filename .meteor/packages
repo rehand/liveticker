@@ -10,7 +10,6 @@ underscore
 accounts-password
 aldeed:collection2
 raix:handlebar-helpers
-matteodem:easy-security
 audit-argument-checks
 fastclick
 manuelschoebel:ms-seo
@@ -36,3 +35,4 @@ mizzao:timesync
 fortawesome:fontawesome
 fezvrasta:bootstrap-material-design
 bojicas:howler2
+tmeasday:presence

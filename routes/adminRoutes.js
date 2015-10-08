@@ -99,15 +99,18 @@ if (Meteor.isClient) {
             path: '/admin/tickers/:_id',
             notFoundTemplate: 'tickerNotFound',
             waitOn: function() {
+                var tickerId = this.params._id;
                 return [
-                    Meteor.subscribe('Ticker', this.params._id),
+                    Meteor.subscribe('Ticker', tickerId),
                     Meteor.subscribe('Teams'),
-                    Meteor.subscribe('Images')
+                    Meteor.subscribe('Images'),
+                    Meteor.subscribe('UserPresence', tickerId)
                 ];
             },
             data: function() {
                 return {
-                    ticker: Tickers.findOne(this.params._id)
+                    ticker: Tickers.findOne(this.params._id),
+                    userPresence: Presences.find()
                 };
             }
         });
