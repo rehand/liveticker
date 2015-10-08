@@ -108,9 +108,21 @@ if (Meteor.isClient) {
                 ];
             },
             data: function() {
+                var presences = Presences.find().fetch();
+
+                var userPresence = {
+                    connections: presences.length,
+                    frontend: presences.filter(function (entry) {
+                        return entry.state.route.indexOf('frontend') === 0;
+                    }).length,
+                    backend: presences.filter(function (entry) {
+                        return entry.state.route.indexOf('admin') === 0;
+                    }).length
+                };
+
                 return {
                     ticker: Tickers.findOne(this.params._id),
-                    userPresence: Presences.find()
+                    userPresence: userPresence
                 };
             }
         });
