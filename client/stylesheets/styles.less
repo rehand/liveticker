@@ -5,8 +5,12 @@ img.teamLogo {
 }
 
 .tickerEntry {
-  padding-top: 1em;
+  padding: 0.5em 0;
   font-size: @tickerFontSize;
+}
+
+.tickerEntry:not(:last-child) {
+  border-bottom: 1px solid #ccc;
 }
 
 .tickerStatus {
