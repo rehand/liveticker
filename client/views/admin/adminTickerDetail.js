@@ -12,6 +12,16 @@ Template.adminTickerDetail.created = function() {
     Session.setDefault(SESSION_PLAY_AUDIO, false);
 };
 
+Template.adminTickerDetail.rendered = function () {
+    $('.add-ticker-entry textarea').keypress(function (e) {
+        console.log(e.which);
+        if (e.which == 13) {
+            $(e.target).parents('form').submit();
+            e.preventDefault();
+        }
+    });
+};
+
 Template.adminTickerDetail.destroyed = function() {
     Meteor.clearInterval(timer);
 };
@@ -20,7 +30,7 @@ Template.addTickerEntry.events({
     "submit .add-ticker-entry": function (event) {
         event.preventDefault();
 
-        var tickerEntryText = event.target.text.value;
+        var tickerEntryText = event.target[0].value;
         var tickerId = Router.current().params._id;
 
         Meteor.call("addTickerEntry", {tickerId: tickerId, tickerEntryText: tickerEntryText}, function (error) {
@@ -31,7 +41,10 @@ Template.addTickerEntry.events({
         });
 
         // Clear form
-        event.target.text.value = "";
+        event.target[0].value = "";
+
+        // Resize form
+        Stretchy.resizeAll('textarea');
 
         // Prevent default form submit
         return false;
