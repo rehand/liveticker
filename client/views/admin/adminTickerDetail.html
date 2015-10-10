@@ -22,31 +22,33 @@
                     </div>
                 </div>
                 <div class="col-xs-6 col-sm-4 text-center">
-                    <div class="col-xs-12 block-center">
-                        {{#if ticker.getHomeTeam}}
-                            {{#with ticker.getHomeTeam}}
-                                {{> teamLogo}}
-                            {{/with}}
-                        {{/if}}
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
-                            Aufstellung
+                    <div class="row">
+                        <div class="col-xs-12 block-center">
+                            {{#if ticker.getHomeTeam}}
+                                {{#with ticker.getHomeTeam}}
+                                    {{> teamLogo}}
+                                {{/with}}
+                            {{/if}}
                         </div>
-                        <div id="teamHomeFormation" class="collapse in">
-                            {{#with ticker.teamHomeFormation}}
-                                {{> tickerFormation}}
-                            {{/with}}
+                        <div class="col-xs-12">
+                            <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
+                                Aufstellung
+                            </div>
+                            <div id="teamHomeFormation" class="collapse in">
+                                {{#with ticker.teamHomeFormation}}
+                                    {{> tickerFormation}}
+                                {{/with}}
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="home-"></button>
-                        <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
-                        <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="home+"></button>
-                    </div>
-                    <div class="col-xs-12">
-                        {{> addEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
-                        {{> addSubstitutionEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
+                        <div class="col-xs-12">
+                            <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="home-"></button>
+                            <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
+                            <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="home+"></button>
+                        </div>
+                        <div class="col-xs-12">
+                            {{> addEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
+                            {{> addSubstitutionEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-4 hidden-xs text-center tickerStatus">
@@ -55,31 +57,33 @@
                     </div>
                 </div>
                 <div class="col-xs-6 col-sm-4 text-center">
-                    <div class="col-xs-12 block-center">
-                        {{#if ticker.getAwayTeam}}
-                            {{#with ticker.getAwayTeam}}
-                                {{> teamLogo}}
-                            {{/with}}
-                        {{/if}}
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
-                            Aufstellung
+                    <div class="row">
+                        <div class="col-xs-12 block-center">
+                            {{#if ticker.getAwayTeam}}
+                                {{#with ticker.getAwayTeam}}
+                                    {{> teamLogo}}
+                                {{/with}}
+                            {{/if}}
                         </div>
-                        <div id="teamAwayFormation" class="collapse in">
-                            {{#with ticker.teamAwayFormation}}
-                                {{> tickerFormation}}
-                            {{/with}}
+                        <div class="col-xs-12">
+                            <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
+                                Aufstellung
+                            </div>
+                            <div id="teamAwayFormation" class="collapse in">
+                                {{#with ticker.teamAwayFormation}}
+                                    {{> tickerFormation}}
+                                {{/with}}
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="away-"></button>
-                        <h1 class="inline-headers">{{ticker.scoreAway}}</h1>
-                        <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="away+"></button>
-                    </div>
-                    <div class="col-xs-12">
-                        {{> addEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
-                        {{> addSubstitutionEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
+                        <div class="col-xs-12">
+                            <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="away-"></button>
+                            <h1 class="inline-headers">{{ticker.scoreAway}}</h1>
+                            <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="away+"></button>
+                        </div>
+                        <div class="col-xs-12">
+                            {{> addEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
+                            {{> addSubstitutionEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
+                        </div>
                     </div>
                 </div>
             </div>
