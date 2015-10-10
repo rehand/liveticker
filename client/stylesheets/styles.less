@@ -2,6 +2,10 @@
 
 img.teamLogo {
   max-height: 9em;
+
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  transition: all 1s ease;
 }
 
 .tickerEntry {
@@ -36,4 +40,60 @@ h2, .h2, h2:first-child, .h2:first-child {
 
 .add-ticker-entry textarea {
   line-height: 2em;
+}
+
+.scoreInline {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  visibility: hidden;
+  padding: 0 0.3em;
+  font-size: 2em;
+  -webkit-transition: visibility 0s, opacity 1s linear;
+  -moz-transition: visibility 0s, opacity 1s linear;
+  transition: visibility 0s, opacity 1s linear;
+}
+
+.scoreBottom {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: visibility 0s, opacity 1s linear;
+  -moz-transition: visibility 0s, opacity 1s linear;
+  transition: visibility 0s, opacity 1s linear;
+}
+
+.sticky {
+  #matchInfo {
+    background-color: #eeeeee;
+    z-index: 2;
+    border-bottom: 2px solid #1f1f1f;
+  }
+
+  img.teamLogo {
+    max-height: 7em;
+    display: inline-block;
+  }
+
+  .tickerStatus {
+    margin-top: 2em;
+  }
+
+  .tickerStatusTop {
+    margin-top: 0;
+  }
+
+  .scoreInline {
+    visibility: visible;
+    display: inline-block;
+    vertical-align: middle;
+    opacity: 1;
+    height: auto;
+  }
+
+  .scoreBottom {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
 }
