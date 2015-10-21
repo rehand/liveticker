@@ -616,6 +616,8 @@ if (Meteor.isServer) {
             check(tickerComment, TickerComments);
 
             Tickers.update(tickerId, {$push: {comments: tickerComment}});
+
+            return tickerComment.name;
         },
         approveTickerComment: function (tickerId, commentId) {
             if (!this.userId) {

@@ -140,7 +140,7 @@
 
 <template name="commentForm">
     {{#autoForm schema="TickerComments" id="addTickerComment" class="addTickerCommentForm form-inline" type="method" meteormethod="addTickerComment"}}
-        {{> afQuickField name='name'}}
+        {{> afQuickField name='name' value=getCommentName}}
         {{> afQuickField name='text'}}
         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
 
