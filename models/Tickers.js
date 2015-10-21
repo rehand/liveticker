@@ -200,6 +200,11 @@ Tickers.attachSchema(
             optional: false,
             label: 'Spieltermin'
         },
+        referee: {
+            type: String,
+            optional: true,
+            label: 'Schiedsrichter'
+        },
         description: {
             type: String,
             optional: true,
