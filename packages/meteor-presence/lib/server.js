@@ -1,7 +1,14 @@
 var connections = {};
 
 var expire = function(id) {
-  Presences.remove(id);
+  //Presences.remove(id);
+
+  Presences.update(id, {
+    $set: {
+      session_expired: Date.now()
+    }
+  });
+
   delete connections[id];
 };
 
@@ -10,12 +17,25 @@ var tick = function(id) {
 };
 
 Meteor.startup(function() {
-  Presences.remove({});
+  Presences.remove({
+    session_expired: {
+      $exists: false
+    }
+  });
+
+  Presences.remove({
+    'state.tickerId': {
+      $exists: false
+    }
+  });
 });
 
 Meteor.onConnection(function(connection) {
   // console.log('connectionId: ' + connection.id);
-  Presences.insert({ _id: connection.id });
+  Presences.insert({
+    _id: connection.id,
+    session_created: Date.now()
+  });
 
   connections[connection.id] = {};
   tick(connection.id);

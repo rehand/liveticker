@@ -3,5 +3,5 @@ Meteor.publish('UserPresence', function (tickerId) {
 
     var filter = {'state.tickerId': tickerId};
 
-    return Presences.find(filter, {fields: {userId: true, state: true}});
+    return Presences.find(filter, {fields: {userId: true, state: true, session_created: true, session_expired: true}});
 });

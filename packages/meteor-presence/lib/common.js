@@ -22,6 +22,6 @@ Meteor.methods({
     check(connectionId, String);
     check(update, Object);
 
-    Presences.update(connectionId, update);
+    Presences.update(connectionId, {$set: update});
   }
 });
