@@ -14,7 +14,6 @@ Template.adminTickerDetail.created = function() {
 
 Template.adminTickerDetail.rendered = function () {
     $('.add-ticker-entry textarea').keypress(function (e) {
-        console.log(e.which);
         if (e.which == 13) {
             $(e.target).parents('form').submit();
             e.preventDefault();
