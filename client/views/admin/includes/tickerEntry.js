@@ -1,6 +1,6 @@
 Template.tickerEntry.helpers({
-    isTextEntry: function () {
-        return this.eventType === EVENT_TYPE_TEXT;
+    isTextEntry: function (entry) {
+        return (entry ? entry : this).eventType === EVENT_TYPE_TEXT;
     },
     isGoalEntry: function () {
         return this.eventType === EVENT_TYPE_GOAL;
@@ -90,6 +90,60 @@ Template.adminTickerDetail.events({
             });
         }
 
+        return false;
+    },
+    "click .edit-entry": function (event, template) {
+        var editDialog = $('#editTickerEntry');
+
+        var entryId = this.entry.id;
+        editDialog.find('input[name="entryId"]').first().val(entryId);
+
+        var text = this.entry.text;
+        editDialog.find('textarea[name="text"]').first().val(text);
+
+        return true;
+    }
+});
+
+Template.editTickerEntry.rendered = function () {
+    $('#editTickerEntry').on('shown.bs.modal', function (event) {
+        Stretchy.resizeAll('textarea');
+        $('#editTickerEntry').find('textarea[name="text"]').first().focus();
+    });
+
+    // register enter key to submit form
+    $('.edit-ticker-entry textarea').keypress(function (e) {
+        if (e.which == 13) {
+            $(e.target).parents('form').submit();
+            e.preventDefault();
+        }
+    });
+};
+
+Template.editTickerEntry.events({
+    "submit .edit-ticker-entry": function (event) {
+        event.preventDefault();
+
+        var target = $(event.target);
+
+        var tickerId = Router.current().params._id;
+        var entryId = target.find('input[name="entryId"]').first().val();
+        var tickerEntryText = target.find('textarea[name="text"]').first();
+
+        Meteor.call("editTickerEntry", tickerId, entryId, tickerEntryText.val(),
+            function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+
+        // Clear form
+        tickerEntryText.val('');
+
+        // Close modal
+        target.find('button.close').click();
+
+        // Prevent default form submit
         return false;
     }
 });

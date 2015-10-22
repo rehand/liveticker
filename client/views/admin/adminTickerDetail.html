@@ -176,6 +176,7 @@
         </div>
         <div class="col-xs-12 collapse in" id="tickerEntries">
             {{> addTickerEntry}}
+            {{> editTickerEntry}}
             {{#each reverseArray ticker.entries}}
                 {{> tickerEntry entry=this showButtons=true}}
             {{/each}}

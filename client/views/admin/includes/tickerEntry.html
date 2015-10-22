@@ -3,14 +3,29 @@
 
         <div class="{{getMinuteClasses}}">
             {{#if showButtons}}
-                <!--
-                <button class="btn btn-default btn-xs mdi-content-create no-margin"></button>
-                -->
-                <button class="btn btn-default btn-xs mdi-action-delete no-margin delete-entry" data-entry-id="{{entry.id}}"></button>
+                <div class="row">
+                    <div class="col-xs-4">
+                            {{#if isTextEntry entry}}
+                                <button class="btn btn-default btn-xs mdi-content-create no-margin edit-entry remove-padding"
+                                        data-toggle="modal"
+                                        data-target="#editTickerEntry"></button>
+                            {{else}}
+                                <button class="btn btn-xs invisible no-margin mdi-content-clear remove-padding"></button>
+                            {{/if}}
+                        <button class="btn btn-default btn-xs mdi-action-delete no-margin delete-entry remove-padding"
+                                data-entry-id="{{entry.id}}"></button>
+                    </div>
+                    <div class="col-xs-8">
+                        {{#with entry}}
+                            {{entryTime}}:
+                        {{/with}}
+                    </div>
+                </div>
+            {{else}}
+                {{#with entry}}
+                    {{entryTime}}:
+                {{/with}}
             {{/if}}
-            {{#with entry}}
-                {{entryTime}}:
-            {{/with}}
         </div>
 
         <div class="{{getEntryClasses}}">
@@ -77,6 +92,29 @@
                     {{/if}}
                 {{/if}}
             {{/with}}
+        </div>
+    </div>
+</template>
+
+<template name="editTickerEntry">
+    <div class="modal fade" id="editTickerEntry" tabindex="-1" role="dialog" aria-labelledby="editTickerEntryLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form class="edit-ticker-entry form-horizontal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="editTickerEntryLabel">Eintrag bearbeiten</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="form-control" name="text" rows="1" placeholder="Schreiben..."></textarea>
+                        <input type="hidden" name="entryId"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
+                        <button class="btn btn-danger btn-flat" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

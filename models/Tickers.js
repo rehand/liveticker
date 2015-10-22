@@ -472,6 +472,30 @@ if (Meteor.isServer) {
 
             Tickers.update(tickerId, {$push: {entries: tickerEntry}});
         },
+        editTickerEntry: function (tickerId, entryId, tickerEntryText) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(entryId, String);
+            check(tickerEntryText, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            Tickers.update(
+                {
+                    _id: tickerId,
+                    'entries.id': entryId
+                }, {
+                    $set: {
+                        'entries.$.text': tickerEntryText
+                    }
+                });
+        },
         deleteTickerEntry: function (tickerId, entryId) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
