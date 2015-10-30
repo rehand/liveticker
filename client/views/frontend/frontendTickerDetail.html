@@ -143,13 +143,13 @@
 <template name="commentForm">
     <div class="row">
         {{#autoForm schema="TickerComments" id="addTickerComment" class="addTickerCommentForm" type="method" meteormethod="addTickerComment"}}
-            <div class="col-xs-3">
+            <div class="col-xs-12 col-sm-3">
                 {{> afQuickField name='name' value=getCommentName placeholder="Name" label=false}}
             </div>
-            <div class="col-xs-7">
+            <div class="col-xs-12 col-sm-7">
                 {{> afQuickField name='text' placeholder="Kommentar..." label=false}}
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-12 col-sm-2">
                 {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
             </div>
 
