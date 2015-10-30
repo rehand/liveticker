@@ -19,6 +19,10 @@ Template.adminTickerDetail.rendered = function () {
             e.preventDefault();
         }
     });
+
+    $('form.substitutionEventForm').closest('div.modal').on('shown.bs.modal', function (event) {
+        $(event.target).find('input[name="eventType"]').first().prop("checked", true);
+    });
 };
 
 Template.adminTickerDetail.destroyed = function() {
