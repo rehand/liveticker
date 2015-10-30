@@ -71,41 +71,43 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12">
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-4 text-center">
-                            <div class="row">
-                                <div class="col-xs-12 teamFormation">
-                                    <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
-                                        Aufstellung
-                                    </div>
-                                    <div id="teamHomeFormation" class="collapse in">
-                                        {{#with ticker.teamHomeFormation}}
-                                            {{> tickerFormation}}
-                                        {{/with}}
+                {{#unless ticker.formationHidden}}
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-4 text-center">
+                                <div class="row">
+                                    <div class="col-xs-12 teamFormation">
+                                        <div class="h3" data-toggle="collapse" data-target="#teamHomeFormation">
+                                            Aufstellung
+                                        </div>
+                                        <div id="teamHomeFormation" class="collapse in">
+                                            {{#with ticker.teamHomeFormation}}
+                                                {{> tickerFormation}}
+                                            {{/with}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-4 hidden-xs"></div>
+                            <div class="col-sm-4 hidden-xs"></div>
 
-                        <div class="col-xs-6 col-sm-4 text-center">
-                            <div class="row">
-                                <div class="col-xs-12 teamFormation">
-                                    <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
-                                        Aufstellung
-                                    </div>
-                                    <div id="teamAwayFormation" class="collapse in">
-                                        {{#with ticker.teamAwayFormation}}
-                                            {{> tickerFormation}}
-                                        {{/with}}
+                            <div class="col-xs-6 col-sm-4 text-center">
+                                <div class="row">
+                                    <div class="col-xs-12 teamFormation">
+                                        <div class="h3" data-toggle="collapse" data-target="#teamAwayFormation">
+                                            Aufstellung
+                                        </div>
+                                        <div id="teamAwayFormation" class="collapse in">
+                                            {{#with ticker.teamAwayFormation}}
+                                                {{> tickerFormation}}
+                                            {{/with}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {{/unless}}
             </div>
         </div>
     </div>

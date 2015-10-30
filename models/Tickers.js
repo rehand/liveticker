@@ -288,6 +288,19 @@ Tickers.attachSchema(
             defaultValue: [],
             label: 'Aufstellung Auswärtsmannschaft',
             optional: true
+        },
+        formationHidden: {
+            type: Boolean,
+            defaultValue: true,
+            optional: true,
+            label: 'Sichtbarkeit',
+            autoform: {
+                afFieldInput: {
+                    type: "boolean-select",
+                    trueLabel: "Ausblenden",
+                    falseLabel: "Freigeben"
+                }
+            }
         }
     })
 );
