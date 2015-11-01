@@ -557,12 +557,12 @@ if (Meteor.isServer) {
 
             // remove null values from home formation array
             if (ticker.$set.teamHomeFormation && Array.isArray(ticker.$set.teamHomeFormation)) {
-                ticker.$set.teamHomeFormation = cleanFormation(ticker.$set.teamHomeFormation);
+                ticker.$set.teamHomeFormation = sortFormation(cleanFormation(ticker.$set.teamHomeFormation), true);
             }
 
             // remove null values from aray formation array
             if (ticker.$set.teamAwayFormation && Array.isArray(ticker.$set.teamAwayFormation)) {
-                ticker.$set.teamAwayFormation = cleanFormation(ticker.$set.teamAwayFormation);
+                ticker.$set.teamAwayFormation = sortFormation(cleanFormation(ticker.$set.teamAwayFormation), true);
             }
 
             Tickers.update(tickerId, ticker);
