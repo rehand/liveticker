@@ -50,10 +50,11 @@ KickersFormationSchema = new SimpleSchema({
         defaultValue: false,
         autoform: {
             afFieldInput: {
-                type: "boolean-select",
+                type: "boolean-checkbox",
                 trueLabel: "Ja",
                 falseLabel: "Nein"
-            }
+            },
+            template: 'materialized'
         }
     }
 });
