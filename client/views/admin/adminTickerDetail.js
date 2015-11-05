@@ -157,6 +157,10 @@ var closeModal = function (event, template) {
     $('#' + formId).find('button.close').click();
 };
 
+var substitutionEventFilter = function (entry) {
+    return entry.eventType == EVENT_TYPE_SUBSTITUTION
+};
+
 Template.addEvent.helpers({
     mapFormation: mapFormation,
     getEventTypes: function () {
@@ -196,15 +200,37 @@ Template.addSubstitutionEvent.helpers({
     getSubstitutionDefaultEventType: function () {
         return EVENT_TYPE_SUBSTITUTION;
     },
-    mapPlayingFormation: function (formation) {
+    mapPlayingFormation: function (formation, entries) {
+        var substitutionEntries = entries.filter(substitutionEventFilter);
+
+        var substitutedKickers = substitutionEntries.map(function (entry) {
+            return entry.kicker[0].id;
+        });
+
+        var exchangedKickers = substitutionEntries.map(function (entry) {
+            return entry.kicker[1].id;
+        });
+
         return mapFormation(formation.filter(function (entry) {
-            //return POSITIONS.indexOf(entry.gamePosition) !== -1;
-            return entry.gamePosition !== POS_NA;
+            var isKickerStarting = entry.gamePosition !== POS_NA && entry.gamePosition !== POS_ERSATZBANK;
+            var wasKickerSubstituted = substitutedKickers.indexOf(entry.id) !== -1;
+            var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
+
+            return (isKickerStarting || wasKickerExchanged) && !wasKickerSubstituted;
         }));
     },
-    mapSubstitutionFormation: function (formation) {
+    mapSubstitutionFormation: function (formation, entries) {
+        var substitutionEntries = entries.filter(substitutionEventFilter);
+
+        var exchangedKickers = substitutionEntries.map(function (entry) {
+            return entry.kicker[1].id;
+        });
+
         return mapFormation(formation.filter(function (entry) {
-            return entry.gamePosition === POS_ERSATZBANK;
+            var isKickerOnBench = entry.gamePosition === POS_ERSATZBANK;
+            var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
+
+            return isKickerOnBench && !wasKickerExchanged;
         }));
     }
 });

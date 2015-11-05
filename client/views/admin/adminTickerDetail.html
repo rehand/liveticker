@@ -281,11 +281,11 @@
                     <div class="modal-body">
                         {{> afQuickField name="eventType" value=getSubstitutionDefaultEventType options=getSubstitutionEventTypes type="select-radio-inline"}}
 
-                        {{#with mapPlayingFormation formation}}
+                        {{#with mapPlayingFormation formation ticker.entries}}
                             {{> afQuickField name="kicker" type="select" options=this label="Auswechselspieler ↓"}}
                         {{/with}}
 
-                        {{#with mapSubstitutionFormation formation}}
+                        {{#with mapSubstitutionFormation formation ticker.entries}}
                             {{> afQuickField name="kicker2" type="select" options=this label="Einwechselspieler ↑"}}
                         {{/with}}
 
