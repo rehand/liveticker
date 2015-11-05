@@ -26,7 +26,7 @@ if (Meteor.isClient) {
                 return [
                     Meteor.subscribe('Ticker', tickerId, true),
                     Meteor.subscribe('TickerTeams', tickerId, true),
-                    Meteor.subscribe('Images')
+                    Meteor.subscribe('TickerImages', tickerId, true)
                 ];
             },
             data: function() {

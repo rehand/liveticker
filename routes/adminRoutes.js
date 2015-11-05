@@ -103,7 +103,7 @@ if (Meteor.isClient) {
                 return [
                     Meteor.subscribe('Ticker', tickerId),
                     Meteor.subscribe('TickerTeams', tickerId),
-                    Meteor.subscribe('Images'),
+                    Meteor.subscribe('TickerImages', tickerId),
                     Meteor.subscribe('UserPresence', tickerId)
                 ];
             },
