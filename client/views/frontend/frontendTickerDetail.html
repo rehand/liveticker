@@ -22,7 +22,7 @@
                         {{/with}}
                     </div>
 
-                    <div class="col-xs-6 col-sm-4 text-center">
+                    <div class="col-xs-6 col-sm-4 text-right">
                         <div class="row">
                             <div class="col-xs-12 block-center">
                                 <div class="row">
@@ -31,31 +31,31 @@
                                             {{> teamLogo}}
                                         {{/with}}
                                     {{/if}}
-                                    <div class="scoreInline">
-                                        {{ticker.scoreHome}}
-                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-xs-12 scoreBottom">
+                            <div class="col-xs-12 scoreBottom text-center">
                                 <div class="h2">{{ticker.scoreHome}}</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-4 hidden-xs text-center tickerStatus">
-                        {{#with ticker}}
-                            {{gameTime}}
-                        {{/with}}
+                        <div class="row">
+                            {{#with ticker}}
+                                {{gameTime}}
+                            {{/with}}
+                        </div>
+
+                        <div class="row scoreInline">
+                            {{ticker.scoreHome}} : {{ticker.scoreAway}}
+                        </div>
                     </div>
 
-                    <div class="col-xs-6 col-sm-4 text-center">
+                    <div class="col-xs-6 col-sm-4 text-left">
                         <div class="row">
                             <div class="col-xs-12 block-center">
                                 <div class="row">
-                                    <div class="scoreInline">
-                                        {{ticker.scoreAway}}
-                                    </div>
                                     {{#if ticker.getAwayTeam}}
                                         {{#with ticker.getAwayTeam}}
                                             {{> teamLogo}}
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-12 scoreBottom">
+                            <div class="col-xs-12 scoreBottom text-center">
                                 <div class="h2">{{ticker.scoreAway}}</div>
                             </div>
                         </div>
