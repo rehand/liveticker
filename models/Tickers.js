@@ -206,6 +206,11 @@ Tickers.attachSchema(
             optional: true,
             label: 'Schiedsrichter'
         },
+        competition: {
+            type: String,
+            optional: true,
+            label: 'Bewerb'
+        },
         description: {
             type: String,
             optional: true,
