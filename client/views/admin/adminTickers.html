@@ -26,7 +26,7 @@
 <template name="tickerAdmin">
     <li class="col-xs-12">
         <a href="{{ pathFor 'adminTickerDetail' }}">
-            <span title="{{kickoffDate kickoff}}: {{getHomeTeam.code}} - {{getAwayTeam.code}}">{{kickoffDate kickoff}} Uhr: {{getHomeTeam.code}} - {{getAwayTeam.code}}</span>
+            <span title="{{kickoffDate kickoff}}: {{getHomeTeam.name}} - {{getAwayTeam.name}}">{{kickoffDate kickoff}} Uhr: {{getHomeTeam.name}} - {{getAwayTeam.name}}</span>
         </a>
     </li>
 </template>
