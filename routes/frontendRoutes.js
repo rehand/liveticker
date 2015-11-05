@@ -13,7 +13,7 @@ if (Meteor.isClient) {
             },
             data: function () {
                 return {
-                    tickers: Tickers.find()
+                    tickers: Tickers.find({}, {sort: {kickoff: -1}})
                 }
             }
         });
