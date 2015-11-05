@@ -1,5 +1,7 @@
+var tickerFieldsExclude = {fields: {entries: 0, comments: 0, teamHomeFormation: 0, teamAwayFormation: 0}};
+
 Meteor.publish('Tickers', function () {
-    return Tickers.find();
+    return Tickers.find({}, tickerFieldsExclude);
 });
 
 Meteor.publish('Ticker', function (_id, onlyPublic) {
@@ -19,5 +21,5 @@ Meteor.publish('Ticker', function (_id, onlyPublic) {
 });
 
 Meteor.publish('PublicTickers', function () {
-    return Tickers.find({published: true});
+    return Tickers.find({published: true}, tickerFieldsExclude);
 });
