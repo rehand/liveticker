@@ -102,7 +102,7 @@ if (Meteor.isClient) {
                 var tickerId = this.params._id;
                 return [
                     Meteor.subscribe('Ticker', tickerId),
-                    Meteor.subscribe('Teams'),
+                    Meteor.subscribe('TickerTeams', tickerId),
                     Meteor.subscribe('Images'),
                     Meteor.subscribe('UserPresence', tickerId)
                 ];
