@@ -217,7 +217,7 @@
                     <div class="modal-body">
                         {{> afQuickField name="eventType" options=getEventTypes type="select"}}
 
-                        {{#with mapFormation formation}}
+                        {{#with mapPlayingFormation formation ticker.entries}}
                             {{> afQuickField name="kicker" type="select" options=this}}
                         {{/with}}
 

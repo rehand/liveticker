@@ -152,6 +152,26 @@ var mapFormation = function (formation) {
     });
 };
 
+var mapPlayingFormation = function (formation, entries) {
+    var substitutionEntries = entries.filter(substitutionEventFilter);
+
+    var substitutedKickers = substitutionEntries.map(function (entry) {
+        return entry.kicker[0].id;
+    });
+
+    var exchangedKickers = substitutionEntries.map(function (entry) {
+        return entry.kicker[1].id;
+    });
+
+    return mapFormation(formation.filter(function (entry) {
+        var isKickerStarting = entry.gamePosition !== POS_NA && entry.gamePosition !== POS_ERSATZBANK;
+        var wasKickerSubstituted = substitutedKickers.indexOf(entry.id) !== -1;
+        var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
+
+        return (isKickerStarting || wasKickerExchanged) && !wasKickerSubstituted;
+    }));
+};
+
 var mapEventType = function (eventType) {
     return {
         label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
@@ -169,7 +189,7 @@ var substitutionEventFilter = function (entry) {
 };
 
 Template.addEvent.helpers({
-    mapFormation: mapFormation,
+    mapPlayingFormation: mapPlayingFormation,
     getEventTypes: function () {
         return EVENT_TYPES.map(mapEventType);
     }
@@ -207,25 +227,7 @@ Template.addSubstitutionEvent.helpers({
     getSubstitutionDefaultEventType: function () {
         return EVENT_TYPE_SUBSTITUTION;
     },
-    mapPlayingFormation: function (formation, entries) {
-        var substitutionEntries = entries.filter(substitutionEventFilter);
-
-        var substitutedKickers = substitutionEntries.map(function (entry) {
-            return entry.kicker[0].id;
-        });
-
-        var exchangedKickers = substitutionEntries.map(function (entry) {
-            return entry.kicker[1].id;
-        });
-
-        return mapFormation(formation.filter(function (entry) {
-            var isKickerStarting = entry.gamePosition !== POS_NA && entry.gamePosition !== POS_ERSATZBANK;
-            var wasKickerSubstituted = substitutedKickers.indexOf(entry.id) !== -1;
-            var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
-
-            return (isKickerStarting || wasKickerExchanged) && !wasKickerSubstituted;
-        }));
-    },
+    mapPlayingFormation: mapPlayingFormation,
     mapSubstitutionFormation: function (formation, entries) {
         var substitutionEntries = entries.filter(substitutionEventFilter);
 
