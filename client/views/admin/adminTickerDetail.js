@@ -138,8 +138,15 @@ Template.adminTickerDetail.events({
 
 var mapFormation = function (formation) {
     return formation.map(function (entry) {
+        var label;
+        if (entry.number) {
+            label = entry.number + ' ' + entry.name;
+        } else {
+            label = entry.name;
+        }
+
         return {
-            label: entry.name,
+            label: label,
             value: entry.id
         };
     });
