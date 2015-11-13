@@ -49,7 +49,7 @@ h2, .h2, h2:first-child, .h2:first-child {
   line-height: 2em;
 }
 
-.scoreInline {
+.showSticky {
   height: 0;
   opacity: 0;
   overflow: hidden;
@@ -61,7 +61,7 @@ h2, .h2, h2:first-child, .h2:first-child {
   transition: visibility 0s, opacity 1s linear;
 }
 
-.scoreBottom {
+.hideSticky {
   visibility: visible;
   opacity: 1;
   -webkit-transition: visibility 0s, opacity 1s linear;
@@ -90,12 +90,12 @@ h2, .h2, h2:first-child, .h2:first-child {
   }
 
   .tickerStatus {
-    .scoreInline {
+    .showSticky {
       font-size: 1em;
     }
   }
 
-  .scoreInline {
+  .showSticky {
     visibility: visible;
     display: inline-block;
     vertical-align: middle;
@@ -103,7 +103,7 @@ h2, .h2, h2:first-child, .h2:first-child {
     height: auto;
   }
 
-  .scoreBottom {
+  .hideSticky {
     height: 0;
     opacity: 0;
     overflow: hidden;
