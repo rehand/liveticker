@@ -69,6 +69,13 @@ h2, .h2, h2:first-child, .h2:first-child {
   transition: visibility 0s, opacity 1s linear;
 }
 
+.tickerStatus {
+  .gameTimeSmall {
+    margin-top: 0.5em;
+    font-size: 0.8em;
+  }
+}
+
 .sticky {
   #matchInfo {
     background-color: #eeeeee;
@@ -83,12 +90,9 @@ h2, .h2, h2:first-child, .h2:first-child {
   }
 
   .tickerStatus {
-
-  }
-
-  .tickerStatusTop {
-    margin-top: 0;
-    font-size: @tickerFontSize;
+    .scoreInline {
+      font-size: 1em;
+    }
   }
 
   .scoreInline {
@@ -97,7 +101,6 @@ h2, .h2, h2:first-child, .h2:first-child {
     vertical-align: middle;
     opacity: 1;
     height: auto;
-    font-size: 1em;
   }
 
   .scoreBottom {
