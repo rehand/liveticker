@@ -3,8 +3,8 @@
 
     <div class="page-header col-xs-12">
         <h1>Ticker bearbeiten
-            <a href="{{ pathFor 'adminTickerDelete' _id=ticker._id}}" class="btn btn-danger btn-flat">
-                <i class="mdi-action-delete"></i> Ticker löschen
+            <a href="{{ pathFor 'adminTickerDelete' _id=ticker._id}}" class="btn btn-danger">
+                <i class="material-icons">delete</i> Ticker löschen
             </a>
         </h1>
     </div>
@@ -44,8 +44,8 @@
                 {{> afQuickField name='timeSecondHalfEnd' type="datetime-local" step="1"}}
             </div>
 
-            <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
-            <button class="btn btn-danger btn-flat cancel-button" type="button"><i class="mdi-navigation-close"></i> Abbrechen</button>
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+            <button class="btn btn-danger cancel-button" type="button"><i class="material-icons">close</i> Abbrechen</button>
         </div>
     {{/autoForm}}
 </template>

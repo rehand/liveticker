@@ -79,6 +79,9 @@ Template.adminTickerDetail.events({
         event.preventDefault();
 
         var entryId = event.target.getAttribute('data-entry-id');
+        if (!entryId) {
+            entryId = event.target.parentNode.getAttribute('data-entry-id');
+        }
 
         if (confirm("Möchten Sie den Eintrag wirklich unwiderruflich löschen?")) {
             var tickerId = Router.current().params._id;

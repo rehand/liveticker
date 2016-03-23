@@ -3,8 +3,8 @@
 
     <div class="page-header col-xs-12">
         <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
-            <a href="{{ pathFor 'adminTickerEdit' _id=ticker._id}}" class="btn btn-primary btn-flat">
-                <i class="mdi-content-create"></i> Bearbeiten
+            <a href="{{ pathFor 'adminTickerEdit' _id=ticker._id}}" class="btn btn-primary">
+                <i class="material-icons">create</i> Bearbeiten
             </a>
             <br/>
             <small>
@@ -45,9 +45,9 @@
                             </div>
                         </div>
                         <div class="col-xs-12">
-                            <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="home-"></button>
+                            <button class="btn btn-primary btn-raised btn-sm score-button" data-type="home-"><i class="material-icons">exposure_neg_1</i></button>
                             <h1 class="inline-headers">{{ticker.scoreHome}}</h1>
-                            <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="home+"></button>
+                            <button class="btn btn-primary btn-raised btn-sm score-button" data-type="home+"><i class="material-icons">exposure_plus_1</i></button>
                         </div>
                         <div class="col-xs-12">
                             {{> addEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
@@ -80,9 +80,9 @@
                             </div>
                         </div>
                         <div class="col-xs-12">
-                            <button class="btn btn-primary btn-sm mdi-image-exposure-minus-1 score-button" data-type="away-"></button>
+                            <button class="btn btn-primary btn-raised btn-sm score-button" data-type="away-"><i class="material-icons">exposure_neg_1</i></button>
                             <h1 class="inline-headers">{{ticker.scoreAway}}</h1>
-                            <button class="btn btn-primary btn-sm mdi-image-exposure-plus-1 score-button" data-type="away+"></button>
+                            <button class="btn btn-primary btn-raised btn-sm score-button" data-type="away+"><i class="material-icons">exposure_plus_1</i></button>
                         </div>
                         <div class="col-xs-12">
                             {{> addEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
@@ -102,42 +102,42 @@
 
             <div class="collapse in" id="tickerControl">
                 {{#unless ticker.timeFirstHalfStart}}
-                    <button class="btn btn-success time-button" data-type="timeFirstHalfStart">
+                    <button class="btn btn-success btn-raised time-button" data-type="timeFirstHalfStart">
                         <i class="fa fa-play"></i>
                         Spiel starten
                     </button>
                 {{else}}
                     {{#unless ticker.timeFirstHalfEnd}}
-                        <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfStart">
+                        <button class="btn btn-warning btn-raised reset-time-button" data-type="timeFirstHalfStart">
                             <i class="fa fa-step-backward"></i>
                             zurück zum Vorbericht
                         </button>
-                        <button class="btn btn-success time-button" data-type="timeFirstHalfEnd">
+                        <button class="btn btn-success btn-raised time-button" data-type="timeFirstHalfEnd">
                             <i class="fa fa-pause"></i>
                             Halbzeitpause
                         </button>
                     {{else}}
                         {{#unless ticker.timeSecondHalfStart}}
-                            <button class="btn btn-warning reset-time-button" data-type="timeFirstHalfEnd">
+                            <button class="btn btn-warning btn-raised reset-time-button" data-type="timeFirstHalfEnd">
                                 <i class="fa fa-step-backward"></i>
                                 zurück zur 1. Halbzeit
                             </button>
-                            <button class="btn btn-success time-button" data-type="timeSecondHalfStart">
+                            <button class="btn btn-success btn-raised time-button" data-type="timeSecondHalfStart">
                                 <i class="fa fa-play"></i>
                                 2. Halbzeit starten
                             </button>
                         {{else}}
                             {{#unless ticker.timeSecondHalfEnd}}
-                                <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfStart">
+                                <button class="btn btn-warning btn-raised reset-time-button" data-type="timeSecondHalfStart">
                                     <i class="fa fa-step-backward"></i>
                                     zurück zur Halbzeitpause
                                 </button>
-                                <button class="btn btn-success time-button" data-type="timeSecondHalfEnd">
+                                <button class="btn btn-success btn-raised time-button" data-type="timeSecondHalfEnd">
                                     <i class="fa fa-stop"></i>
                                     Spiel beenden
                                 </button>
                             {{else}}
-                                <button class="btn btn-warning reset-time-button" data-type="timeSecondHalfEnd">
+                                <button class="btn btn-warning btn-raised reset-time-button" data-type="timeSecondHalfEnd">
                                     <i class="fa fa-step-backward"></i>
                                     zurück zur 2. Halbzeit
                                 </button>
@@ -146,7 +146,7 @@
                     {{/unless}}
                 {{/unless}}
 
-                <a href="{{ pathFor 'adminTickerEditFormation' _id=ticker._id}}" class="btn btn-primary">
+                <a href="{{ pathFor 'adminTickerEditFormation' _id=ticker._id}}" class="btn btn-primary btn-raised">
                     <i class="fa fa-tasks"></i>
                     Aufstellung
                 </a>
@@ -193,17 +193,17 @@
     <form class="add-ticker-entry form-horizontal">
         <div class="form-group">
             <div class="col-xs-10">
-                <textarea class="form-control" name="text" rows="1" placeholder="Schreiben..."></textarea>
+                <textarea class="form-control no-padding" name="text" rows="1" placeholder="Schreiben..."></textarea>
             </div>
             <div class="col-xs-2">
-                <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-content-send"></i> Senden</button>
+                <button class="btn btn-primary no-padding no-margin" type="submit"><i class="material-icons">send</i> Senden</button>
             </div>
         </div>
     </form>
 </template>
 
 <template name="addEvent">
-    <button class="btn btn-primary goal-button" data-toggle="modal" data-target="#eventModal{{team.code}}">
+    <button class="btn btn-primary btn-raised goal-button" data-toggle="modal" data-target="#eventModal{{team.code}}">
         <i class="fa fa-futbol-o"></i> Event
     </button>
     <div class="modal fade" id="eventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="eventModal{{team.code}}Label">
@@ -225,8 +225,8 @@
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
-                        <button class="btn btn-danger btn-flat" type="button" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                        <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="material-icons">close</i> Abbrechen</button>
                     </div>
                 {{/autoForm}}
             </div>
@@ -235,7 +235,7 @@
 </template>
 
 <template name="addTeamEvent">
-    <button class="btn btn-primary team-event-button" data-toggle="modal" data-target="#teamEventModal">
+    <button class="btn btn-primary btn-raised team-event-button" data-toggle="modal" data-target="#teamEventModal">
         <i class="fa fa-bolt"></i> Elfmeter
     </button>
     <div class="modal fade" id="teamEventModal" tabindex="-1" role="dialog" aria-labelledby="teamEventModalLabel">
@@ -257,8 +257,8 @@
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
-                        <button class="btn btn-danger btn-flat" type="button" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                        <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="material-icons">close</i> Abbrechen</button>
                     </div>
                 {{/autoForm}}
             </div>
@@ -267,7 +267,7 @@
 </template>
 
 <template name="addSubstitutionEvent">
-    <button class="btn btn-primary substitution-event-button" data-toggle="modal" data-target="#substitutionEventModal{{team.code}}">
+    <button class="btn btn-primary btn-raised substitution-event-button" data-toggle="modal" data-target="#substitutionEventModal{{team.code}}">
         <i class="fa fa-exchange"></i> Spielerwechsel
     </button>
     <div class="modal fade" id="substitutionEventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="substitutionEventModal{{team.code}}Label">
@@ -293,8 +293,8 @@
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
-                        <button class="btn btn-danger btn-flat" type="button" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                        <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="material-icons">close</i> Abbrechen</button>
                     </div>
                 {{/autoForm}}
             </div>
@@ -305,8 +305,12 @@
 <template name="tickerComment">
     <div class="tickerEntry row">
         <div class="col-xs-12 col-sm-3">
-            <button class="btn btn-danger btn-sm mdi-action-delete no-margin delete-comment" data-comment-id="{{id}}"></button>
-            <button class="btn btn-primary btn-sm mdi-action-done no-margin approve-comment" data-comment-id="{{id}}"></button>
+            <button class="btn btn-danger btn-raised btn-sm no-margin delete-comment" data-comment-id="{{id}}">
+                <i class="material-icons">delete</i>
+            </button>
+            <button class="btn btn-primary btn-raised btn-sm no-margin approve-comment" data-comment-id="{{id}}">
+                <i class="material-icons">done</i>
+            </button>
         </div>
         <div class="col-xs-12 col-sm-9">
             {{kickoffDate timestamp}} - {{name}}: {{text}}

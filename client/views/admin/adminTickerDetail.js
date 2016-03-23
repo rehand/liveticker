@@ -67,6 +67,9 @@ var commentEvent = function (event, method) {
     event.preventDefault();
 
     var commentId = event.target.getAttribute('data-comment-id');
+    if (!commentId) {
+        commentId = event.target.parentNode.getAttribute('data-comment-id');
+    }
     var tickerId = Router.current().params._id;
 
     Meteor.call(method, tickerId, commentId, function (error) {
@@ -84,6 +87,9 @@ Template.adminTickerDetail.events({
         event.preventDefault();
 
         var type = event.target.getAttribute('data-type');
+        if (!type) {
+            type = event.target.parentNode.getAttribute('data-type');
+        }
 
         var isHomeScore = type.indexOf("home") > -1;
         var value = ~type.indexOf("+") ? 1 : -1;
@@ -107,6 +113,9 @@ Template.adminTickerDetail.events({
 
         if (confirm("Möchten Sie wirklich zur nächsten Spielphase wechseln?")) {
             var type = event.target.getAttribute('data-type');
+            if (!type) {
+                type = event.target.parentNode.getAttribute('data-type');
+            }
             var tickerId = Router.current().params._id;
 
             Meteor.call("setTime", tickerId, type, function (error) {
@@ -123,6 +132,9 @@ Template.adminTickerDetail.events({
 
         if (confirm("Möchten Sie wirklich in die vorherige Spielphase zurückkehren?")) {
             var type = event.target.getAttribute('data-type');
+            if (!type) {
+                type = event.target.parentNode.getAttribute('data-type');
+            }
             var tickerId = Router.current().params._id;
 
             Meteor.call("resetTime", tickerId, type, function (error) {

@@ -6,14 +6,20 @@
                 <div class="row">
                     <div class="col-xs-4">
                             {{#if isTextEntry entry}}
-                                <button class="btn btn-default btn-xs mdi-content-create no-margin edit-entry remove-padding"
+                                <button class="btn btn-default btn-xs no-margin edit-entry remove-padding"
                                         data-toggle="modal"
-                                        data-target="#editTickerEntry"></button>
+                                        data-target="#editTickerEntry">
+                                    <i class="material-icons material-icon-xs">create</i>
+                                </button>
                             {{else}}
-                                <button class="btn btn-xs invisible no-margin mdi-content-clear remove-padding"></button>
+                                <button class="btn btn-xs invisible no-margin remove-padding">
+                                    <i class="material-icons material-icon-xs">clear</i>
+                                </button>
                             {{/if}}
-                        <button class="btn btn-default btn-xs mdi-action-delete no-margin delete-entry remove-padding"
-                                data-entry-id="{{entry.id}}"></button>
+                        <button class="btn btn-default btn-xs no-margin delete-entry remove-padding"
+                                data-entry-id="{{entry.id}}">
+                            <i class="material-icons material-icon-xs">delete</i>
+                        </button>
                     </div>
                     <div class="col-xs-8">
                         {{#with entry}}
@@ -110,8 +116,8 @@
                         <input type="hidden" name="entryId"/>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-flat" type="submit"><i class="mdi-navigation-check"></i> Speichern</button>
-                        <button class="btn btn-danger btn-flat" data-dismiss="modal"><i class="mdi-navigation-close"></i> Abbrechen</button>
+                        <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+                        <button class="btn btn-danger" data-dismiss="modal"><i class="material-icons">close</i> Abbrechen</button>
                     </div>
                 </form>
             </div>

@@ -3,7 +3,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-platform
 less
 jquery
 underscore
@@ -21,20 +20,33 @@ semantic:ui-css
 
 iron:router
 multiply:iron-router-progress
-zimme:iron-router-active
 tmeasday:errors
 sacha:spin
 aldeed:autoform
 cfs:standard-packages
 cfs:gridfs
-gildaspk:autoform-file-materialize
 ian:accounts-ui-bootstrap-3
 momentjs:moment
 mizzao:timesync
 fortawesome:fontawesome
-fezvrasta:bootstrap-material-design
 bojicas:howler2
 tmeasday:presence
 bambattajb:sticky
 u2622:persistent-session
 meteorhacks:kadira
+zimme:active-route
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+gildaspk:autoform-file-materialize
+fezvrasta:bootstrap-material-design
