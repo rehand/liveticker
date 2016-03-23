@@ -23,5 +23,5 @@ Meteor.startup(function() {
 
   Meteor.setInterval(function() {
     Meteor.call('presenceTick');
-  }, 5000);
+  }, 30000);
 });

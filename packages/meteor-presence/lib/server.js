@@ -56,7 +56,7 @@ Meteor.methods({
 
 Meteor.setInterval(function() {
   _.each(connections, function(connection, id) {
-    if (connection.lastSeen < (Date.now() - 10000))
+    if (connection.lastSeen < (Date.now() - 60000))
       expire(id);
   });
-}, 5000);
+}, 30000);
