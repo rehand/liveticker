@@ -37,4 +37,21 @@ if (Meteor.isClient) {
         });
 
     });
+
+    // set page title
+    Router.onAfterAction(function() {
+        if (this.ready()) {
+            var title = Meteor.App.NAME;
+
+            var ticker = this.data().ticker;
+            if (ticker) {
+                var homeTeamName = ticker.getHomeTeam().name;
+                var awayTeamName = ticker.getAwayTeam().name;
+
+                title += ': ' + homeTeamName + ' vs. ' + awayTeamName;
+            }
+
+            document.title = title;
+        }
+    })
 }
