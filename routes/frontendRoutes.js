@@ -43,12 +43,14 @@ if (Meteor.isClient) {
         if (this.ready()) {
             var title = Meteor.App.NAME;
 
-            var ticker = this.data().ticker;
-            if (ticker) {
-                var homeTeamName = ticker.getHomeTeam().name;
-                var awayTeamName = ticker.getAwayTeam().name;
+            if (typeof this.data === 'function') {
+                var ticker = this.data().ticker;
+                if (ticker) {
+                    var homeTeamName = ticker.getHomeTeam().name;
+                    var awayTeamName = ticker.getAwayTeam().name;
 
-                title += ': ' + homeTeamName + ' vs. ' + awayTeamName;
+                    title += ': ' + homeTeamName + ' vs. ' + awayTeamName;
+                }
             }
 
             document.title = title;
