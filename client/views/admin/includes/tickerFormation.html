@@ -1,5 +1,5 @@
 <template name="tickerFormation">
-    {{#each sortFormation this}}
+    {{#each sortAndPopulateFormation formation}}
         {{> tickerFormationEntry}}
     {{/each}}
 </template>
@@ -15,6 +15,32 @@
                 {{name}}
                 {{#if isCaptain}}
                     <strong>(C)</strong>
+                {{/if}}
+
+                {{#if redCard}}
+                    <img class="entryIcon" src="/images/red.png"/>
+                {{/if}}
+
+                {{#if yellowRedCard}}
+                    <img class="entryIcon" src="/images/yellowred.png"/>
+                {{/if}}
+
+                {{#if yellowCard}}
+                    <img class="entryIcon" src="/images/yellow.png"/>
+                {{/if}}
+
+                {{#if exchanged}}
+                    <img class="entryIcon" src="/images/in.png"/>
+                {{/if}}
+
+                {{#if substituted}}
+                    <img class="entryIcon" src="/images/out.png"/>
+                {{/if}}
+
+                {{#if scored}}
+                    {{#each goals}}
+                        <i class="fa fa-futbol-o"></i>
+                    {{/each}}
                 {{/if}}
             </div>
         </div>

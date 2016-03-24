@@ -39,9 +39,7 @@
                                 Aufstellung
                             </div>
                             <div id="teamHomeFormation" class="collapse in">
-                                {{#with ticker.teamHomeFormation}}
-                                    {{> tickerFormation}}
-                                {{/with}}
+                                {{> tickerFormation formation=ticker.teamHomeFormation entries=ticker.entries}}
                             </div>
                         </div>
                         <div class="col-xs-12">
@@ -74,9 +72,7 @@
                                 Aufstellung
                             </div>
                             <div id="teamAwayFormation" class="collapse in">
-                                {{#with ticker.teamAwayFormation}}
-                                    {{> tickerFormation}}
-                                {{/with}}
+                                {{> tickerFormation formation=ticker.teamAwayFormation entries=ticker.entries}}
                             </div>
                         </div>
                         <div class="col-xs-12">
