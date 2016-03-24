@@ -50,10 +50,23 @@ Template.tickerEntry.helpers({
         return false;
     },
     playAnthemSturmGraz: function () {
-        var anthemSturmGraz = new Howl({
-            src: [TEAM_ANTHEM_STURM_GRAZ]
-        });
-        anthemSturmGraz.play();
+        var anthemsPlayed = Session.get(SESSION_ANTHEMS_PLAYED);
+
+        if (!Array.isArray(anthemsPlayed)) {
+            anthemsPlayed = [];
+        }
+
+        if (anthemsPlayed.indexOf(this.timestamp.getTime()) === -1) {
+            // store timestamp so that we know, that for this event the anthem was played
+            anthemsPlayed.push(this.timestamp.getTime());
+            Session.set(SESSION_ANTHEMS_PLAYED, anthemsPlayed);
+
+            // play anthem
+            var anthemSturmGraz = new Howl({
+                src: [TEAM_ANTHEM_STURM_GRAZ]
+            });
+            anthemSturmGraz.play();
+        }
     },
     playAudio: function () {
         return Session.get(SESSION_PLAY_AUDIO);
