@@ -1,7 +1,7 @@
 Presence = {};
 Presence.state = function() {
   var currentRoute = Router.current();
-  if (currentRoute && currentRoute.params) {
+  if (currentRoute && currentRoute.params && currentRoute.options.route) {
     return {
       tickerId: currentRoute.params._id,
       route: currentRoute.options.route.getName()
