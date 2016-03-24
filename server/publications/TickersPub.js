@@ -23,3 +23,7 @@ Meteor.publish('Ticker', function (_id, onlyPublic) {
 Meteor.publish('PublicTickers', function () {
     return Tickers.find({published: true}, tickerFieldsExclude);
 });
+
+Meteor.publish('CurrentPublicTicker', function () {
+    return Tickers.find({published: true}, {sort: {kickoff: -1}, limit: 1}, tickerFieldsExclude);
+});

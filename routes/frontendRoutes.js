@@ -5,20 +5,44 @@ if (Meteor.isClient) {
     Router.map(function () {
         this.route('frontendTickers', {
             path: '/',
-            waitOn: function () {
+            waitOn: function() {
                 return [
                     Meteor.subscribe('PublicTickers'),
                     Meteor.subscribe('Teams')
                 ];
             },
-            data: function () {
+            data: function() {
                 return {
                     tickers: Tickers.find({}, {sort: {kickoff: -1}})
                 }
             }
         });
 
+        this.route('frontendLink', {
+            path: '/link/:target',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('CurrentPublicTicker')
+                ];
+            },
+            action: function () {
+                var currentTicker;
+
+                if (this.params.target === 'currentTicker') {
+                    currentTicker = Tickers.findOne();
+                }
+
+                if (currentTicker && currentTicker._id) {
+                    Router.go('frontendTickerDetail', {_id: currentTicker._id});
+                } else {
+                    this.render('tickerNotFound');
+                }
+            }
+        });
+
         this.route('frontendTickerDetail', {
+            name: 'frontendTickerDetail',
             path: '/tickers/:_id',
             notFoundTemplate: 'tickerNotFound',
             waitOn: function() {
@@ -55,5 +79,5 @@ if (Meteor.isClient) {
 
             document.title = title;
         }
-    })
+    });
 }
