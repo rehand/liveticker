@@ -11,7 +11,7 @@ Meteor.methods({
       : this.connection.id;
 
     // Should never happen
-    if (! connectionId)
+    if (!connectionId)
       return;
 
     var update = {};
