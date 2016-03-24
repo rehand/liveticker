@@ -211,6 +211,12 @@ Tickers.attachSchema(
             optional: true,
             label: 'Bewerb'
         },
+        descriptionTitle: {
+            type: String,
+            optional: true,
+            label: 'Titel Zusatzinformationen',
+            defaultValue: 'Einstimmung'
+        },
         description: {
             type: String,
             optional: true,

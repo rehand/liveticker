@@ -2,7 +2,13 @@
     {{#if ticker.description}}
         <div class="row">
             <div class="col-xs-12 col-lg-10" data-toggle="collapse" data-target="#tickerDescription">
-                <h2>Einstimmung</h2>
+                <h2>
+                    {{#if ticker.descriptionTitle}}
+                        {{ticker.descriptionTitle}}
+                    {{else}}
+                        Einstimmung
+                    {{/if}}
+                </h2>
             </div>
             <div class="col-xs-12 col-lg-10 collapse in" id="tickerDescription">
                 {{{ticker.description}}}
