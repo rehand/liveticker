@@ -4,6 +4,7 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.meteor/local" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/bootstrap-material-design/meteor/example/.meteor/local" />
       <excludeFolder url="file://$MODULE_DIR$/packages/fezvrasta_bootstrap-material-design/meteor/example/.meteor/local" />
       <excludeFolder url="file://$MODULE_DIR$/packages/fezvrasta_bootstrap_material_design/meteor/example/.meteor/local" />
     </content>
