@@ -10,7 +10,7 @@ var mapFirstKicker = function (entry) {
 
 Template.tickerFormation.helpers({
     sortAndPopulateFormation: function (formation) {
-        var eventEntries = this.entries.filter(function (entry) {
+        var eventEntries = this.tickerEntries.fetch().filter(function (entry) {
             return EVENT_TYPES_TO_FILTER.indexOf(entry.eventType) !== -1;
         });
 

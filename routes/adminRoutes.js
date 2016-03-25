@@ -104,6 +104,7 @@ if (Meteor.isClient) {
                     Meteor.subscribe('Ticker', tickerId),
                     Meteor.subscribe('TickerTeams', tickerId),
                     Meteor.subscribe('TickerImages', tickerId),
+                    Meteor.subscribe('TickerEntries', tickerId),
                     Meteor.subscribe('UserPresence', tickerId)
                 ];
             },
@@ -131,6 +132,11 @@ if (Meteor.isClient) {
 
                 return {
                     ticker: Tickers.findOne(this.params._id),
+                    tickerEntries: TickerEntries.find({}, {
+                        sort: {
+                            timestamp: -1
+                        }
+                    }),
                     userPresence: userPresence
                 };
             }
@@ -159,7 +165,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 return [
                     Meteor.subscribe('Ticker', this.params._id),
-                    Meteor.subscribe('Teams'),
+                    Meteor.subscribe('Teams')
                 ];
             },
             data: function() {

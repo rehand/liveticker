@@ -165,7 +165,7 @@ var mapFormation = function (formation) {
 };
 
 var mapPlayingFormation = function (formation, entries) {
-    var substitutionEntries = entries.filter(substitutionEventFilter);
+    var substitutionEntries = entries.fetch().filter(substitutionEventFilter);
 
     var substitutedKickers = substitutionEntries.map(function (entry) {
         return entry.kicker[0].id;
@@ -241,7 +241,7 @@ Template.addSubstitutionEvent.helpers({
     },
     mapPlayingFormation: mapPlayingFormation,
     mapSubstitutionFormation: function (formation, entries) {
-        var substitutionEntries = entries.filter(substitutionEventFilter);
+        var substitutionEntries = entries.fetch().filter(substitutionEventFilter);
 
         var exchangedKickers = substitutionEntries.map(function (entry) {
             return entry.kicker[1].id;

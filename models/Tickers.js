@@ -1,4 +1,5 @@
 Tickers = new Mongo.Collection('Tickers');
+TickerEntries = new Mongo.Collection('TickerEntries');
 
 var teamsOptionMapper = function () {
     return Teams.find({}, {sort: {name: 1}}).map(function (team) {
@@ -59,7 +60,7 @@ KickersFormationSchema = new SimpleSchema({
     }
 });
 
-TickerEntries = new SimpleSchema({
+TickerEntriesSchema = new SimpleSchema({
     id: {
         type: String,
         autoform: {
@@ -69,7 +70,7 @@ TickerEntries = new SimpleSchema({
         },
         optional: true,
         autoValue: function () {
-            if (!this.isSet) {
+            if (!this.isSet && this.isInsert) {
                 return new Mongo.Collection.ObjectID()._str;
             }
         }
@@ -79,7 +80,7 @@ TickerEntries = new SimpleSchema({
         label: 'Minute',
         optional: true,
         autoValue: function () {
-            if (!this.isSet && this.operator !== "$pull") {
+            if (!this.isSet && this.operator !== "$pull" && this.isInsert) {
                 return new Date();
             }
         }
@@ -100,8 +101,13 @@ TickerEntries = new SimpleSchema({
     teamId: {
         type: String,
         optional: true
+    },
+    tickerId: {
+        type: String
     }
 });
+
+TickerEntries.attachSchema(TickerEntriesSchema);
 
 TickerComments = new SimpleSchema({
     id: {
@@ -280,7 +286,7 @@ Tickers.attachSchema(
             optional: true
         },
         entries: {
-            type: [TickerEntries],
+            type: [TickerEntriesSchema],
             defaultValue: [],
             optional: true
         },
@@ -380,6 +386,18 @@ if (Meteor.isServer) {
         }
     });
 
+    TickerEntries.allow({
+        insert: function () {
+            return true;
+        },
+        update: function () {
+            return true;
+        },
+        remove: function () {
+            return true;
+        }
+    });
+
     Meteor.methods({
         addTicker: function (ticker) {
             if (!Meteor.userId()) {
@@ -465,17 +483,17 @@ if (Meteor.isServer) {
                 eventType: data.eventType,
                 kicker: kicker,
                 text: data.eventType,
-                teamId: teamId
+                teamId: teamId,
+                tickerId: tickerId
             };
-            check(event, TickerEntries);
-
-            var updateData = {$push: {entries: event}};
+            check(event, TickerEntriesSchema);
+            TickerEntries.insert(event);
 
             if (isGoalEvent(event)) {
-                updateData['$inc'] = getChangeScoreUpdateValue(1, event.eventType === EVENT_TYPE_OWN_GOAL ? !isHomeScore : isHomeScore);
+                Tickers.update(tickerId, {
+                    '$inc': getChangeScoreUpdateValue(1, event.eventType === EVENT_TYPE_OWN_GOAL ? !isHomeScore : isHomeScore)
+                });
             }
-
-            Tickers.update(tickerId, updateData);
         },
         addTickerEntry: function (data) {
             if (!this.userId) {
@@ -492,10 +510,10 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            var tickerEntry = {text: data.tickerEntryText, eventType: EVENT_TYPE_TEXT};
-            check(tickerEntry, TickerEntries);
+            var tickerEntry = {text: data.tickerEntryText, eventType: EVENT_TYPE_TEXT, tickerId: tickerId};
+            check(tickerEntry, TickerEntriesSchema);
 
-            Tickers.update(tickerId, {$push: {entries: tickerEntry}});
+            TickerEntries.insert(tickerEntry);
         },
         editTickerEntry: function (tickerId, entryId, tickerEntryText) {
             if (!this.userId) {
@@ -511,15 +529,11 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            Tickers.update(
-                {
-                    _id: tickerId,
-                    'entries.id': entryId
-                }, {
-                    $set: {
-                        'entries.$.text': tickerEntryText
-                    }
-                });
+            TickerEntries.update({id: entryId}, {
+                $set: {
+                    'text': tickerEntryText
+                }
+            });
         },
         deleteTickerEntry: function (tickerId, entryId) {
             if (!this.userId) {
@@ -534,24 +548,19 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            var updateData = {$pull: {'entries': {'id': entryId}}};
+            var entry = TickerEntries.findOne({id: entryId});
 
-            var entries_filtered = ticker.entries.filter(function (entry) {
-                return entry.id === entryId;
-            });
-
-            if (entries_filtered.length > 0) {
-                var event = entries_filtered[0];
+            if (entry && entry.teamId && isGoalEvent(entry)) {
                 // reduce score if goal event
-                if (event.teamId && isGoalEvent(event)) {
-                    var isHomeScore = event.teamId === ticker.teamHome && event.eventType !== EVENT_TYPE_OWN_GOAL;
-                    if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
-                        updateData['$inc'] = getChangeScoreUpdateValue(-1, isHomeScore);
-                    }
+                var isHomeScore = entry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
+                if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
+                    Tickers.update({_id: tickerId}, {
+                        $inc: getChangeScoreUpdateValue(-1, isHomeScore)
+                    });
                 }
             }
 
-            Tickers.update({_id: tickerId}, updateData);
+            TickerEntries.remove({id: entryId});
         },
         updateTicker: function (ticker, tickerId) {
             if (!this.userId) {
@@ -693,19 +702,18 @@ if (Meteor.isServer) {
 
             var text = comment.name + ": " + comment.text;
 
-            var tickerEntry = {text: text, eventType: EVENT_TYPE_COMMENT};
-            check(tickerEntry, TickerEntries);
+            var tickerEntry = {text: text, eventType: EVENT_TYPE_COMMENT, tickerId: tickerId};
+            check(tickerEntry, TickerEntriesSchema);
 
             Tickers.update(tickerId, {
-                $push: { // add comment to entries
-                    entries: tickerEntry
-                },
                 $pull: { // remove comment from comments
                     comments: {
                         id: commentId
                     }
                 }
             });
+
+            TickerEntries.insert(tickerEntry);
         },
         deleteTickerComment: function (tickerId, commentId) {
             if (!this.userId) {

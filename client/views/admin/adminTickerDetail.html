@@ -39,7 +39,7 @@
                                 Aufstellung
                             </div>
                             <div id="teamHomeFormation" class="collapse in">
-                                {{> tickerFormation formation=ticker.teamHomeFormation entries=ticker.entries}}
+                                {{> tickerFormation formation=ticker.teamHomeFormation tickerEntries=tickerEntries}}
                             </div>
                         </div>
                         <div class="col-xs-12">
@@ -48,8 +48,8 @@
                             <button class="btn btn-primary btn-raised btn-sm score-button" data-type="home+"><i class="material-icons">exposure_plus_1</i></button>
                         </div>
                         <div class="col-xs-12">
-                            {{> addEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
-                            {{> addSubstitutionEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker}}
+                            {{> addEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker tickerEntries=tickerEntries}}
+                            {{> addSubstitutionEvent team=ticker.getHomeTeam formation=ticker.teamHomeFormation ticker=ticker tickerEntries=tickerEntries}}
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                                 Aufstellung
                             </div>
                             <div id="teamAwayFormation" class="collapse in">
-                                {{> tickerFormation formation=ticker.teamAwayFormation entries=ticker.entries}}
+                                {{> tickerFormation formation=ticker.teamAwayFormation tickerEntries=tickerEntries}}
                             </div>
                         </div>
                         <div class="col-xs-12">
@@ -81,8 +81,8 @@
                             <button class="btn btn-primary btn-raised btn-sm score-button" data-type="away+"><i class="material-icons">exposure_plus_1</i></button>
                         </div>
                         <div class="col-xs-12">
-                            {{> addEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
-                            {{> addSubstitutionEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker}}
+                            {{> addEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker tickerEntries=tickerEntries}}
+                            {{> addSubstitutionEvent team=ticker.getAwayTeam formation=ticker.teamAwayFormation ticker=ticker tickerEntries=tickerEntries}}
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
         <div class="col-xs-12 collapse in" id="tickerEntries">
             {{> addTickerEntry}}
             {{> editTickerEntry}}
-            {{#each reverseArray ticker.entries}}
+            {{#each tickerEntries}}
                 {{> tickerEntry entry=this showButtons=true}}
             {{/each}}
         </div>
@@ -213,7 +213,7 @@
                     <div class="modal-body">
                         {{> afQuickField name="eventType" options=getEventTypes type="select"}}
 
-                        {{#with mapPlayingFormation formation ticker.entries}}
+                        {{#with mapPlayingFormation formation tickerEntries}}
                             {{> afQuickField name="kicker" type="select" options=this}}
                         {{/with}}
 
@@ -277,11 +277,11 @@
                     <div class="modal-body">
                         {{> afQuickField name="eventType" value=getSubstitutionDefaultEventType options=getSubstitutionEventTypes type="select-radio-inline"}}
 
-                        {{#with mapPlayingFormation formation ticker.entries}}
+                        {{#with mapPlayingFormation formation tickerEntries}}
                             {{> afQuickField name="kicker" type="select" options=this label="Auswechselspieler ↓"}}
                         {{/with}}
 
-                        {{#with mapSubstitutionFormation formation ticker.entries}}
+                        {{#with mapSubstitutionFormation formation tickerEntries}}
                             {{> afQuickField name="kicker2" type="select" options=this label="Einwechselspieler ↑"}}
                         {{/with}}
 

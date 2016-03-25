@@ -73,7 +73,7 @@
                                             Aufstellung
                                         </div>
                                         <div id="teamHomeFormation" class="collapse in">
-                                            {{> tickerFormation formation=ticker.teamHomeFormation entries=ticker.entries}}
+                                            {{> tickerFormation formation=ticker.teamHomeFormation tickerEntries=tickerEntries}}
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                             Aufstellung
                                         </div>
                                         <div id="teamAwayFormation" class="collapse in">
-                                            {{> tickerFormation formation=ticker.teamAwayFormation entries=ticker.entries}}
+                                            {{> tickerFormation formation=ticker.teamAwayFormation tickerEntries=tickerEntries}}
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@
             <h2>Ticker</h2>
         </div>
         <div class="col-xs-12 collapse in" id="tickerEntries">
-            {{#each reverseArray ticker.entries}}
+            {{#each tickerEntries}}
                 {{> tickerEntry entry=this}}
             {{/each}}
         </div>

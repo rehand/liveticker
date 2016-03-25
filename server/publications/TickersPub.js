@@ -1,4 +1,4 @@
-var tickerFieldsExclude = {fields: {entries: 0, comments: 0, teamHomeFormation: 0, teamAwayFormation: 0, updatedAt: 0}};
+var tickerFieldsExclude = {fields: {comments: 0, teamHomeFormation: 0, teamAwayFormation: 0, updatedAt: 0}};
 
 Meteor.publish('Tickers', function () {
     return Tickers.find({}, tickerFieldsExclude);
@@ -37,4 +37,12 @@ Meteor.publish('PublicTickers', function () {
 
 Meteor.publish('CurrentPublicTicker', function () {
     return Tickers.find({published: true}, {sort: {kickoff: -1}, limit: 1}, tickerFieldsExclude);
+});
+
+Meteor.publish('TickerEntries', function (tickerId) {
+    check(tickerId, String);
+
+    return TickerEntries.find({
+        tickerId: tickerId
+    });
 });

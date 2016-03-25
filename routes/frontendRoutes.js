@@ -50,12 +50,18 @@ if (Meteor.isClient) {
                 return [
                     Meteor.subscribe('Ticker', tickerId, true, true),
                     Meteor.subscribe('TickerTeams', tickerId, true),
-                    Meteor.subscribe('TickerImages', tickerId, true)
+                    Meteor.subscribe('TickerImages', tickerId, true),
+                    Meteor.subscribe('TickerEntries', tickerId)
                 ];
             },
             data: function() {
                 return {
-                    ticker: Tickers.findOne(this.params._id)
+                    ticker: Tickers.findOne(this.params._id),
+                    tickerEntries: TickerEntries.find({}, {
+                        sort: {
+                            timestamp: -1
+                        }
+                    })
                 };
             }
         });
