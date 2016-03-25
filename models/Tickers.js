@@ -303,7 +303,7 @@ Tickers.attachSchema(
         },
         formationHidden: {
             type: Boolean,
-            defaultValue: true,
+            defaultValue: false,
             optional: true,
             label: 'Sichtbarkeit',
             autoform: {
