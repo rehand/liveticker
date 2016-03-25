@@ -48,7 +48,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 var tickerId = this.params._id;
                 return [
-                    Meteor.subscribe('Ticker', tickerId, true),
+                    Meteor.subscribe('Ticker', tickerId, true, true),
                     Meteor.subscribe('TickerTeams', tickerId, true),
                     Meteor.subscribe('TickerImages', tickerId, true)
                 ];
