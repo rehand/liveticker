@@ -17,10 +17,7 @@ if (Meteor.isClient) {
         });
 
         this.route('adminTeamCreate', {
-            path: '/admin/teams/create',
-            waitOn: function() {
-                return [Meteor.subscribe('Teams')];
-            }
+            path: '/admin/teams/create'
         });
 
         this.route('adminTeamDetail', {
@@ -181,7 +178,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 return [
                     Meteor.subscribe('Ticker', this.params._id),
-                    Meteor.subscribe('Teams')
+                    Meteor.subscribe('TickerTeams', this.params._id)
                 ];
             },
             data: function() {

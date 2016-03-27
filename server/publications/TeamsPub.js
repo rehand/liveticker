@@ -1,5 +1,6 @@
+var teamFieldsExclude = {fields: {kickers: 0, logo: 0, createdAt: 0, updatedAt: 0}};
 Meteor.publish('Teams', function () {
-  return Teams.find();
+    return Teams.find({}, teamFieldsExclude);
 });
 
 Meteor.publish('Team', function (code) {
