@@ -35,7 +35,6 @@ bambattajb:sticky
 u2622:persistent-session
 meteorhacks:kadira
 zimme:active-route
-standard-minifiers
 meteor-base
 mobile-experience
 mongo
@@ -51,3 +50,5 @@ check
 gildaspk:autoform-file-materialize
 fezvrasta:bootstrap-material-design
 percolate:migrations
+standard-minifier-css
+standard-minifier-js
