@@ -39,6 +39,11 @@ TeamsSchema = new SimpleSchema({
         type: String,
         label: 'Kürzel'
     },
+    coach: {
+        type: String,
+        label: 'Trainer',
+        optional: true
+    },
     kickers: {
         type: [KickersSchema],
         defaultValue: [],
@@ -127,7 +132,8 @@ if (Meteor.isServer) {
 
             Teams.insert({
                 name: team.name,
-                code: team.code
+                code: team.code,
+                coach: team.coach
             });
 
             var redirect = {

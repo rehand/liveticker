@@ -88,6 +88,20 @@ function drawLogos(context, ticker) {
     logoAway.src = ticker.getAwayTeam().getLogo().url();
 }
 
+var drawCoachString = function (context, team, textAlign, xText, yText) {
+    if (team.coach) {
+        context.textAlign = textAlign;
+
+        // coach header
+        context.font = "bold " + fontSize + "px FuturaEFME-Bold";
+        context.fillText("Trainer", xText, 1011);
+
+        // coach name
+        context.font = fontSize + "px FuturaEFME-Book";
+        context.fillText(team.coach, xText, yText);
+    }
+};
+
 var drawFormationString = function (context, formation, xPos, yPos) {
     var formationCnt = {
         defenders: 0,
@@ -148,15 +162,9 @@ function generateImage(ticker) {
             var position = kickerFormationEntry.exchanged ? kickerFormationEntry.position : kickerFormationEntry.gamePosition;
             context.fillText(abbreviatePositions(position), xText, yText);
 
-            // Trainer header
-            // context.fillText("Trainer", xText, 1011);
-
             var xTextOffset = 45 * direction;
             context.font = fontSize + "px FuturaEFME-Book";
             context.fillText(abbreviateKickerName(kickerFormationEntry.name), xText + xTextOffset, yText);
-
-            // trainer
-            // context.fillText("Trainer x", xText, 1039);
 
             var xCardOffset = 20;
             var yCard = yText - 16;
@@ -190,15 +198,22 @@ function generateImage(ticker) {
             }
         }
 
+        var leftPos = 39;
+        var rightPos = 762;
+
         var formationHome = sortFormation(filterFormation(populateFormation(ticker.teamHomeFormation, tickerEntries)), false);
         formationHome.forEach(function (kickerFormationEntry, index) {
-            drawKicker(index, kickerFormationEntry, "left", 39, 236);
+            drawKicker(index, kickerFormationEntry, "left", leftPos, 236);
         });
 
         var formationAway = sortFormation(filterFormation(populateFormation(ticker.teamAwayFormation, tickerEntries)), false);
         formationAway.forEach(function (kickerFormationEntry, index) {
-            drawKicker(index, kickerFormationEntry, "right", 762, 486);
+            drawKicker(index, kickerFormationEntry, "right", rightPos, 486);
         });
+
+        // coaches
+        drawCoachString(context, ticker.getHomeTeam(), "left", leftPos, 1039);
+        drawCoachString(context, ticker.getAwayTeam(), "right", rightPos, 1039);
 
         var yPosFormationString = 350;
         drawFormationString(context, formationHome, 74 + 100 / 2, yPosFormationString);
