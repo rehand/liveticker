@@ -5,17 +5,11 @@
             {{#if showButtons}}
                 <div class="row">
                     <div class="col-xs-4">
-                            {{#if isTextEntry entry}}
-                                <button class="btn btn-default btn-xs no-margin edit-entry remove-padding"
-                                        data-toggle="modal"
-                                        data-target="#editTickerEntry">
-                                    <i class="material-icons material-icon-xs">create</i>
-                                </button>
-                            {{else}}
-                                <button class="btn btn-xs invisible no-margin remove-padding">
-                                    <i class="material-icons material-icon-xs">clear</i>
-                                </button>
-                            {{/if}}
+                        <button class="btn btn-default btn-xs no-margin edit-entry remove-padding"
+                                data-toggle="modal"
+                                data-target="#editTickerEntry">
+                            <i class="material-icons material-icon-xs">create</i>
+                        </button>
                         <button class="btn btn-default btn-xs no-margin delete-entry remove-padding"
                                 data-entry-id="{{entry.id}}">
                             <i class="material-icons material-icon-xs">delete</i>
@@ -114,6 +108,15 @@
                     <div class="modal-body">
                         <textarea class="form-control" name="text" rows="1" placeholder="Schreiben..."></textarea>
                         <input type="hidden" name="entryId"/>
+
+                        <div class="h4" data-toggle="collapse" data-target="#editExpert">
+                            Interne Daten
+                            <i class="glyphicon glyphicon-collapse-down"></i>
+                        </div>
+                        <div class="collapse" id="editExpert">
+                            <label for="entryTimestamp" class="control-label">Zeitstempel</label>
+                            <input type="datetime-local" name="entryTimestamp" id="entryTimestamp" class="form-control" step=".001" />
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>

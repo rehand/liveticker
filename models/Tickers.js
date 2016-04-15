@@ -515,7 +515,7 @@ if (Meteor.isServer) {
 
             TickerEntries.insert(tickerEntry);
         },
-        editTickerEntry: function (tickerId, entryId, tickerEntryText) {
+        editTickerEntry: function (tickerId, entryId, tickerEntryText, entryTimestamp) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
             }
@@ -523,17 +523,30 @@ if (Meteor.isServer) {
             check(tickerId, String);
             check(entryId, String);
             check(tickerEntryText, String);
+            check(entryTimestamp, Date);
 
             var ticker = Tickers.findOne(tickerId);
             if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            TickerEntries.update({id: entryId}, {
+            var tickerEntry = TickerEntries.findOne({id: entryId});
+            if (tickerEntry === null) {
+                throw new Meteor.Error("entry-not-found", "Eintrag nicht gefunden!");
+            }
+
+            var value = {
                 $set: {
-                    'text': tickerEntryText
+                    'timestamp': entryTimestamp
                 }
-            });
+            };
+
+            // update Text only in case of TEXT event
+            if (tickerEntry.eventType === EVENT_TYPE_TEXT) {
+                value.$set['text'] = tickerEntryText;
+            }
+
+            TickerEntries.update({id: entryId}, value);
         },
         deleteTickerEntry: function (tickerId, entryId) {
             if (!this.userId) {

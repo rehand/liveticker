@@ -117,6 +117,9 @@ Template.adminTickerDetail.events({
         var text = this.entry.text;
         editDialog.find('textarea[name="text"]').first().val(text);
 
+        var entryTimestamp = this.entry.timestamp.toISOString().replace('Z', '');
+        editDialog.find('input[name="entryTimestamp"]').first().val(entryTimestamp);
+
         return true;
     }
 });
@@ -145,8 +148,12 @@ Template.editTickerEntry.events({
         var tickerId = Router.current().params._id;
         var entryId = target.find('input[name="entryId"]').first().val();
         var tickerEntryText = target.find('textarea[name="text"]').first();
+        var entryTimestamp = new Date(target.find('input[name="entryTimestamp"]').first().val());
+        if (!entryTimestamp) {
+            console.error("Invalid date: ", entryTimestamp);
+        }
 
-        Meteor.call("editTickerEntry", tickerId, entryId, tickerEntryText.val(),
+        Meteor.call("editTickerEntry", tickerId, entryId, tickerEntryText.val(), entryTimestamp,
             function (error) {
                 if (error) {
                     console.error('error ' + error.reason);
