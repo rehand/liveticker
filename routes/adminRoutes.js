@@ -188,6 +188,25 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTickerExportFormation', {
+            path: '/admin/tickers/:_id/formation/export',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                var tickerId = this.params._id;
+                return [
+                    Meteor.subscribe('Ticker', tickerId),
+                    Meteor.subscribe('TickerTeams', tickerId),
+                    Meteor.subscribe('TickerEntries', tickerId),
+                    Meteor.subscribe('TickerImages', tickerId)
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params._id)
+                };
+            }
+        });
+
         this.route('adminUsers', {
             path: '/admin/users'
         });

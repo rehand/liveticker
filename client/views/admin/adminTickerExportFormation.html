@@ -1,0 +1,46 @@
+<template name="adminTickerExportFormation">
+    {{> adminNavigation}}
+
+    <style type="text/css">
+        @font-face {
+            font-family: 'FuturaEFME-Bold';
+            src: url('/fonts/FuturaEFME-Bold.eot?#iefix') format('embedded-opentype'), url('/fonts/FuturaEFME-Bold.otf') format('opentype'),
+            url('/fonts/FuturaEFME-Bold.woff') format('woff'), url('/fonts/FuturaEFME-Bold.ttf') format('truetype'), url('/fonts/FuturaEFME-Bold.svg#FuturaEFME-Bold') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaEFME-Book';
+            src: url('/fonts/FuturaEFME-Book.eot?#iefix') format('embedded-opentype'), url('/fonts/FuturaEFME-Book.otf') format('opentype'),
+            url('/fonts/FuturaEFME-Book.woff') format('woff'), url('/fonts/FuturaEFME-Book.ttf') format('truetype'), url('/fonts/FuturaEFME-Book.svg#FuturaEFME-Book') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+
+    <div class="page-header col-xs-12">
+        <h1>Aufstellungen exportieren
+            <button class="btn btn-primary refresh" type="button">
+                <i class="material-icons">refresh</i>
+                Aktualisieren
+            </button>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <canvas id="formationExport" width="800" height="1134"></canvas>
+        </div>
+
+        <div class="col-xs-12">
+            <a class="download-button btn btn-primary"><i class="material-icons">file_download</i> Herunterladen</a>
+            <button class="btn btn-default back-button" type="button"><i class="material-icons">arrow_back</i> Zurück
+            </button>
+        </div>
+    </div>
+</template>

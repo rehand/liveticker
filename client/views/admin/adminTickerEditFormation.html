@@ -2,7 +2,12 @@
     {{> adminNavigation}}
 
     <div class="page-header col-xs-12">
-        <h1>Aufstellung</h1>
+        <h1>Aufstellung
+            <a href="{{ pathFor 'adminTickerExportFormation' _id=ticker._id}}" class="btn btn-primary">
+                <i class="material-icons">share</i>
+                Exportieren
+            </a>
+        </h1>
     </div>
 
     <div class="row">
