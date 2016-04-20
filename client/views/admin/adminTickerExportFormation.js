@@ -18,6 +18,7 @@ var imgOut = new Image();
 imgOut.src = '/images/out.png';
 
 var fontSize = 24;
+var maxTextLength = 150;
 
 var abbreviatePositions = function (position) {
     if (position in POSITIONS_ABBR) {
@@ -163,12 +164,19 @@ function generateImage(ticker) {
             context.fillText(abbreviatePositions(position), xText, yText);
 
             var xTextOffset = 45 * direction;
-            context.font = fontSize + "px FuturaEFME-Book";
-            context.fillText(abbreviateKickerName(kickerFormationEntry.name), xText + xTextOffset, yText);
+
+            var kickerName = abbreviateKickerName(kickerFormationEntry.name);
+            var tmpFontSize = fontSize;
+            do {
+                context.font = tmpFontSize + "px FuturaEFME-Book";
+                tmpFontSize --;
+            } while (context.measureText(kickerName).width > maxTextLength && tmpFontSize > 1);
+            context.fillText(kickerName, xText + xTextOffset, yText);
 
             var xCardOffset = 20;
             var yCard = yText - 16;
-
+            
+            context.font = fontSize + "px FuturaEFME-Book";
             context.textAlign = "left";
 
             var xImageOffset = 70 * direction;
@@ -215,7 +223,7 @@ function generateImage(ticker) {
 
         var formationAway = sortFormation(filterFormation(populateFormation(ticker.teamAwayFormation, tickerEntries)), false);
         formationAway.forEach(function (kickerFormationEntry, index) {
-            drawKicker(index, kickerFormationEntry, "right", rightPos, 486);
+            drawKicker(index, kickerFormationEntry, "right", rightPos, 489);
         });
 
         // coaches
