@@ -101,40 +101,17 @@ if (Meteor.isClient) {
                     Meteor.subscribe('Ticker', tickerId),
                     Meteor.subscribe('TickerTeams', tickerId),
                     Meteor.subscribe('TickerImages', tickerId),
-                    Meteor.subscribe('TickerEntries', tickerId),
-                    Meteor.subscribe('UserPresence', tickerId)
+                    Meteor.subscribe('TickerEntries', tickerId)
                 ];
             },
             data: function() {
-                var presences = Presences.find().fetch();
-
-                var presencesOnline = presences.filter( function (entry) {
-                    return !entry.session_expired;
-                });
-
-                var filterFrontend = function (entry) {
-                    return entry.state.route.indexOf('frontend') === 0;
-                };
-
-                var filterBackend = function (entry) {
-                    return entry.state.route.indexOf('admin') === 0;
-                };
-
-                var userPresence = {
-                    connections: presencesOnline.length,
-                    frontend: presencesOnline.filter(filterFrontend).length,
-                    backend: presencesOnline.filter(filterBackend).length,
-                    visitsFrontend: presences.filter(filterFrontend).length
-                };
-
                 return {
                     ticker: Tickers.findOne(this.params._id),
                     tickerEntries: TickerEntries.find({}, {
                         sort: {
                             timestamp: -1
                         }
-                    }),
-                    userPresence: userPresence
+                    })
                 };
             }
         });
@@ -216,12 +193,35 @@ if (Meteor.isClient) {
                     Meteor.subscribe('Ticker', tickerId),
                     Meteor.subscribe('TickerTeams', tickerId),
                     Meteor.subscribe('TickerEntries', tickerId),
-                    Meteor.subscribe('TickerImages', tickerId)
+                    Meteor.subscribe('TickerImages', tickerId),
+                    Meteor.subscribe('UserPresence', tickerId)
                 ];
             },
             data: function() {
+                var presences = Presences.find().fetch();
+
+                var presencesOnline = presences.filter( function (entry) {
+                    return !entry.session_expired;
+                });
+
+                var filterFrontend = function (entry) {
+                    return entry.state.route.indexOf('frontend') === 0;
+                };
+
+                var filterBackend = function (entry) {
+                    return entry.state.route.indexOf('admin') === 0;
+                };
+
+                var userPresence = {
+                    connections: presencesOnline.length,
+                    frontend: presencesOnline.filter(filterFrontend).length,
+                    backend: presencesOnline.filter(filterBackend).length,
+                    visitsFrontend: presences.filter(filterFrontend).length
+                };
+
                 return {
-                    ticker: Tickers.findOne(this.params._id)
+                    ticker: Tickers.findOne(this.params._id),
+                    userPresence: userPresence
                 };
             }
         });
