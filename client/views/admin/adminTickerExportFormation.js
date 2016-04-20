@@ -27,16 +27,6 @@ var abbreviatePositions = function (position) {
     return position;
 };
 
-var abbreviateKickerName = function (kickerName) {
-    var kickerNameSplit = kickerName.split(' ');
-
-    if (kickerNameSplit.length > 1) {
-        return kickerNameSplit[0].charAt(0) + '. ' + kickerNameSplit[kickerNameSplit.length - 1];
-    }
-
-    return kickerName;
-};
-
 var drawEventTime = function (context, ticker, timestamp, x, y) {
     var minuteStr = getGameTimeMinStr(ticker, timestamp);
 
@@ -55,39 +45,6 @@ var filterFormation = function (formation) {
 Template.adminTickerExportFormation.created = function () {
     serverOffset = TimeSync.serverOffset();
 };
-
-function drawLogos(context, ticker) {
-    var maxLogoWidth = 100;
-    var maxLogoHeight = 100;
-    var yPosLogo = 312;
-    var xPosLogoHome = 74;
-    var xPosLogoAway = 648;
-
-    var drawLogo = function (context, logo, xPosLogo) {
-        var ratio = 1;
-        if (logo.width > maxLogoWidth)
-            ratio = maxLogoWidth / logo.width;
-        else if (logo.height > maxLogoHeight)
-            ratio = maxLogoHeight / logo.height;
-
-        var width = logo.width * ratio;
-        var height = logo.height * ratio;
-
-        context.drawImage(logo, xPosLogo + (maxLogoWidth - width) / 2, yPosLogo - height, width, height);
-    };
-
-    var logoHome = new Image();
-    logoHome.onload = function () {
-        drawLogo(context, logoHome, xPosLogoHome);
-    };
-    logoHome.src = ticker.getHomeTeam().getLogo().url();
-
-    var logoAway = new Image();
-    logoAway.onload = function () {
-        drawLogo(context, logoAway, xPosLogoAway);
-    };
-    logoAway.src = ticker.getAwayTeam().getLogo().url();
-}
 
 var drawCoachString = function (context, team, textAlign, xText, yText) {
     if (team.coach) {
@@ -147,7 +104,12 @@ function generateImage(ticker) {
     background.onload = function () {
         context.drawImage(background, 0, 0);
 
-        drawLogos(context, ticker);
+        var maxLogoWidth = 100;
+        var maxLogoHeight = 100;
+        var yPosLogo = 312;
+        var xPosLogoHome = 74;
+        var xPosLogoAway = 648;
+        drawLogos(context, ticker, maxLogoWidth, maxLogoHeight, yPosLogo, xPosLogoHome, xPosLogoAway);
 
         function drawKicker(index, kickerFormationEntry, textAlign, xText, xCard) {
             // don't draw more than 14 kickers (11+3)
@@ -175,7 +137,7 @@ function generateImage(ticker) {
 
             var xCardOffset = 20;
             var yCard = yText - 16;
-            
+
             context.font = fontSize + "px FuturaEFME-Book";
             context.textAlign = "left";
 
@@ -250,14 +212,9 @@ Template.adminTickerExportFormation.events({
         return false;
     },
     "click .download-button": function (event) {
-        console.log('Download!');
-
         var dt = $('#formationExport').get(0).toDataURL('image/png');
 
-        /* Change MIME type to trick the browser to download the file instead of displaying it */
-        // dt = dt.replace(/^data:image\/[^;]*/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
-
-        event.target.setAttribute("download", this.ticker.kickoff.toISOString().substring(0, 10) + "_" + this.ticker.getHomeTeam().name + " - " + this.ticker.getAwayTeam().name + ".png");
+        event.target.setAttribute("download", this.ticker.kickoff.toISOString().substring(0, 10) + "_" + this.ticker.getHomeTeam().name + " - " + this.ticker.getAwayTeam().name + " - Aufstellungen.png");
 
         event.target.href = dt;
     },
