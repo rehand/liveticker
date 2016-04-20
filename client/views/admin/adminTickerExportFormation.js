@@ -170,31 +170,38 @@ function generateImage(ticker) {
             var yCard = yText - 16;
 
             context.textAlign = "left";
-            var imgCount = 0;
-            if (kickerFormationEntry.redCard) {
-                context.drawImage(imgRedCard, xCard, yCard);
-                drawEventTime(context, ticker, kickerFormationEntry.redCard[0], xCard + xCardOffset, yText);
-                imgCount++;
-            } else if (kickerFormationEntry.yellowRedCard) {
-                context.drawImage(imgYellowRedCard, xCard, yCard);
-                drawEventTime(context, ticker, kickerFormationEntry.yellowRedCard[0], xCard + xCardOffset, yText);
-                imgCount++;
-            } else if (kickerFormationEntry.yellowCard) {
-                context.drawImage(imgYellowCard, xCard, yCard);
-                drawEventTime(context, ticker, kickerFormationEntry.yellowCard[0], xCard + xCardOffset, yText);
-                imgCount++;
-            }
 
             var xImageOffset = 70 * direction;
+            var imgCount = 0;
+
             if (kickerFormationEntry.exchanged) {
                 context.drawImage(imgIn, xCard + imgCount * xImageOffset, yCard);
                 drawEventTime(context, ticker, kickerFormationEntry.exchanged[0], xCard + xCardOffset + imgCount * xImageOffset, yText);
                 imgCount++;
             }
 
+            if (kickerFormationEntry.yellowCard) {
+                context.drawImage(imgYellowCard, xCard + imgCount * xImageOffset, yCard);
+                drawEventTime(context, ticker, kickerFormationEntry.yellowCard[0], xCard + xCardOffset + imgCount * xImageOffset, yText);
+                imgCount++;
+            }
+
+            if (kickerFormationEntry.yellowRedCard) {
+                context.drawImage(imgYellowRedCard, xCard + imgCount * xImageOffset, yCard);
+                drawEventTime(context, ticker, kickerFormationEntry.yellowRedCard[0], xCard + xCardOffset + imgCount * xImageOffset, yText);
+                imgCount++;
+            }
+
+            if (kickerFormationEntry.redCard) {
+                context.drawImage(imgRedCard, xCard + imgCount * xImageOffset, yCard);
+                drawEventTime(context, ticker, kickerFormationEntry.redCard[0], xCard + xCardOffset + imgCount * xImageOffset, yText);
+                imgCount++;
+            }
+
             if (kickerFormationEntry.substituted) {
                 context.drawImage(imgOut, xCard + imgCount * xImageOffset, yCard);
                 drawEventTime(context, ticker, kickerFormationEntry.substituted[0], xCard + xCardOffset + imgCount * xImageOffset, yText);
+                imgCount++;
             }
         }
 
