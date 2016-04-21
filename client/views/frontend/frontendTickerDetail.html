@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    {{#unless ticker.timeSecondHalfEnd}}
+    {{#if allowComments}}
         <div class="row">
             <div class="col-xs-12" data-toggle="collapse" data-target="#tickerCommentForm">
                 <h2>Kommentar</h2>
@@ -109,7 +109,7 @@
                 {{> commentForm}}
             </div>
         </div>
-    {{/unless}}
+    {{/if}}
 
     <div class="row">
         <div class="col-xs-12" data-toggle="collapse" data-target="#tickerEntries">
