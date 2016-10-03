@@ -36,7 +36,7 @@ Template.tickerEntry.helpers({
         return Teams.findOne(this.teamId).code;
     },
     isSturmGraz: function () {
-        return Teams.findOne(this.teamId).code === TEAM_CODE_STURM_GRAZ;
+        return TEAM_CODES_STURM_GRAZ.indexOf(Teams.findOne(this.teamId).code) !== -1;
     },
     isCurrentEntry: function () {
         var currentDate = new Date();
