@@ -44,7 +44,16 @@
                                     {{/if}}
                                 {{/if}}
                             {{else}}
-                                Tor
+                                {{#if isAmateur}}
+                                    TOOOOOOOOOOOOOOOOOOOOOOOR
+                                    {{#if playAudio}}
+                                        {{#if isCurrentEntry}}
+                                            {{playAnthemAmateur}}
+                                        {{/if}}
+                                    {{/if}}
+                                {{else}}
+                                    Tor
+                                {{/if}}
                             {{/if}}
                             von {{kicker.[0].name}} ({{getTeamCode}})!
                         </strong>

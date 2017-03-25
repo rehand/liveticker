@@ -38,6 +38,9 @@ Template.tickerEntry.helpers({
     isSturmGraz: function () {
         return TEAM_CODES_STURM_GRAZ.indexOf(Teams.findOne(this.teamId).code) !== -1;
     },
+    isAmateur: function () {
+        return TEAM_CODES_AMATEUR.indexOf(Teams.findOne(this.teamId).code) !== -1;
+    },
     isCurrentEntry: function () {
         var currentDate = new Date();
         var diff = currentDate - this.timestamp;
@@ -50,23 +53,10 @@ Template.tickerEntry.helpers({
         return false;
     },
     playAnthemSturmGraz: function () {
-        var anthemsPlayed = Session.get(SESSION_ANTHEMS_PLAYED);
-
-        if (!Array.isArray(anthemsPlayed)) {
-            anthemsPlayed = [];
-        }
-
-        if (anthemsPlayed.indexOf(this.timestamp.getTime()) === -1) {
-            // store timestamp so that we know, that for this event the anthem was played
-            anthemsPlayed.push(this.timestamp.getTime());
-            Session.set(SESSION_ANTHEMS_PLAYED, anthemsPlayed);
-
-            // play anthem
-            var anthemSturmGraz = new Howl({
-                src: [TEAM_ANTHEM_STURM_GRAZ]
-            });
-            anthemSturmGraz.play();
-        }
+        playAnthem(this, TEAM_ANTHEM_STURM_GRAZ);
+    },
+    playAnthemAmateur: function () {
+        playAnthem(this, TEAM_ANTHEM_AMATEUR);
     },
     playAudio: function () {
         return Session.get(SESSION_PLAY_AUDIO);
