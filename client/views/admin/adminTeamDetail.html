@@ -32,6 +32,30 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-6">
+            <h2>Tor-Einstellungen</h2>
+            <ul>
+                <li>Tortext:
+                    {{#if team.goalText}}
+                        "{{team.goalText}}"
+                    {{else}}
+                        Standard
+                    {{/if}}
+                </li>
+                <li>
+                    Torhymne:
+                    {{#if team.getAnthemName}}
+                        {{team.getAnthemName}}
+                    {{else}}
+                        Keine
+                    {{/if}}
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
             <h2>Spieler</h2>
             <ul>
                 {{#each team.kickers}}

@@ -35,12 +35,6 @@ Template.tickerEntry.helpers({
     getTeamCode: function () {
         return Teams.findOne(this.teamId).code;
     },
-    isSturmGraz: function () {
-        return TEAM_CODES_STURM_GRAZ.indexOf(Teams.findOne(this.teamId).code) !== -1;
-    },
-    isAmateur: function () {
-        return TEAM_CODES_AMATEUR.indexOf(Teams.findOne(this.teamId).code) !== -1;
-    },
     isCurrentEntry: function () {
         var currentDate = new Date();
         var diff = currentDate - this.timestamp;
@@ -52,11 +46,17 @@ Template.tickerEntry.helpers({
 
         return false;
     },
-    playAnthemSturmGraz: function () {
-        playAnthem(this, TEAM_ANTHEM_STURM_GRAZ);
+    hasGoalText: function () {
+        return !!Teams.findOne(this.teamId).goalText;
     },
-    playAnthemAmateur: function () {
-        playAnthem(this, TEAM_ANTHEM_AMATEUR);
+    getGoalText: function () {
+        return Teams.findOne(this.teamId).goalText;
+    },
+    hasAnthem: function () {
+        return !!Teams.findOne(this.teamId).anthem;
+    },
+    playTeamAnthem: function () {
+        playAnthem(this, Teams.findOne(this.teamId).getAnthemPath());
     },
     playAudio: function () {
         return Session.get(SESSION_PLAY_AUDIO);

@@ -51,6 +51,48 @@ Migrations.add({
     }
 );
 
+var resultFunction = function (error, affectedRows) {
+    console.log('Updated ' + affectedRows + ' entrie(s) with error: ' + error);
+};
+
+Migrations.add({
+        version: 2,
+        name: 'Added goalText and anthem to Team in database',
+        up: function () {
+            console.log('Setting goalText and anthem for team STU...');
+            Teams.update({'code': 'STU'}, {
+                $set: {
+                    goalText: 'TOOOOOOOOOOOOOOOOOOOOOOOR',
+                    anthem: 'sturm'
+                }
+            }, resultFunction);
+
+            console.log('Setting goalText and anthem for team STUF...');
+            Teams.update({'code': 'STUF'}, {
+                $set: {
+                    goalText: 'TOOOOOOOOOOOOOOOOOOOOOOOR',
+                    anthem: 'sturm'
+                }
+            }, resultFunction);
+
+            console.log('Setting goalText and anthem for team SVF...');
+            Teams.update({'code': 'SVF'}, {
+                $set: {
+                    goalText: 'TOOOOOOOOOOOOOOOOOOOOOOOR',
+                    anthem: 'steirermen'
+                }
+            }, resultFunction);
+        },
+        down: function () {
+            console.log('Removing goalText and anthem from Teams...');
+            Teams.update({}, {$unset: {
+                goalText: "",
+                anthem: ""
+            }}, {multi: true}, resultFunction);
+        }
+    }
+);
+
 Meteor.startup(function () {
     Migrations.migrateTo('latest');
 });

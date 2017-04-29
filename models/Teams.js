@@ -61,6 +61,25 @@ TeamsSchema = new SimpleSchema({
         label: 'Logo',
         optional: true
     },
+    goalText: {
+        type: String,
+        label: 'Tortext',
+        optional: true
+    },
+    anthem: {
+        type: String,
+        label: 'Torhymne',
+        allowedValues: TEAM_ANTHEMS.map(function(entry) {
+            return entry.value
+        }),
+        autoform: {
+            afFieldInput: {
+                type: 'select',
+                options: TEAM_ANTHEMS
+            }
+        },
+        optional: true
+    },
     createdAt: {
         type: Date,
         autoValue: function () {
@@ -102,6 +121,32 @@ Teams.helpers({
     },
     getSubstitionEventFormName: function () {
         return "changeEventForm" + this.code;
+    },
+    getAnthem: function () {
+        if (this.anthem) {
+            var anthemValue = this.anthem;
+            var foundAnthems = TEAM_ANTHEMS.filter(function (anthem) {
+                return anthem.value == anthemValue;
+            });
+            if (foundAnthems.length > 0) {
+                return foundAnthems[0];
+            }
+        }
+        return null;
+    },
+    getAnthemName: function () {
+        var foundAnthem = this.getAnthem();
+        if (foundAnthem) {
+            return foundAnthem.label;
+        }
+        return null;
+    },
+    getAnthemPath: function () {
+        var foundAnthem = this.getAnthem();
+        if (foundAnthem) {
+            return foundAnthem.path;
+        }
+        return null;
     }
 });
 
