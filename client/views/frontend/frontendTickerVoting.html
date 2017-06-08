@@ -1,0 +1,64 @@
+<template name="frontendTickerVoting">
+    <div class="page-header col-xs-12">
+        <h1>Spielerbewertung
+            <a href="{{ pathFor 'frontendTickerDetail' _id=ticker._id }}" class="btn btn-primary btn-raised">
+                <i class="fa fa-arrow-left"></i>
+                zurück zum Ticker
+            </a>
+        </h1>
+    </div>
+
+    <div class="row">
+      {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            {{#if ticker.isVotingEnabled}}
+                <form id="votingForm" class="votingForm" type="POST">
+                    <input name="tickerId" type="hidden" value="{{ticker._id}}" />
+
+                    {{#if ticker.teamHomeVoting}}
+                        {{> votingForm team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries}}
+                    {{/if}}
+
+                    {{#if ticker.teamAwayVoting}}
+                        {{> votingForm team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries}}
+                    {{/if}}
+
+                    <button class="btn btn-primary btn-raised" type="submit"><i class="material-icons">check</i> Absenden</button>
+                    <a href="{{ pathFor 'frontendTickerDetail' _id=ticker._id }}" class="btn btn-danger btn-raised" type="button"><i class="material-icons">close</i> Abbrechen</a>
+                </form>
+            {{else}}
+                Die Spielerbewertung ist geschlossen.
+            {{/if}}
+        </div>
+    </div>
+</template>
+
+<template name="votingForm">
+    <div class="col-xs-12">
+        <h2>Bewertung {{team.name}}</h2>
+
+        {{#with mapVotableKickers formation tickerEntries}}
+            {{#each this}}
+                <div class="form-group">
+                    <label for="voting[]" class="control-label">{{name}}</label>
+                    <input type="hidden" name="kickerId[]" value={{id}} />
+                    <select name="voting[]" class="form-control" required>
+                        <option disabled selected value>Spieler bewerten</option>
+                        {{#each VOTING_OPTIONS}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                        <option value="0">0 Zu kurz eingesetzt</option>
+                        <option value="1">1 Sehr schwach</option>
+                        <option value="2">2 Schwach</option>
+                        <option value="3">3 Durchschnittlich</option>
+                        <option value="4">4 Gut</option>
+                        <option value="5">5 Hervorragend</option>
+                    </select>
+                </div>
+            {{/each}}
+        {{/with}}
+    </div>
+</template>

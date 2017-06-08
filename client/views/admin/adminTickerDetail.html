@@ -141,6 +141,8 @@
                                     <i class="fa fa-step-backward"></i>
                                     zurück zur 2. Halbzeit
                                 </button>
+
+                                {{> startVoting ticker=ticker}}
                             {{/unless}}
                         {{/unless}}
                     {{/unless}}
@@ -323,5 +325,40 @@
         {{#with ticker}}
             Status: {{gameTime}}
         {{/with}}
+    </div>
+</template>
+
+<template name="startVoting">
+    <button class="btn btn-primary btn-raised" data-toggle="modal" data-target="#startVotingModal">
+        <i class="fa fa-thumbs-up"></i>
+        Spielerbewertung
+        <i class="fa {{#if ticker.votingEnabled}}fa-play-circle{{else}}fa-stop-circle{{/if}}"></i>
+    </button>
+    <div class="modal fade" id="startVotingModal" tabindex="-1" role="dialog" aria-labelledby="startVotingModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{#autoForm schema="VotingFormSchema" id="startVotingModalForm" class="startVotingForm" type="method" meteormethod="startVoting"}}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="startVotingModalLabel">Spielerbewertung</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{> afQuickField name="votingEnabled" value=ticker.votingEnabled}}
+
+                        {{> afQuickField name="votingDeadline" type="datetime-local" value=ticker.votingDeadline}}
+
+                        {{#with mapTeams ticker}}
+                            {{> afQuickField name="teamIds" type="select-checkbox-inline" options=this}}
+                        {{/with}}
+
+                        {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="material-icons">close</i> Abbrechen</button>
+                    </div>
+                {{/autoForm}}
+            </div>
+        </div>
     </div>
 </template>

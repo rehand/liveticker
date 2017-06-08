@@ -66,6 +66,31 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('frontendTickerVoting', {
+            name: 'frontendTickerVoting',
+            path: '/tickers/:_id/voting',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                var tickerId = this.params._id;
+                return [
+                    Meteor.subscribe('Ticker', tickerId, true, true),
+                    Meteor.subscribe('TickerTeams', tickerId, true),
+                    Meteor.subscribe('TickerImages', tickerId, true),
+                    Meteor.subscribe('TickerEntries', tickerId)
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params._id),
+                    tickerEntries: TickerEntries.find({}, {
+                        sort: {
+                            timestamp: -1
+                        }
+                    })
+                };
+            }
+        });
+
     });
 
     // set page title

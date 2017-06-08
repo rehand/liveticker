@@ -7,6 +7,36 @@ var teamsOptionMapper = function () {
     });
 };
 
+KickerVotingSchema = new SimpleSchema({
+    'kickerId': {
+        type: String
+    },
+    'voting': {
+        type: Number,
+        label: 'Bewertung',
+        allowedValues: VOTING_VALUES
+    }
+});
+
+VotingSchema = new SimpleSchema({
+    votings: {
+        type: [KickerVotingSchema],
+        label: 'Bewertungen'
+    },
+    ipAddress: {
+        type: String
+    },
+    timestamp: {
+        type: Date,
+        optional: true,
+        autoValue: function () {
+            if (!this.isSet && this.operator !== "$pull" && this.isInsert) {
+                return new Date();
+            }
+        }
+    }
+});
+
 KickersFormationSchema = new SimpleSchema({
     id: {
         type: String,
@@ -319,9 +349,74 @@ Tickers.attachSchema(
                     falseLabel: "Freigeben"
                 }
             }
+        },
+        votingEnabled: {
+            type: Boolean,
+            defaultValue: false,
+            optional: true,
+            label: 'Spielerbewertung',
+            autoform: {
+                afFieldInput: {
+                    type: "boolean-select",
+                    trueLabel: "Freigeben",
+                    falseLabel: "Sperren"
+                }
+            }
+        },
+        votingDeadline: {
+            type: Date,
+            optional: true,
+            label: 'Spielerbewertung geöffnet bis'
+        },
+        teamHomeVoting: {
+            type: Boolean,
+            defaultValue: false,
+            label: 'Spielerbewertung Heimmannschaft',
+            optional: true
+        },
+        teamAwayVoting: {
+            type: Boolean,
+            defaultValue: false,
+            label: 'Spielerbewertung Auswärtsmannschaft',
+            optional: true
+        },
+        votings: {
+            type: [VotingSchema],
+            defaultValue: [],
+            optional: true,
+            autoform: {
+                type: "hidden",
+                label: false
+            }
         }
     })
 );
+
+VotingFormSchema = new SimpleSchema({
+    tickerId: {
+        type: String
+    },
+    votingEnabled: {
+        type: Boolean,
+        label: 'Spielerbewertung',
+        autoform: {
+            afFieldInput: {
+                type: "boolean-select",
+                trueLabel: "Freigegeben",
+                falseLabel: "Gesperrt"
+            }
+        }
+    },
+    votingDeadline: {
+        type: Date,
+        optional: true,
+        label: 'Spielerbewertung geöffnet bis'
+    },
+    teamIds: {
+        type: [String],
+        label: 'Mannschaften auswählen:'
+    }
+});
 
 Tickers.helpers({
     getHomeTeam: function() {
@@ -341,6 +436,9 @@ Tickers.helpers({
             return Object.keys(this.teamAwayFormation).length;
         }
         return 0;
+    },
+    isVotingEnabled: function () {
+        return this.votingEnabled && this.votingDeadline && Date.now() < this.votingDeadline;
     }
 });
 
@@ -593,7 +691,7 @@ if (Meteor.isServer) {
                 ticker.$set.teamHomeFormation = sortFormation(cleanFormation(ticker.$set.teamHomeFormation), true);
             }
 
-            // remove null values from aray formation array
+            // remove null values from array formation array
             if (ticker.$set.teamAwayFormation && Array.isArray(ticker.$set.teamAwayFormation)) {
                 ticker.$set.teamAwayFormation = sortFormation(cleanFormation(ticker.$set.teamAwayFormation), true);
             }
@@ -743,42 +841,102 @@ if (Meteor.isServer) {
                     }
                 }
             });
+        },
+        startVoting: function (data) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(data, Object);
+
+            var tickerId = data.tickerId;
+            check(tickerId, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            if (data.votingEnabled) {
+                var teamIds = data.teamIds;
+                if (!data.votingDeadline || data.votingDeadline < Date.now()) {
+                    throw new Meteor.Error("voting-deadline-invalid", "Die Deadline für die Spielerbewertung liegt in der Vergangenheit!");
+                } else if (Array.isArray(teamIds) && (teamIds.indexOf(ticker.teamHome) !== -1 || teamIds.indexOf(ticker.teamAway) !== -1)) {
+                    Tickers.update(tickerId, {
+                        $set: {
+                            votingEnabled: true,
+                            votingDeadline: data.votingDeadline,
+                            teamHomeVoting: teamIds.indexOf(ticker.teamHome) !== -1,
+                            teamAwayVoting: teamIds.indexOf(ticker.teamAway) !== -1
+                        }
+                    });
+                } else {
+                    throw new Meteor.Error("no-teams-selected", "Es wurden keine Teams ausgewählt!");
+                }
+            } else {
+                Tickers.update(tickerId, {
+                    $set: {
+                        votingEnabled: false,
+                        votingDeadline: undefined,
+                        teamHomeVoting: false,
+                        teamAwayVoting: false
+                    }
+                });
+            }
+        },
+        tickerVoting: function (tickerId, votings) {
+            check(tickerId, String);
+            check(votings, Object);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            if (ticker.isVotingEnabled()) {
+                var votingsData = [];
+
+                for (var kickerId in votings) {
+                    var voting = parseInt(votings[kickerId]);
+
+                    if (isNaN(voting)) {
+                        throw new Meteor.Error("voting-incomplete", "Bitte alle Spieler bewerten!");
+                    } else if (voting < 0 || voting > 5) {
+                        throw new Meteor.Error("voting-invalid", "Die Spielerbewertung ist ungültig!");
+                    }
+
+                    votingsData.push({
+                        'kickerId': kickerId,
+                        'voting': voting
+                    });
+                }
+
+                var ipAddress = this.connection.clientAddress;
+
+                var votingsDataComplete = {
+                    'ipAddress': ipAddress,
+                    'votings': votingsData
+                };
+
+                // check if the user did not vote until now
+                if (Array.isArray(ticker.votings) && ticker.votings.find(function (voting) {
+                        return voting['ipAddress'] == ipAddress;
+                    })) {
+                    throw new Meteor.Error("voting-found", "Die Spielerbewertung kann nur einmal durchgeführt werden!");
+                } else {
+                    Tickers.update(tickerId, {
+                        $push: {
+                            'votings': votingsDataComplete
+                        }
+                    }, function (err, cnt) {
+                        console.log('error: ' + err + ', updated: ' + cnt);
+                    });
+                }
+            } else {
+                throw new Meteor.Error("voting-not-enabled", "Die Spielerbewertung ist deaktiviert!");
+            }
+
+            return true;
         }
-        //updateTicker: function (ticker, tickerId) {
-        //    if (!Meteor.userId()) {
-        //        throw new Meteor.Error("not-authorized");
-        //    }
-        //
-        //    check(team, Object);
-        //    check(team.$set, Teams.simpleSchema());
-        //    check(teamId, String);
-        //
-        //    var thisTeam = Teams.findOne(teamId);
-        //    if (thisTeam == null) {
-        //        throw new Meteor.Error("team-not-found", "Team nicht gefunden!");
-        //    }
-        //
-        //    var otherTeam = Teams.findOne({code: team.$set.code});
-        //    if (otherTeam != null && otherTeam._id !== teamId) {
-        //        throw new Meteor.Error("team-duplicate-code", "Ein Team mit diesem Code existiert bereits!");
-        //    }
-        //
-        //    // delete logo if changed/deleted
-        //    if ((team.$unset !== undefined && team.$unset.logo !== undefined) || (team.$set.logo !== undefined && thisTeam.logo !== team.$set.logo)) {
-        //        Images.remove(thisTeam.logo, function (error) {
-        //            if (error) {
-        //                throw new Error("logo-remove", "Während dem Löschen des Logos ist ein Fehler aufgetreten");
-        //            }
-        //        });
-        //    }
-        //
-        //    Teams.update(teamId, team);
-        //
-        //    var redirect = {};
-        //
-        //    redirect.template = 'adminTeams';
-        //
-        //    return redirect;
-        //}
     });
 }

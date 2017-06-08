@@ -46,6 +46,17 @@
                         <div class="row">
                             {{ticker.scoreHome}} : {{ticker.scoreAway}}
                         </div>
+
+                        {{#if ticker.isVotingEnabled}}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <a href="{{ pathFor 'frontendTickerVoting' _id=ticker._id }}" class="btn btn-primary btn-raised btn-block">
+                                        <i class="fa fa-thumbs-up"></i>
+                                        Zur Spielerbewertung
+                                    </a>
+                                </div>
+                            </div>
+                        {{/if}}
                     </div>
 
                     <div class="col-xs-3 col-sm-4 text-left">

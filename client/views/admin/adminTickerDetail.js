@@ -145,6 +145,21 @@ Template.adminTickerDetail.events({
         }
 
         return false;
+    },
+    "click .stop-voting-button": function (event, template) {
+        event.preventDefault();
+
+        if (confirm("Möchten Sie die Spielerbewertung wirklich beenden?")) {
+            var tickerId = Router.current().params._id;
+
+            Meteor.call("stopVoting", tickerId, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
+
+        return false;
     }
 });
 
@@ -211,15 +226,17 @@ Template.addEvent.events({
     "submit .addEventForm": closeModal
 });
 
+var mapTeams = function (ticker) {
+    return [ticker.getHomeTeam(), ticker.getAwayTeam()].map(function (team) {
+        return {
+            label: team.name,
+            value: team._id
+        };
+    });
+};
+
 Template.addTeamEvent.helpers({
-    mapTeams: function (ticker) {
-        return [ticker.getHomeTeam(), ticker.getAwayTeam()].map(function (team) {
-            return {
-                label: team.name,
-                value: team._id
-            };
-        });
-    },
+    mapTeams: mapTeams,
     getTeamEventTypes: function () {
         return [EVENT_TYPE_PENALTY].map(mapEventType);
     },
@@ -258,4 +275,12 @@ Template.addSubstitutionEvent.helpers({
 
 Template.addSubstitutionEvent.events({
     "submit .substitutionEventForm": closeModal
+});
+
+Template.startVoting.helpers({
+    mapTeams: mapTeams
+});
+
+Template.startVoting.events({
+    "submit .startVotingForm": closeModal
 });
