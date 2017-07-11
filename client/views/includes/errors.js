@@ -3,3 +3,10 @@ Template.errors.helpers({
         return Errors.find();
     }
 });
+
+Template.errors.events({
+    "click .closeError": function () {
+        clearErrors();
+        console.log('clear errors');
+    }
+});
