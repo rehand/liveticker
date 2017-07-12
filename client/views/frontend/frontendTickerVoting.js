@@ -1,18 +1,5 @@
 Template.votingForm.helpers({
-    mapVotableKickers: function (formation, entries) {
-        var substitutionEntries = entries.fetch().filter(substitutionEventFilter);
-
-        var exchangedKickers = substitutionEntries.map(function (entry) {
-            return entry.kicker[1].id;
-        });
-
-        return sortFormation(formation.filter(function (entry) {
-            var isKickerStarting = entry.gamePosition !== POS_NA && entry.gamePosition !== POS_ERSATZBANK;
-            var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
-
-            return isKickerStarting || wasKickerExchanged;
-        }), false);
-    },
+    mapVotableKickers: mapVotableKickers,
     getVotingOptions: function () {
         return VOTING_OPTIONS;
     }

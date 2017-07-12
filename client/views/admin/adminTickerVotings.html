@@ -1,0 +1,115 @@
+<template name="adminTickerVotings">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Spielerbewertungen
+            <a href="{{ pathFor 'adminTickerDetail' _id=ticker._id }}" class="btn btn-primary btn-raised">
+                <i class="fa fa-arrow-left"></i>
+                zurück zum Ticker
+            </a>
+            <br/>
+            {{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
+            <br/>
+            <small>
+                Kickoff: {{kickoffDate ticker.kickoff}} Uhr{{#if ticker.referee}}, Schiedsrichter: {{ticker.referee}}{{/if}}{{#if ticker.competition}}, {{ticker.competition}}{{/if}}
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="h3">
+                # Bewertungen: {{ticker.votings.length}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="h3" data-toggle="collapse" data-target="#votingsOverview">
+                Gesamt
+                <i class="glyphicon glyphicon-collapse-down"></i>
+            </div>
+            <div id="votingsOverview" class="collapse in">
+                {{#if ticker.votings}}
+                    {{ >tickerVotingsOverview team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                {{else}}
+                    Keine Bewertungen vorhanden.
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="h3" data-toggle="collapse" data-target="#votingDetails">
+                Details
+                <i class="glyphicon glyphicon-collapse-down"></i>
+            </div>
+            <div id="votingDetails" class="collapse">
+                {{#if ticker.votings}}
+                    {{ >tickerVotingDetails team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                {{else}}
+                    Keine Bewertungen vorhanden.
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+</template>
+
+<template name="tickerVotingsOverview">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>Spieler</th>
+                <th>Ø Note</th>
+                <th># gültige Bewertungen</th>
+            </thead>
+            <tbody>
+            {{#each mapVotings formation tickerEntries votings}}
+                <tr>
+                    <td>{{kicker.name}}</td>
+                    <td>
+                        {{#if averageVoting}}
+                            {{averageVoting}}
+                        {{else}}
+                            -
+                        {{/if}}
+                    </td>
+                    <td>{{votings.length}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<template name="tickerVotingDetails">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>IP</th>
+                <th>Zeitpunkt</th>
+                {{#each getVotableKickers formation tickerEntries}}
+                    <th>{{name}}</th>
+                {{/each}}
+            </thead>
+            <tbody>
+            {{#each mapVotingDetails formation tickerEntries votings}}
+                <tr>
+                    <td>{{ipAddress}}</td>
+                    <td>{{kickoffDate timestamp}}</td>
+                    {{#each votings}}
+                        <td>{{this}}</td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</template>

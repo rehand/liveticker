@@ -149,6 +149,30 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminTickerVotings', {
+            path: '/admin/tickers/:_id/votings',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                var tickerId = this.params._id;
+                return [
+                    Meteor.subscribe('Ticker', tickerId),
+                    Meteor.subscribe('TickerTeams', tickerId),
+                    Meteor.subscribe('TickerImages', tickerId),
+                    Meteor.subscribe('TickerEntries', tickerId)
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params._id),
+                    tickerEntries: TickerEntries.find({}, {
+                        sort: {
+                            timestamp: -1
+                        }
+                    })
+                };
+            }
+        });
+
         this.route('adminTickerEditFormation', {
             path: '/admin/tickers/:_id/formation',
             notFoundTemplate: 'tickerNotFound',
@@ -251,7 +275,8 @@ if (Meteor.isClient) {
         except: [
             'frontendTickers',
             'frontendTickerDetail',
-            'frontendLink'
+            'frontendLink',
+            'frontendTickerVoting'
         ]
     });
 }

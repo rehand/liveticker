@@ -26,6 +26,7 @@ Meteor.publish('Ticker', function (_id, onlyPublic, isFrontend) {
     };
     if (isFrontend) {
         excludeFields.fields.comments = 0;
+        excludeFields.fields.votings = 0;
     }
 
     return Tickers.find(filter, excludeFields);

@@ -10,6 +10,10 @@
                 <i class="material-icons">share</i>
                 Statistiken
             </a>
+            <a href="{{ pathFor 'adminTickerVotings' _id=ticker._id}}" class="btn btn-primary">
+                <i class="material-icons">insert_chart</i>
+                Spielerbewertungen
+            </a>
             <br/>
             <small>
                 Kickoff: {{kickoffDate ticker.kickoff}} Uhr{{#if ticker.referee}}, Schiedsrichter: {{ticker.referee}}{{/if}}{{#if ticker.competition}}, {{ticker.competition}}{{/if}}

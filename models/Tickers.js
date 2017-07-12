@@ -915,7 +915,8 @@ if (Meteor.isServer) {
 
                 var votingsDataComplete = {
                     'ipAddress': ipAddress,
-                    'votings': votingsData
+                    'votings': votingsData,
+                    'timestamp': Date.now()
                 };
 
                 // check if the user did not vote until now
@@ -928,8 +929,6 @@ if (Meteor.isServer) {
                         $push: {
                             'votings': votingsDataComplete
                         }
-                    }, function (err, cnt) {
-                        console.log('error: ' + err + ', updated: ' + cnt);
                     });
                 }
             } else {
