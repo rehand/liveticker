@@ -23,7 +23,20 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="h3">
-                # Bewertungen: {{ticker.votings.length}}
+                Status:
+                {{#if ticker.isVotingEnabled}}
+                    Freigeschaltet bis {{kickoffDate ticker.votingDeadline}} Uhr
+                {{else}}
+                    Gesperrt
+                {{/if}}
+            </div>
+            <div class="h3">
+                # Bewertungen:
+                {{#if ticker.votings.length}}
+                    {{ticker.votings.length}}
+                {{else}}
+                    0
+                {{/if}}
             </div>
         </div>
     </div>
