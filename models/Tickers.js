@@ -901,7 +901,7 @@ if (Meteor.isServer) {
 
                     if (isNaN(voting)) {
                         throw new Meteor.Error("voting-incomplete", "Bitte alle Spieler bewerten!");
-                    } else if (voting < 0 || voting > 5) {
+                    } else if (VOTING_VALUES.indexOf(voting) === -1) {
                         throw new Meteor.Error("voting-invalid", "Die Spielerbewertung ist ungültig!");
                     }
 
