@@ -351,8 +351,8 @@
 
                         {{> afQuickField name="votingDeadline" type="datetime-local" value=ticker.votingDeadline}}
 
-                        {{#with mapTeams ticker}}
-                            {{> afQuickField name="teamIds" type="select-checkbox-inline" options=this}}
+                        {{#with getVotingTeams ticker}}
+                            {{> afQuickField name="teamIds" type="select-checkbox-inline" options=this value=selectedValues}}
                         {{/with}}
 
                         {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}

@@ -278,7 +278,21 @@ Template.addSubstitutionEvent.events({
 });
 
 Template.startVoting.helpers({
-    mapTeams: mapTeams
+    getVotingTeams: function (ticker) {
+        var mappedTeams = mapTeams(ticker);
+
+        mappedTeams.selectedValues = [];
+
+        if (ticker.teamHomeVoting) {
+            mappedTeams.selectedValues.push(ticker.teamHome);
+        }
+
+        if (ticker.teamAwayVoting) {
+            mappedTeams.selectedValues.push(ticker.teamAway);
+        }
+
+        return mappedTeams;
+    }
 });
 
 Template.startVoting.events({
