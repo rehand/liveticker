@@ -414,6 +414,7 @@ VotingFormSchema = new SimpleSchema({
     votingTickerLinkDisabled: {
         type: Boolean,
         label: 'Zurück zum Ticker-Link',
+        defaultValue: true,
         optional: true,
         autoform: {
             afFieldInput: {
