@@ -42,6 +42,7 @@ Template.frontendTickerVoting.events({
                 console.error('error ' + error.reason);
                 throwError(error.reason);
             } else if (data) {
+                alert('Danke für deine Bewertung!');
                 Router.go('frontendTickerDetail', {
                     '_id': tickerId
                 });
