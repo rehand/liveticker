@@ -6,6 +6,8 @@ Template.tickerVotingsOverview.helpers({
         if (votings && Array.isArray(votings)) {
             var kickers = mapVotableKickers(formation, entries);
 
+            var maxVotingValueBarrier = Math.max.apply(Math, VOTING_VALUES) + 1;
+
             var votingsPerKicker = kickers.map(function (kicker) {
                 var kickerResult = {
                     kicker: kicker,
@@ -29,7 +31,12 @@ Template.tickerVotingsOverview.helpers({
 
                 return kickerResult;
             }).sort(function (a, b) {
-                return b.averageVoting - a.averageVoting;
+                if (a.averageVoting === VOTING_VALUE_SKIP && b.averageVoting !== VOTING_VALUE_SKIP) {
+                    return maxVotingValueBarrier;
+                } else if (b.averageVoting === VOTING_VALUE_SKIP && a.averageVoting !== VOTING_VALUE_SKIP) {
+                    return -maxVotingValueBarrier;
+                }
+                return a.averageVoting - b.averageVoting;
             });
 
             return votingsPerKicker;

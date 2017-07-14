@@ -93,6 +93,61 @@ Migrations.add({
     }
 );
 
+var swapVotingValuesForAllTickers = function() {
+    var tickers = Tickers.find({'votings.0': {$exists: true}}).fetch();
+
+    tickers.forEach(function (ticker) {
+        var tickerId = ticker._id;
+        console.log('Updating voting values for tickerId ' + tickerId);
+
+        if (ticker.votings && ticker.votings.length > 0) {
+            var votingsData = ticker.votings.map(function (votingData) {
+                votingData.votings = votingData.votings.map(function (voting) {
+                    if (!voting.voting) {
+                        voting.voting = 0;
+                    }
+                    switch(voting.voting) {
+                        case 1:
+                            voting.voting = 5;
+                            break;
+                        case 2:
+                            voting.voting = 4;
+                            break;
+                        case 4:
+                            voting.voting = 2;
+                            break;
+                        case 5:
+                            voting.voting = 1;
+                            break;
+                    }
+                    return voting;
+                });
+                return votingData;
+            });
+
+            Tickers.update(tickerId, {
+                $set: {
+                    votings: votingsData
+                }
+            }, resultFunction);
+        }
+    });
+};
+
+Migrations.add({
+        version: 3,
+        name: 'Changed voting values',
+        up: function () {
+            console.log('Migrating voting values...');
+            swapVotingValuesForAllTickers();
+        },
+        down: function () {
+            console.log('Migrating voting values back...');
+            swapVotingValuesForAllTickers();
+        }
+    }
+);
+
 Meteor.startup(function () {
     Migrations.migrateTo('latest');
 });
