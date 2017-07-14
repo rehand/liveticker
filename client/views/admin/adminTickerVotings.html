@@ -2,16 +2,27 @@
     {{> adminNavigation}}
 
     <div class="page-header col-xs-12">
-        <h1>Spielerbewertungen
+        <h1>
+            {{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
             <a href="{{ pathFor 'adminTickerDetail' _id=ticker._id }}" class="btn btn-primary btn-raised">
                 <i class="fa fa-arrow-left"></i>
                 zurück zum Ticker
             </a>
             <br/>
-            {{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
-            <br/>
             <small>
                 Kickoff: {{kickoffDate ticker.kickoff}} Uhr{{#if ticker.referee}}, Schiedsrichter: {{ticker.referee}}{{/if}}{{#if ticker.competition}}, {{ticker.competition}}{{/if}}
+            </small>
+        </h1>
+
+        <h1>Spielerbewertungen
+            <br/>
+            <small>
+                Status:
+                {{#if ticker.isVotingEnabled}}
+                    Freigegeben bis {{kickoffDate ticker.votingDeadline}} Uhr
+                {{else}}
+                    Gesperrt
+                {{/if}}
             </small>
         </h1>
     </div>
@@ -22,14 +33,6 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <div class="h3">
-                Status:
-                {{#if ticker.isVotingEnabled}}
-                    Freigeschaltet bis {{kickoffDate ticker.votingDeadline}} Uhr
-                {{else}}
-                    Gesperrt
-                {{/if}}
-            </div>
             <div class="h3">
                 # Bewertungen:
                 {{#if ticker.votings.length}}

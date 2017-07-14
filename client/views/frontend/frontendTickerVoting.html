@@ -1,10 +1,29 @@
 <template name="frontendTickerVoting">
     <div class="page-header col-xs-12">
-        <h1>Spielerbewertung
+        <h1>
+            {{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
             <a href="{{ pathFor 'frontendTickerDetail' _id=ticker._id }}" class="btn btn-primary btn-raised">
                 <i class="fa fa-arrow-left"></i>
                 zurück zum Ticker
             </a>
+            <br/>
+            <small>
+                Kickoff: {{kickoffDate ticker.kickoff}} Uhr{{#if ticker.referee}}, Schiedsrichter: {{ticker.referee}}{{/if}}{{#if ticker.competition}}, {{ticker.competition}}{{/if}}
+            </small>
+        </h1>
+
+        <br/>
+
+        <h1>Spielerbewertung
+            <br />
+            <small>
+                Die Spielerbewertung ist
+                {{#if ticker.isVotingEnabled}}
+                    bis {{kickoffDate ticker.votingDeadline}} Uhr geöffnet.
+                {{else}}
+                    geschlossen.
+                {{/if}}
+            </small>
         </h1>
     </div>
 
@@ -12,9 +31,9 @@
       {{> errors}}
     </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            {{#if ticker.isVotingEnabled}}
+    {{#if ticker.isVotingEnabled}}
+        <div class="row">
+            <div class="col-xs-12">
                 <form id="votingForm" class="votingForm" type="POST">
                     <input name="tickerId" type="hidden" value="{{ticker._id}}" />
 
@@ -29,11 +48,9 @@
                     <button class="btn btn-primary btn-raised" type="submit"><i class="material-icons">check</i> Absenden</button>
                     <a href="{{ pathFor 'frontendTickerDetail' _id=ticker._id }}" class="btn btn-danger btn-raised" type="button"><i class="material-icons">close</i> Abbrechen</a>
                 </form>
-            {{else}}
-                Die Spielerbewertung ist geschlossen.
-            {{/if}}
+            </div>
         </div>
-    </div>
+    {{/if}}
 </template>
 
 <template name="votingForm">
