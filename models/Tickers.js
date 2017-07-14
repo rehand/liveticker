@@ -380,6 +380,10 @@ Tickers.attachSchema(
             label: 'Spielerbewertung Auswärtsmannschaft',
             optional: true
         },
+        votingTickerLinkDisabled: {
+            type: Boolean,
+            defaultValue: false
+        },
         votings: {
             type: [VotingSchema],
             defaultValue: [],
@@ -404,6 +408,18 @@ VotingFormSchema = new SimpleSchema({
                 type: "boolean-select",
                 trueLabel: "Freigegeben",
                 falseLabel: "Gesperrt"
+            }
+        }
+    },
+    votingTickerLinkDisabled: {
+        type: Boolean,
+        label: 'Zurück zum Ticker-Link',
+        optional: true,
+        autoform: {
+            afFieldInput: {
+                type: "boolean-select",
+                trueLabel: "Ausblenden",
+                falseLabel: "Anzeigen"
             }
         }
     },
@@ -866,6 +882,7 @@ if (Meteor.isServer) {
                         $set: {
                             votingEnabled: true,
                             votingDeadline: data.votingDeadline,
+                            votingTickerLinkDisabled: data.votingTickerLinkDisabled,
                             teamHomeVoting: teamIds.indexOf(ticker.teamHome) !== -1,
                             teamAwayVoting: teamIds.indexOf(ticker.teamAway) !== -1
                         }
@@ -878,6 +895,7 @@ if (Meteor.isServer) {
                     $set: {
                         votingEnabled: false,
                         votingDeadline: undefined,
+                        votingTickerLinkDisabled: false,
                         teamHomeVoting: false,
                         teamAwayVoting: false
                     }
