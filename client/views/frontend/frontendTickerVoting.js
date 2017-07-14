@@ -2,6 +2,9 @@ Template.votingForm.helpers({
     mapVotableKickers: mapVotableKickers,
     getVotingOptions: function () {
         return VOTING_OPTIONS;
+    },
+    getVotingOptions: function () {
+        return VOTING_OPTIONS;
     }
 });
 

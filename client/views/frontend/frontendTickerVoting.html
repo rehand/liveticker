@@ -66,15 +66,9 @@
                     <input type="hidden" name="kickerId[]" value={{id}} />
                     <select name="voting[]" class="form-control" required>
                         <option disabled selected value>Spieler bewerten</option>
-                        {{#each VOTING_OPTIONS}}
+                        {{#each getVotingOptions}}
                             <option value="{{value}}">{{label}}</option>
                         {{/each}}
-                        <option value="0">0 Zu kurz eingesetzt</option>
-                        <option value="1">1 Sehr schwach</option>
-                        <option value="2">2 Schwach</option>
-                        <option value="3">3 Durchschnittlich</option>
-                        <option value="4">4 Gut</option>
-                        <option value="5">5 Hervorragend</option>
                     </select>
                 </div>
             {{/each}}
