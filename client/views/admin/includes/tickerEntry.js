@@ -107,7 +107,7 @@ Template.adminTickerDetail.events({
         var text = this.entry.text;
         editDialog.find('textarea[name="text"]').first().val(text);
 
-        var entryTimestamp = this.entry.timestamp.toISOString().replace('Z', '');
+        var entryTimestamp = new Date(this.entry.timestamp.getTime() - (this.entry.timestamp.getTimezoneOffset() * 60000)).toISOString().slice(0, -1);
         editDialog.find('input[name="entryTimestamp"]').first().val(entryTimestamp);
 
         return true;
