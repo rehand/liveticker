@@ -18,7 +18,7 @@ Template.tickerVotingsOverview.helpers({
                     }).filter(function (userVoting) {
                         return !!userVoting && userVoting.voting > 0;
                     }).map(function (voting) {
-                        return voting.voting;
+                        return parseFloat(voting.voting);
                     }),
                     averageVoting: 0
                 };

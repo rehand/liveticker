@@ -12,7 +12,7 @@ KickerVotingSchema = new SimpleSchema({
         type: String
     },
     'voting': {
-        type: Number,
+        type: String,
         label: 'Bewertung',
         allowedValues: VOTING_VALUES
     }
@@ -916,7 +916,7 @@ if (Meteor.isServer) {
                 var votingsData = [];
 
                 for (var kickerId in votings) {
-                    var voting = parseInt(votings[kickerId]);
+                    var voting = parseFloat(votings[kickerId]).toString();
 
                     if (isNaN(voting)) {
                         throw new Meteor.Error("voting-incomplete", "Bitte alle Spieler bewerten!");

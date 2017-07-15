@@ -37,7 +37,7 @@ Template.frontendTickerVoting.events({
         var votings = {};
 
         for (var i=0; i < dataValues.length; i++) {
-            votings[dataKeys[i]] = parseInt(dataValues[i]);
+            votings[dataKeys[i]] = parseFloat(dataValues[i]);
         }
 
         Meteor.call("tickerVoting", tickerId, votings, function(error, data) {
