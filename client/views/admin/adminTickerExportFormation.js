@@ -37,7 +37,7 @@ var drawEventTime = function (context, ticker, timestamp, x, y) {
 };
 
 var filterFormation = function (formation) {
-    return formation.filter(function (kicker) {
+    return ensureArray(formation).filter(function (kicker) {
         return POSITIONS.indexOf(kicker.gamePosition) !== -1 || kicker.exchanged;
     });
 };

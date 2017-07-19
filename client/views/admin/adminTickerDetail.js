@@ -190,7 +190,7 @@ var mapPlayingFormation = function (formation, entries) {
         return entry.kicker[1].id;
     });
 
-    return mapFormation(formation.filter(function (entry) {
+    return mapFormation(ensureArray(formation).filter(function (entry) {
         var isKickerStarting = entry.gamePosition !== POS_NA && entry.gamePosition !== POS_ERSATZBANK;
         var wasKickerSubstituted = substitutedKickers.indexOf(entry.id) !== -1;
         var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
@@ -264,7 +264,7 @@ Template.addSubstitutionEvent.helpers({
             return entry.kicker[1].id;
         });
 
-        return mapFormation(formation.filter(function (entry) {
+        return mapFormation(ensureArray(formation).filter(function (entry) {
             var isKickerOnBench = entry.gamePosition === POS_ERSATZBANK;
             var wasKickerExchanged = exchangedKickers.indexOf(entry.id) !== -1;
 
