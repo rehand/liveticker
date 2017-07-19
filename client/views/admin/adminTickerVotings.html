@@ -52,7 +52,13 @@
             </div>
             <div id="votingsOverview" class="collapse in">
                 {{#if ticker.votings}}
-                    {{ >tickerVotingsOverview team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                    {{#if ticker.teamHomeVoting}}
+                        {{ >tickerVotingsOverview team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                    {{/if}}
+
+                    {{#if ticker.teamAwayVoting}}
+                        {{ >tickerVotingsOverview team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                    {{/if}}
                 {{else}}
                     Keine Bewertungen vorhanden.
                 {{/if}}
@@ -68,7 +74,13 @@
             </div>
             <div id="votingDetails" class="collapse">
                 {{#if ticker.votings}}
-                    {{ >tickerVotingDetails team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                    {{#if ticker.teamHomeVoting}}
+                        {{ >tickerVotingDetails team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                    {{/if}}
+
+                    {{#if ticker.teamAwayVoting}}
+                        {{ >tickerVotingDetails team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                    {{/if}}
                 {{else}}
                     Keine Bewertungen vorhanden.
                 {{/if}}
@@ -79,33 +91,43 @@
 </template>
 
 <template name="tickerVotingsOverview">
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead>
-                <th>Spieler</th>
-                <th>Ø Note</th>
-                <th># gültige Bewertungen</th>
-            </thead>
-            <tbody>
-            {{#each mapVotings formation tickerEntries votings}}
-                <tr>
-                    <td>{{kicker.name}}</td>
-                    <td>
-                        {{#if averageVoting}}
-                            {{averageVoting}}
-                        {{else}}
-                            -
-                        {{/if}}
-                    </td>
-                    <td>{{votings.length}}</td>
-                </tr>
-            {{/each}}
-            </tbody>
-        </table>
+    <div class="h3">
+        {{team.name}}
     </div>
+    {{#with mapVotings formation tickerEntries votings}}
+        {{#if this}}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Spieler</th>
+                        <th>Ø Note</th>
+                        <th># gültige Bewertungen</th>
+                    </thead>
+                    <tbody>
+                    {{#each this}}
+                        <tr>
+                            <td>{{kicker.name}}</td>
+                            <td>
+                                {{#if averageVoting}}
+                                    {{averageVoting}}
+                                {{else}}
+                                    -
+                                {{/if}}
+                            </td>
+                            <td>{{votings.length}}</td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{/if}}
+    {{/with}}
 </template>
 
 <template name="tickerVotingDetails">
+    <div class="h3">
+        {{team.name}}
+    </div>
     <div class="table-responsive">
         <table class="table table-striped table-hover">
             <thead>
