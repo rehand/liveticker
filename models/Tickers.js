@@ -365,8 +365,8 @@ Tickers.attachSchema(
         },
         votingDeadline: {
             type: Date,
-            optional: true,
-            label: 'Spielerbewertung geöffnet bis'
+            label: 'Spielerbewertung geöffnet bis',
+            optional: true
         },
         teamHomeVoting: {
             type: Boolean,
@@ -382,7 +382,8 @@ Tickers.attachSchema(
         },
         votingTickerLinkDisabled: {
             type: Boolean,
-            defaultValue: false
+            defaultValue: false,
+            optional: true
         },
         votings: {
             type: [VotingSchema],
