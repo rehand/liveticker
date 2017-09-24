@@ -368,6 +368,19 @@ Tickers.attachSchema(
             label: 'Spielerbewertung geöffnet bis',
             optional: true
         },
+        votingAutoEnable: {
+            type: Boolean,
+            defaultValue: false,
+            optional: true,
+            label: 'Spielerbewertung nach Spielende aktivieren',
+            autoform: {
+                afFieldInput: {
+                    type: "boolean-select",
+                    trueLabel: "Automatisch",
+                    falseLabel: "Manuell"
+                }
+            }
+        },
         teamHomeVoting: {
             type: Boolean,
             defaultValue: false,
@@ -409,6 +422,19 @@ VotingFormSchema = new SimpleSchema({
                 type: "boolean-select",
                 trueLabel: "Freigegeben",
                 falseLabel: "Gesperrt"
+            }
+        }
+    },
+    votingAutoEnable: {
+        type: Boolean,
+        defaultValue: false,
+        optional: true,
+        label: 'Spielerbewertung nach Spielende aktivieren',
+        autoform: {
+            afFieldInput: {
+                type: "boolean-select",
+                trueLabel: "Automatisch",
+                falseLabel: "Manuell"
             }
         }
     },
@@ -763,8 +789,23 @@ if (Meteor.isServer) {
             check(tickerId, String);
             check(timeField, String);
 
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
             var data = {};
             data[timeField] = new Date();
+
+            if (timeField === 'timeSecondHalfEnd' && ticker.votingAutoEnable) {
+                if (!ticker.votingDeadline || data.votingDeadline < Date.now()) {
+                    var votingDeadline = new Date();
+                    votingDeadline.setDate(data[timeField].getDate() + 1);
+
+                    data['votingDeadline'] = votingDeadline;
+                }
+                data['votingEnabled'] = true;
+            }
 
             Tickers.update(tickerId, {$set: data});
         },
@@ -776,8 +817,17 @@ if (Meteor.isServer) {
             check(tickerId, String);
             check(timeField, String);
 
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
             var data = {};
             data[timeField] = null;
+
+            if (timeField === 'timeSecondHalfEnd') {
+                data['votingEnabled'] = false;
+            }
 
             Tickers.update(tickerId, {$set: data});
         },
@@ -875,33 +925,22 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            if (data.votingEnabled) {
-                var teamIds = data.teamIds;
-                if (!data.votingDeadline || data.votingDeadline < Date.now()) {
-                    throw new Meteor.Error("voting-deadline-invalid", "Die Deadline für die Spielerbewertung liegt in der Vergangenheit!");
-                } else if (Array.isArray(teamIds) && (teamIds.indexOf(ticker.teamHome) !== -1 || teamIds.indexOf(ticker.teamAway) !== -1)) {
-                    Tickers.update(tickerId, {
-                        $set: {
-                            votingEnabled: true,
-                            votingDeadline: data.votingDeadline,
-                            votingTickerLinkDisabled: data.votingTickerLinkDisabled,
-                            teamHomeVoting: teamIds.indexOf(ticker.teamHome) !== -1,
-                            teamAwayVoting: teamIds.indexOf(ticker.teamAway) !== -1
-                        }
-                    });
-                } else {
-                    throw new Meteor.Error("no-teams-selected", "Es wurden keine Teams ausgewählt!");
-                }
-            } else {
+            var teamIds = data.teamIds;
+            if (!data.votingAutoEnable && (!data.votingDeadline || data.votingDeadline < Date.now())) {
+                throw new Meteor.Error("voting-deadline-invalid", "Die Deadline für die Spielerbewertung liegt in der Vergangenheit!");
+            } else if (Array.isArray(teamIds) && (teamIds.indexOf(ticker.teamHome) !== -1 || teamIds.indexOf(ticker.teamAway) !== -1)) {
                 Tickers.update(tickerId, {
                     $set: {
-                        votingEnabled: false,
-                        votingDeadline: undefined,
-                        votingTickerLinkDisabled: false,
-                        teamHomeVoting: false,
-                        teamAwayVoting: false
+                        votingEnabled: data.votingEnabled,
+                        votingAutoEnable: data.votingAutoEnable,
+                        votingDeadline: data.votingDeadline ? data.votingDeadline : null,
+                        votingTickerLinkDisabled: data.votingTickerLinkDisabled,
+                        teamHomeVoting: teamIds.indexOf(ticker.teamHome) !== -1,
+                        teamAwayVoting: teamIds.indexOf(ticker.teamAway) !== -1
                     }
                 });
+            } else {
+                throw new Meteor.Error("no-teams-selected", "Es wurden keine Teams ausgewählt!");
             }
         },
         tickerVoting: function (tickerId, votings) {

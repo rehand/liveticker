@@ -145,12 +145,12 @@
                                     <i class="fa fa-step-backward"></i>
                                     zurück zur 2. Halbzeit
                                 </button>
-
-                                {{> startVoting ticker=ticker}}
                             {{/unless}}
                         {{/unless}}
                     {{/unless}}
                 {{/unless}}
+
+                {{> startVoting ticker=ticker}}
 
                 <a href="{{ pathFor 'adminTickerEditFormation' _id=ticker._id}}" class="btn btn-primary btn-raised">
                     <i class="fa fa-tasks"></i>
@@ -348,6 +348,8 @@
                     </div>
                     <div class="modal-body">
                         {{> afQuickField name="votingEnabled" value=ticker.votingEnabled}}
+
+                        {{> afQuickField name="votingAutoEnable" value=ticker.votingAutoEnable}}
 
                         {{> afQuickField name="votingDeadline" type="datetime-local" value=ticker.votingDeadline}}
 
