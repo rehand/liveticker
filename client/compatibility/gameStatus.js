@@ -32,24 +32,28 @@ var getGameTimeStr = function (ticker, timeObj) {
     timeFrom = timeFrom.getTime();
 
     var gameTimeStr;
-    if (ticker.timeSecondHalfEnd && ticker.timeSecondHalfEnd.getTime() < timeFrom) {
+    if (ticker.penaltyShootOutEnd && ticker.penaltyShootOutEnd.getTime() < timeFrom) {
+        gameTimeStr = "Nachbericht";
+    } else if (ticker.penaltyShootOutStart && ticker.penaltyShootOutStart.getTime() < timeFrom) {
+        gameTimeStr = "Elfmeterschießen";
+    } else if (ticker.extraTimeSecondHalfEnd && ticker.extraTimeSecondHalfEnd.getTime() < timeFrom) {
+        gameTimeStr = "Nachbericht";
+    } else if (ticker.extraTimeSecondHalfStart && ticker.extraTimeSecondHalfStart.getTime() < timeFrom) {
+        gameTimeStr = getMinuteStr(ticker.extraTimeSecondHalfStart, 106, 120, timeFrom);
+    } else if (ticker.extraTimeFirstHalfEnd && ticker.extraTimeFirstHalfEnd.getTime() < timeFrom) {
+        gameTimeStr = "Seitenwechsel";
+    } else if (ticker.extraTimeFirstHalfStart && ticker.extraTimeFirstHalfStart.getTime() < timeFrom) {
+        gameTimeStr = getMinuteStr(ticker.extraTimeFirstHalfStart, 91, 105, timeFrom);
+    } else if (ticker.extraTimeStart && ticker.extraTimeStart.getTime() < timeFrom) {
+        gameTimeStr = "Verlängerung";
+    } else if (ticker.timeSecondHalfEnd && ticker.timeSecondHalfEnd.getTime() < timeFrom) {
         gameTimeStr = "Nachbericht";
     } else if (ticker.timeSecondHalfStart && ticker.timeSecondHalfStart.getTime() < timeFrom) {
-        var min = getMinute(ticker.timeSecondHalfStart, 46, timeFrom);
-        if (min > 90) {
-            gameTimeStr = "90. Minute + " + (min - 90);
-        } else {
-            gameTimeStr = min + ". Minute";
-        }
+        gameTimeStr = getMinuteStr(ticker.timeSecondHalfStart, 46, 90, timeFrom);
     } else if (ticker.timeFirstHalfEnd && ticker.timeFirstHalfEnd.getTime() < timeFrom) {
         gameTimeStr = "Halbzeit";
     } else if (ticker.timeFirstHalfStart && ticker.timeFirstHalfStart.getTime() < timeFrom) {
-        var min = getMinute(ticker.timeFirstHalfStart, 1, timeFrom);
-        if (min > 45) {
-            gameTimeStr = "45. Minute + " + (min - 45);
-        } else {
-            gameTimeStr = min + ". Minute";
-        }
+        gameTimeStr = getMinuteStr(ticker.timeFirstHalfStart, 1, 45, timeFrom);
     } else {
         gameTimeStr = "Vorbericht";
     }
@@ -57,15 +61,29 @@ var getGameTimeStr = function (ticker, timeObj) {
     return gameTimeStr;
 };
 
-var getMinute = function (timeFrom, offset, timeObj) {
+var getMinuteStr = function(timeFrom, offset, maxTime, timeObj, minuteText, maxText) {
+    if (!minuteText) {
+        minuteText = ". Minute";
+    }
+    if (!maxText) {
+        maxText = " + ";
+    }
+    var min = getMinute(timeFrom, offset, timeObj);
+    var minuteStr;
+    if (min > maxTime) {
+        minuteStr = maxTime + minuteText + maxText + (min - maxTime);
+    } else {
+        minuteStr = min + minuteText;
+    }
+    return minuteStr;
+};
+
+var getMinute = function (timeFrom, offset, currentTime) {
     if (!serverOffset) {
         serverOffset = 0;
     }
 
-    var currentTime = timeObj;
-
-    var timeFirstHalfStart = timeFrom.getTime();
-    var result = (currentTime - timeFirstHalfStart - serverOffset) / 60000;
+    var result = (currentTime - timeFrom.getTime() - serverOffset) / 60000;
     result = ~~result;
 
     return offset + result;

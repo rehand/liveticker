@@ -29,6 +29,15 @@ Template.tickerEntry.helpers({
     isCommentEntry: function () {
         return this.eventType === EVENT_TYPE_COMMENT;
     },
+    isOvertimePenaltyEntry: function () {
+        return EVENT_TYPES_OVERTIME_PENALTY.indexOf(this.eventType) >= 0;
+    },
+    isOvertimePenaltyConverted: function () {
+        return this.eventType === EVENT_TYPE_OVERTIME_PENALTY_CONVERTED;
+    },
+    isOvertimePenaltyMissed: function () {
+        return this.eventType === EVENT_TYPE_OVERTIME_PENALTY_MISSED;
+    },
     getTeamName: function () {
         return Teams.findOne(this.teamId).name;
     },

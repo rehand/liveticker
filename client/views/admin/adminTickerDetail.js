@@ -116,9 +116,13 @@ Template.adminTickerDetail.events({
             if (!type) {
                 type = event.target.parentNode.getAttribute('data-type');
             }
+            var type2 = event.target.getAttribute('data-type2');
+            if (!type2) {
+                type2 = event.target.parentNode.getAttribute('data-type2');
+            }
             var tickerId = Router.current().params._id;
 
-            Meteor.call("setTime", tickerId, type, function (error) {
+            Meteor.call("setTime", tickerId, [type, type2], function (error) {
                 if (error) {
                     console.error('error ' + error.reason);
                 }
@@ -135,9 +139,13 @@ Template.adminTickerDetail.events({
             if (!type) {
                 type = event.target.parentNode.getAttribute('data-type');
             }
+            var type2 = event.target.getAttribute('data-type2');
+            if (!type2) {
+                type2 = event.target.parentNode.getAttribute('data-type2');
+            }
             var tickerId = Router.current().params._id;
 
-            Meteor.call("resetTime", tickerId, type, function (error) {
+            Meteor.call("resetTime", tickerId, [type, type2], function (error) {
                 if (error) {
                     console.error('error ' + error.reason);
                 }
@@ -224,6 +232,17 @@ Template.addEvent.helpers({
 
 Template.addEvent.events({
     "submit .addEventForm": closeModal
+});
+
+Template.addOvertimePenaltyEvent.helpers({
+    mapPlayingFormation: mapPlayingFormation,
+    getEventTypes: function () {
+        return EVENT_TYPES_OVERTIME_PENALTY.map(mapEventType);
+    }
+});
+
+Template.addOvertimePenaltyEvent.events({
+    "submit .addOvertimePenaltyEvent": closeModal
 });
 
 var mapTeams = function (ticker) {

@@ -84,7 +84,7 @@ function getGoalText(goalEntry, ticker, goalsHome, goalsAway) {
     var goalText = goalsHome + ":" + goalsAway + " " + abbreviateKickerName(goalEntry.kicker[0].name);
     var minuteStr = getGameTimeMinStr(ticker, goalEntry.timestamp);
     if (minuteStr) {
-        goalText += " (" + minuteStr + ".)";
+        goalText += " (" + minuteStr + ")";
     }
     return {
         goalsHome: goalsHome,

@@ -211,6 +211,29 @@ SubstitutionEventSchema = new SimpleSchema([EventSchema, {
     }
 }]);
 
+OvertimePenaltyEventSchema = new SimpleSchema({
+    eventType: {
+        type: String,
+        allowedValues: EVENT_TYPES_OVERTIME_PENALTY,
+        label: 'Eventtyp'
+    },
+    kicker: {
+        type: String,
+        label: 'Spieler'
+    },
+    kicker2: {
+        type: String,
+        optional: true
+    },
+    teamId: {
+        type: String,
+        label: 'Mannschaft'
+    },
+    tickerId: {
+        type: String
+    }
+});
+
 Tickers.attachSchema(
     new SimpleSchema({
         teamHome: {
@@ -414,6 +437,59 @@ Tickers.attachSchema(
                 type: "hidden",
                 label: false
             }
+        },
+        extraTimeAllowed: {
+            type: Boolean,
+            defaultValue: false,
+            label: 'Verlängerung möglich',
+            optional: true
+        },
+        extraTimeStart: {
+            type: Date,
+            label: 'Start Verlängerung',
+            optional: true
+        },
+        extraTimeFirstHalfStart: {
+            type: Date,
+            label: 'Start 1. Halbzeit der Verlängerung',
+            optional: true
+        },
+        extraTimeFirstHalfEnd: {
+            type: Date,
+            label: 'Ende 1. Halbzeit der Verlängerung',
+            optional: true
+        },
+        extraTimeSecondHalfStart: {
+            type: Date,
+            label: 'Start 2. Halbzeit der Verlängerung',
+            optional: true
+        },
+        extraTimeSecondHalfEnd: {
+            type: Date,
+            label: 'Ende 2. Halbzeit der Verlängerung',
+            optional: true
+        },
+        penaltyShootOutStart: {
+            type: Date,
+            label: 'Start Elfmeterschießen',
+            optional: true
+        },
+        penaltyShootOutEnd: {
+            type: Date,
+            label: 'Ende Elfmeterschießen',
+            optional: true
+        },
+        overtimePenaltyScoreHome: {
+            type: Number,
+            optional: true,
+            defaultValue: 0,
+            min: 0
+        },
+        overtimePenaltyScoreAway: {
+            type: Number,
+            optional: true,
+            defaultValue: 0,
+            min: 0
         }
     })
 );
@@ -485,13 +561,13 @@ function convertPlainTeam (teamObject) {
 }
 
 Tickers.helpers({
-    getHomeTeam: function() {
+    getHomeTeam: function () {
         if (Array.isArray(this.teamHomeObject) && this.teamHomeObject.length > 0) {
             return convertPlainTeam(this.teamHomeObject[0]);
         }
         return {};
     },
-    getAwayTeam: function() {
+    getAwayTeam: function () {
         if (Array.isArray(this.teamAwayObject) && this.teamAwayObject.length > 0) {
             return convertPlainTeam(this.teamAwayObject[0]);
         }
@@ -511,12 +587,22 @@ Tickers.helpers({
     },
     isVotingEnabled: function () {
         return this.votingEnabled && this.votingDeadline && Date.now() < this.votingDeadline;
+    },
+    homeScoreTotal: function () {
+        return (this.scoreHome || 0) + (this.overtimePenaltyScoreHome || 0);
+    },
+    awayScoreTotal: function () {
+        return (this.scoreAway || 0) + (this.overtimePenaltyScoreAway || 0);
     }
 });
 
 if (Meteor.isServer) {
     function isGoalEvent(event) {
         return event.eventType === EVENT_TYPE_GOAL || event.eventType === EVENT_TYPE_PENALTY_GOAL || event.eventType === EVENT_TYPE_OWN_GOAL;
+    }
+
+    function isOvertimePenaltyGoalEvent(event) {
+        return event.eventType == EVENT_TYPE_OVERTIME_PENALTY_CONVERTED;
     }
 
     function findKickerById(kickers, kickerId) {
@@ -529,12 +615,22 @@ if (Meteor.isServer) {
     }
 
     function getChangeScoreUpdateValue(value, isHomeScore) {
-        if (Math.abs(value) != 1) {
+        if (Math.abs(value) !== 1) {
             throw new Meteor.Error("ticker-changeScore", "Score kann nicht um " + value + " verändert werden!");
         }
 
         var inc = {};
         inc[isHomeScore ? 'scoreHome' : 'scoreAway'] = value;
+        return inc;
+    }
+
+    function getChangeOvertimePenaltyScoreUpdateValue(value, isHomeScore) {
+        if (Math.abs(value) !== 1) {
+            throw new Meteor.Error("ticker-changeScore", "Elfmeterscore kann nicht um " + value + " verändert werden!");
+        }
+
+        var inc = {};
+        inc[isHomeScore ? 'overtimePenaltyScoreHome' : 'overtimePenaltyScoreAway'] = value;
         return inc;
     }
 
@@ -666,6 +762,10 @@ if (Meteor.isServer) {
                 Tickers.update(tickerId, {
                     '$inc': getChangeScoreUpdateValue(1, event.eventType === EVENT_TYPE_OWN_GOAL ? !isHomeScore : isHomeScore)
                 });
+            } else if (isOvertimePenaltyGoalEvent(event)) {
+                Tickers.update(tickerId, {
+                    '$inc': getChangeOvertimePenaltyScoreUpdateValue(1, isHomeScore)
+                });
             }
         },
         addTickerEntry: function (data) {
@@ -736,13 +836,22 @@ if (Meteor.isServer) {
 
             var entry = TickerEntries.findOne({id: entryId});
 
-            if (entry && entry.teamId && isGoalEvent(entry)) {
-                // reduce score if goal event
-                var isHomeScore = entry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
-                if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
-                    Tickers.update({_id: tickerId}, {
-                        $inc: getChangeScoreUpdateValue(-1, isHomeScore)
-                    });
+            if (entry && entry.teamId) {
+                if (isGoalEvent(entry)) {
+                    // reduce score if goal event
+                    var isHomeScore = entry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
+                    if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
+                        Tickers.update({_id: tickerId}, {
+                            $inc: getChangeScoreUpdateValue(-1, isHomeScore)
+                        });
+                    }
+                } else if (isOvertimePenaltyGoalEvent(entry)) {
+                    var isHomeScore = entry.teamId === ticker.teamHome;
+                    if ((isHomeScore ? ticker.overtimePenaltyScoreHome : ticker.overtimePenaltyScoreAway) > 0) {
+                        Tickers.update({_id: tickerId}, {
+                            $inc: getChangeOvertimePenaltyScoreUpdateValue(-1, isHomeScore)
+                        });
+                    }
                 }
             }
 
@@ -822,52 +931,68 @@ if (Meteor.isServer) {
 
             Tickers.update(tickerId, {$inc: inc});
         },
-        setTime: function (tickerId, timeField) {
+        setTime: function (tickerId, timeFields) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
             }
 
             check(tickerId, String);
-            check(timeField, String);
+            check(timeFields, Array);
 
             var ticker = Tickers.findOne(tickerId);
             if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            var data = {};
-            data[timeField] = new Date();
+            var timeField = timeFields[0];
+            var currentDate = new Date();
 
-            if (timeField === 'timeSecondHalfEnd' && ticker.votingAutoEnable) {
+            var data = {};
+            data[timeField] = currentDate;
+
+            if (    ticker.votingAutoEnable
+                &&  ((timeFields.length <= 1 || !timeFields[1]) && (timeField === 'timeSecondHalfEnd' || timeField === 'extraTimeSecondHalfEnd' || timeField === 'penaltyShootOutEnd' ))) {
                 if (!ticker.votingDeadline || data.votingDeadline < Date.now()) {
                     var votingDeadline = new Date();
-                    votingDeadline.setDate(data[timeField].getDate() + 1);
+                    votingDeadline.setDate(currentDate.getDate() + 1);
 
                     data['votingDeadline'] = votingDeadline;
                 }
                 data['votingEnabled'] = true;
             }
 
+            if (timeFields.length > 1 && !!timeFields[1]) {
+                var timeField2 = timeFields[1];
+                data[timeField2] = currentDate;
+            }
+
             Tickers.update(tickerId, {$set: data});
         },
-        resetTime: function (tickerId, timeField) {
+        resetTime: function (tickerId, timeFields) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");
             }
 
             check(tickerId, String);
-            check(timeField, String);
+            check(timeFields, Array);
 
             var ticker = Tickers.findOne(tickerId);
             if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
+            var timeField = timeFields[0];
+
             var data = {};
             data[timeField] = null;
 
-            if (timeField === 'timeSecondHalfEnd') {
+            if (timeField === 'timeSecondHalfEnd' || timeField === 'extraTimeSecondHalfEnd' || timeField === 'penaltyShootOutEnd') {
                 data['votingEnabled'] = false;
+            }
+
+            if (timeFields.length > 1 && !!timeFields[1]) {
+                var timeField2 = timeFields[1];
+                data[timeField2] = data[timeField];
             }
 
             Tickers.update(tickerId, {$set: data});

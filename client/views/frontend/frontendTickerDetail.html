@@ -44,7 +44,26 @@
                         </div>
 
                         <div class="row">
-                            {{ticker.scoreHome}} : {{ticker.scoreAway}}
+                            {{#unless ticker.extraTimeFirstHalfStart}}
+                                {{ticker.scoreHome}} : {{ticker.scoreAway}}
+                            {{else}}
+                                {{#unless ticker.penaltyShootOutStart}}
+                                    {{ticker.scoreHome}} : {{ticker.scoreAway}}
+                                    {{#unless ticker.extraTimeSecondHalfEnd}}
+                                        i.V.
+                                    {{else}}
+                                        n.V.
+                                    {{/unless}}
+                                {{else}}
+                                    {{#unless ticker.penaltyShootOutEnd}}
+                                        {{ticker.overtimePenaltyScoreHome}} : {{ticker.overtimePenaltyScoreAway}} i.E.
+                                        ({{ticker.scoreHome}} : {{ticker.scoreAway}} n.V.)
+                                    {{else}}
+                                        {{ticker.homeScoreTotal}} : {{ticker.awayScoreTotal}} n.E.
+                                        ({{ticker.scoreHome}} : {{ticker.scoreAway}} n.V.)
+                                    {{/unless}}
+                                {{/unless}}
+                            {{/unless}}
                         </div>
                     </div>
 

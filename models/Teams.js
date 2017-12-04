@@ -122,6 +122,9 @@ Teams.helpers({
     getSubstitionEventFormName: function () {
         return "changeEventForm" + this.code;
     },
+    getAddOvertimePenaltyEventFormName: function () {
+        return "addOvertimePenaltyEventForm" + this.code;
+    },
     getAnthem: function () {
         if (this.anthem) {
             var anthemValue = this.anthem;

@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-6">
-            {{ >insertTickerForm}}
+            {{> insertTickerForm}}
         </div>
     </div>
 
@@ -27,6 +27,7 @@
             {{> afQuickField name='referee'}}
             {{> afQuickField name='competition'}}
             {{> afQuickField name='published' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
+            {{> afQuickField name='extraTimeAllowed' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
 
             <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> OK</button>
             <button class="btn btn-danger cancel-button" type="reset"><i class="material-icons">close</i> Abbrechen</button>

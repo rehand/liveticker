@@ -30,6 +30,7 @@
             {{> afQuickField name='referee'}}
             {{> afQuickField name='competition'}}
             {{> afQuickField name='published' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
+            {{> afQuickField name='extraTimeAllowed' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
 
             {{> afQuickField name='descriptionTitle'}}
             {{> afQuickField name='description'}}
@@ -43,6 +44,13 @@
                 {{> afQuickField name='timeFirstHalfEnd' type="datetime-local" step="1"}}
                 {{> afQuickField name='timeSecondHalfStart' type="datetime-local" step="1"}}
                 {{> afQuickField name='timeSecondHalfEnd' type="datetime-local" step="1"}}
+                {{> afQuickField name='extraTimeStart' type="datetime-local" step="1"}}
+                {{> afQuickField name='extraTimeFirstHalfStart' type="datetime-local" step="1"}}
+                {{> afQuickField name='extraTimeFirstHalfEnd' type="datetime-local" step="1"}}
+                {{> afQuickField name='extraTimeSecondHalfStart' type="datetime-local" step="1"}}
+                {{> afQuickField name='extraTimeSecondHalfEnd' type="datetime-local" step="1"}}
+                {{> afQuickField name='penaltyShootOutStart' type="datetime-local" step="1"}}
+                {{> afQuickField name='penaltyShootOutEnd' type="datetime-local" step="1"}}
             </div>
 
             <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>

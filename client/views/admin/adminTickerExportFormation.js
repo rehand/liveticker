@@ -17,6 +17,12 @@ imgIn.src = '/images/in.png';
 var imgOut = new Image();
 imgOut.src = '/images/out.png';
 
+var imgOvertimePenaltyConverted = new Image();
+imgOvertimePenaltyConverted.src = '/images/penalty_score.png';
+
+var imgOvertimePenaltyMissed = new Image();
+imgOvertimePenaltyMissed.src = '/images/penalty_miss.png';
+
 var fontSize = 24;
 var maxTextLength = 150;
 
@@ -31,8 +37,16 @@ var drawEventTime = function (context, ticker, timestamp, x, y) {
     var minuteStr = getGameTimeMinStr(ticker, timestamp);
 
     if (minuteStr) {
+        var maxMinuteStrLength = 45;
         context.font = fontSize + "px FuturaEFME-Book";
-        context.fillText('(' + minuteStr + '.)', x, y);
+        var tmpFontSize = fontSize;
+        var text = '(' + minuteStr + ')';
+
+        do {
+            context.font = tmpFontSize + "px FuturaEFME-Book";
+            tmpFontSize--;
+        } while (context.measureText(text).width > maxMinuteStrLength && tmpFontSize > 1);
+        context.fillText(text, x, y);
     }
 };
 
@@ -83,12 +97,12 @@ var drawFormationString = function (context, formation, xPos, yPos) {
         }
     }
 
-    var SEPERATOR = "-";
-    var formationString = formationCnt.defenders + SEPERATOR;
+    var SEPARATOR = "-";
+    var formationString = formationCnt.defenders + SEPARATOR;
     if (formationCnt.dmidfielders > 0) {
-        formationString += formationCnt.dmidfielders + SEPERATOR;
+        formationString += formationCnt.dmidfielders + SEPARATOR;
     }
-    formationString += formationCnt.midfielders + SEPERATOR;
+    formationString += formationCnt.midfielders + SEPARATOR;
     formationString += formationCnt.forwards;
 
     context.textAlign = "center";
@@ -131,7 +145,7 @@ function generateImage(ticker) {
             var tmpFontSize = fontSize;
             do {
                 context.font = tmpFontSize + "px FuturaEFME-Book";
-                tmpFontSize --;
+                tmpFontSize--;
             } while (context.measureText(kickerName).width > maxTextLength && tmpFontSize > 1);
             context.fillText(kickerName, xText + xTextOffset, yText);
 
@@ -141,7 +155,9 @@ function generateImage(ticker) {
             context.font = fontSize + "px FuturaEFME-Book";
             context.textAlign = "left";
 
-            var xImageOffset = 70 * direction;
+            var xImageWidth = 70;
+
+            var xImageOffset = xImageWidth * direction;
             var imgCount = 0;
 
             if (kickerFormationEntry.exchanged) {
@@ -171,6 +187,16 @@ function generateImage(ticker) {
             if (kickerFormationEntry.substituted) {
                 context.drawImage(imgOut, xCard + imgCount * xImageOffset, yCard);
                 drawEventTime(context, ticker, kickerFormationEntry.substituted[0], xCard + xCardOffset + imgCount * xImageOffset, yText);
+                imgCount++;
+            }
+
+            if (kickerFormationEntry.overtimePenaltyConverted) {
+                context.drawImage(imgOvertimePenaltyConverted, xCard + imgCount * xImageOffset + (direction === -1 ? xImageWidth - xCardOffset : 0), yCard);
+                imgCount++;
+            }
+
+            if (kickerFormationEntry.overtimePenaltyMissed) {
+                context.drawImage(imgOvertimePenaltyMissed, xCard + imgCount * xImageOffset + (direction === -1 ? xImageWidth - xCardOffset : 0), yCard);
                 imgCount++;
             }
         }

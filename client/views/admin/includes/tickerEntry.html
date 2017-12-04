@@ -83,6 +83,28 @@
                                                 {{else}}
                                                     {{#if isCommentEntry}}
                                                         <i class="userComment">Userkommentar von {{text}}</i>
+                                                    {{else}}
+                                                        {{#if isOvertimePenaltyEntry}}
+                                                            {{#if isOvertimePenaltyConverted}}
+                                                                <img class="entryIcon" src="/images/penalty_score.png"/>
+                                                            {{else}}
+                                                                {{#if isOvertimePenaltyMissed}}
+                                                                    <img class="entryIcon" src="/images/penalty_miss.png"/>
+                                                                {{/if}}
+                                                            {{/if}}
+
+                                                            <strong>
+                                                                {{kicker.[0].name}} ({{getTeamCode}})
+
+                                                                {{#if isOvertimePenaltyConverted}}
+                                                                    trifft!
+                                                                {{else}}
+                                                                    {{#if isOvertimePenaltyMissed}}
+                                                                        verschießt!
+                                                                    {{/if}}
+                                                                {{/if}}
+                                                            </strong>
+                                                        {{/if}}
                                                     {{/if}}
                                                 {{/if}}
                                             {{/if}}
