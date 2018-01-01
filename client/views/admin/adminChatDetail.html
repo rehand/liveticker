@@ -1,0 +1,129 @@
+<template name="adminChatDetail">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{chat.title}}
+            <a href="{{ pathFor 'adminChatEdit' _id=chat._id}}" class="btn btn-primary">
+                <i class="material-icons">create</i> Bearbeiten
+            </a>
+            <br/>
+            <small>
+                Beginn: {{chatDate chat.beginDate}} Uhr
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12 text-center tickerStatus">
+                    <div class="row">
+                        {{> adminChatStatus}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div data-toggle="collapse" data-target="#chatControl">
+                <h2>Steuerung</h2>
+            </div>
+
+            <div class="collapse in" id="chatControl">
+                {{#unless chat.timeChatStart}}
+                    <button class="btn btn-success btn-raised time-button" data-type="timeChatStart">
+                        <i class="fa fa-play"></i>
+                        Chat starten
+                    </button>
+                {{else}}
+                    {{#unless chat.timeChatEnd}}
+                        <button class="btn btn-warning btn-raised reset-time-button" data-type="timeChatStart">
+                            <i class="fa fa-step-backward"></i>
+                            zurück zum Vorbericht
+                        </button>
+                        <button class="btn btn-success btn-raised time-button" data-type="timeChatEnd">
+                            <i class="fa fa-stop"></i>
+                            Chat beenden
+                        </button>
+                    {{else}}
+                        <button class="btn btn-warning btn-raised reset-time-button" data-type="timeChatEnd">
+                            <i class="fa fa-step-backward"></i>
+                            Chat nochmal starten
+                        </button>
+                    {{/unless}}
+                {{/unless}}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12" data-toggle="collapse" data-target="#chatComments">
+            <h2>Kommentare <span class="badge">{{chat.comments.length}}</span></h2>
+        </div>
+        <div class="col-xs-12 collapse in" id="chatComments">
+            {{#each chat.comments}}
+                {{> chatComment}}
+            {{else}}
+                Keine Kommentare vorhanden
+            {{/each}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12" data-toggle="collapse" data-target="#chatEntries">
+            <h2>Chat</h2>
+        </div>
+        <div class="col-xs-12 collapse in" id="chatEntries">
+            {{> addChatEntry}}
+            {{> editChatEntry}}
+            {{#each chatEntries}}
+                {{> chatEntry entry=this showButtons=true}}
+            {{/each}}
+        </div>
+    </div>
+
+</template>
+
+<template name="addChatEntry">
+    <form class="add-chat-entry form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-10">
+                <textarea class="form-control no-padding" name="text" rows="1" placeholder="Schreiben..."></textarea>
+            </div>
+            <div class="col-xs-2">
+                <button class="btn btn-primary no-padding no-margin" type="submit"><i class="material-icons">send</i> Senden</button>
+            </div>
+        </div>
+    </form>
+</template>
+
+<template name="chatComment">
+    <div class="chatEntry row">
+        <div class="col-xs-12 col-sm-3">
+            <button class="btn btn-danger btn-raised btn-sm no-margin delete-comment" data-comment-id="{{id}}">
+                <i class="material-icons">delete</i>
+            </button>
+            <button class="btn btn-primary btn-raised btn-sm no-margin approve-comment" data-comment-id="{{id}}">
+                <i class="material-icons">done</i>
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-9">
+            {{commentDate timestamp}} - {{name}}: {{text}}
+        </div>
+    </div>
+</template>
+
+<template name="adminChatStatus">
+    <div class="col-xs-12">
+        {{#with chat}}
+            Status: {{chatTime}}
+        {{/with}}
+    </div>
+</template>

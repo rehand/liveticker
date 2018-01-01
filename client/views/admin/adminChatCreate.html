@@ -1,0 +1,32 @@
+<template name="adminChatCreate">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Chat erstellen</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {{ >insertChatForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="insertChatForm">
+    {{#autoForm collection="Chats" id="insertChatForm" type="method" meteormethod="addChat"}}
+        <div class="inputs">
+            <h2>Neuen Chat erstellen</h2>
+            {{> afQuickField name='title'}}
+            {{> afQuickField name='beginDate' type="datetime-local"}}
+            {{> afQuickField name='published' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
+
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> OK</button>
+            <button class="btn btn-danger cancel-button" type="reset"><i class="material-icons">close</i> Abbrechen</button>
+        </div>
+    {{/autoForm}}
+</template>

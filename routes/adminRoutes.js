@@ -250,6 +250,81 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminChats', {
+            path: '/admin/chats',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Chats')
+                ];
+            },
+            data: function() {
+                return {
+                    chats: Chats.find({}, {sort: {beginDate: -1}})
+                };
+            }
+        });
+
+        this.route('adminChatCreate', {
+            path: '/admin/chats/create',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Chats')
+                ];
+            }
+        });
+
+        this.route('adminChatDetail', {
+            path: '/admin/chats/:_id',
+            notFoundTemplate: 'chatNotFound',
+            waitOn: function() {
+                var chatId = this.params._id;
+                return [
+                    Meteor.subscribe('Chat', chatId),
+                    Meteor.subscribe('ChatEntries', chatId)
+                ];
+            },
+            data: function() {
+                return {
+                    chat: Chats.findOne(this.params._id),
+                    chatEntries: ChatEntries.find({}, {
+                        sort: {
+                            timestamp: -1
+                        }
+                    })
+                };
+            }
+        });
+
+        this.route('adminChatEdit', {
+            path: '/admin/chats/:_id/edit',
+            notFoundTemplate: 'chatNotFound',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Chat', this.params._id)
+                ];
+            },
+            data: function() {
+                return {
+                    chat: Chats.findOne(this.params._id)
+                };
+            }
+        });
+
+        this.route('adminChatDelete', {
+            path: '/admin/chats/:_id/delete',
+            notFoundTemplate: 'chatNotFound',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Chat', this.params._id)
+                ];
+            },
+            data: function() {
+                return {
+                    chat: Chats.findOne(this.params._id)
+                };
+            }
+        });
+
         this.route('adminUsers', {
             path: '/admin/users'
         });
@@ -273,10 +348,13 @@ if (Meteor.isClient) {
 
     Router.onBeforeAction(requireLogin, {
         except: [
+            'frontendOverview',
             'frontendTickers',
             'frontendTickerDetail',
             'frontendLink',
-            'frontendTickerVoting'
+            'frontendTickerVoting',
+            'frontendChats',
+            'frontendChatDetail'
         ]
     });
 }

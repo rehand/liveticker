@@ -1,0 +1,32 @@
+<template name="adminChatDelete">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Chat löschen</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            {{ >deleteChatForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="deleteChatForm">
+    <form class="deleteChatForm">
+        <div class="col-xs-12">
+            <label>Soll der Chat {{chat.title}} am {{chat.beginDate}} unwideruflich gelöscht werden?</label>
+        </div>
+        <div class="col-xs-12">
+            <div class="inputs">
+                <button class="btn btn-danger" type="submit"><i class="material-icons">delete</i> Ja</button>
+                <button class="btn btn-primary cancel-button" type="button"><i class="material-icons">close</i> Nein</button>
+            </div>
+        </div>
+    </form>
+</template>

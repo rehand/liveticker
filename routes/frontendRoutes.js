@@ -3,17 +3,19 @@
  */
 if (Meteor.isClient) {
     Router.map(function () {
-        this.route('frontendTickers', {
+        this.route('frontendOverview', {
             path: '/',
             waitOn: function() {
                 return [
                     Meteor.subscribe('PublicTickers'),
+                    Meteor.subscribe('PublicChats'),
                     Meteor.subscribe('Teams')
                 ];
             },
             data: function() {
                 return {
-                    tickers: Tickers.find({}, {sort: {kickoff: -1}})
+                    tickers: Tickers.find({}, {sort: {kickoff: -1}}),
+                    chats: Chats.find({}, {sort: {beginDate: -1}})
                 }
             }
         });
@@ -37,6 +39,21 @@ if (Meteor.isClient) {
                     Router.go('frontendTickerDetail', {_id: currentTicker._id});
                 } else {
                     this.render('tickerNotFound');
+                }
+            }
+        });
+
+        this.route('frontendTickers', {
+            path: '/tickers',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('PublicTickers'),
+                    Meteor.subscribe('Teams')
+                ];
+            },
+            data: function() {
+                return {
+                    tickers: Tickers.find({}, {sort: {kickoff: -1}})
                 }
             }
         });
@@ -91,6 +108,50 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('frontendChats', {
+            path: '/chats',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('PublicChats')
+                ];
+            },
+            data: function() {
+                return {
+                    chats: Chats.find({}, {sort: {beginDate: -1}})
+                }
+            }
+        });
+
+        this.route('frontendChatDetail', {
+            name: 'frontendChatDetail',
+            path: '/chats/:_id',
+            notFoundTemplate: 'chatNotFound',
+            waitOn: function() {
+                var chatId = this.params._id;
+                return [
+                    Meteor.subscribe('Chat', chatId, true, true),
+                    Meteor.subscribe('ChatEntries', chatId)
+                ];
+            },
+            data: function() {
+                var chat = Chats.findOne(this.params._id);
+
+                var chatEntries = [];
+                if (chat) {
+                    chatEntries = ChatEntries.find({}, {
+                        sort: {
+                            timestamp: -1
+                        }
+                    });
+                }
+
+                return {
+                    chat: chat,
+                    chatEntries: chatEntries
+                };
+            }
+        });
+
     });
 
     // set page title
@@ -105,6 +166,11 @@ if (Meteor.isClient) {
                     var awayTeamName = ticker.getAwayTeam().name;
 
                     title += ': ' + homeTeamName + ' vs. ' + awayTeamName;
+                } else {
+                    var chat = this.data().chat;
+                    if (chat) {
+                        title += ': ' + chat.title;
+                    }
                 }
             }
 

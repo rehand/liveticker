@@ -1,0 +1,72 @@
+<template name="frontendChatDetail">
+    <div class="page-header col-xs-12">
+        <h1>{{chat.title}}
+            <br/>
+            <small>
+                Beginn: {{chatDate chat.beginDate}} Uhr
+            </small>
+        </h1>
+    </div>
+
+    <div class="row" id="errors">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12" id="matchInfo">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12 text-center tickerStatus">
+                                <div class="row">
+                                    {{> adminChatStatus}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#if allowChatComments}}
+        <div class="row">
+            <div class="col-xs-12" data-toggle="collapse" data-target="#chatCommentForm">
+                <h2>Kommentar</h2>
+            </div>
+            <div class="col-xs-12 collapse in" id="chatCommentForm">
+                {{> chatCommentForm}}
+            </div>
+        </div>
+    {{/if}}
+
+    <div class="row">
+        <div class="col-xs-12" data-toggle="collapse" data-target="#chatEntries">
+            <h2>Chat</h2>
+        </div>
+        <div class="col-xs-12 collapse in" id="chatEntries">
+            {{#each chatEntries}}
+                {{> chatEntry entry=this}}
+            {{/each}}
+        </div>
+    </div>
+
+</template>
+
+<template name="chatCommentForm">
+    <div class="row">
+        {{#autoForm schema="ChatComments" id="addChatComment" class="addChatCommentForm" type="method" meteormethod="addChatComment"}}
+            <div class="col-xs-12 col-sm-3">
+                {{> afQuickField name='name' value=getCommentName placeholder="Name" label=false}}
+            </div>
+            <div class="col-xs-12 col-sm-7">
+                {{> afQuickField name='text' placeholder="Kommentar..." label=false}}
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                {{> afFieldInput name="chatId" type="hidden" value=chat._id}}
+                <button class="btn btn-primary" type="submit"><i class="material-icons">send</i> Senden</button>
+            </div>
+        {{/autoForm}}
+    </div>
+</template>

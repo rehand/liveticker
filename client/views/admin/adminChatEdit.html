@@ -1,0 +1,44 @@
+<template name="adminChatEdit">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Chat bearbeiten
+            <a href="{{ pathFor 'adminChatDelete' _id=Chat._id}}" class="btn btn-danger">
+                <i class="material-icons">delete</i> Chat löschen
+            </a>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            {{> updateChatform}}
+        </div>
+    </div>
+
+</template>
+
+<template name="updateChatform">
+    {{#autoForm collection="Chats" id="updateChatForm" type="method-update" meteormethod="updateChat" doc=chat}}
+        <div class="inputs">
+            {{> afQuickField name='title'}}
+            {{> afQuickField name='beginDate' type="datetime-local"}}
+            {{> afQuickField name='published' type="boolean-select" trueLabel="Ja" falseLabel="Nein"}}
+
+            <div class="h3" data-toggle="collapse" data-target="#editExpert">
+                Interne Daten
+                <i class="glyphicon glyphicon-collapse-down"></i>
+            </div>
+            <div class="collapse" id="editExpert">
+                {{> afQuickField name='timeChatStart' type="datetime-local" step="1"}}
+                {{> afQuickField name='timeChatEnd' type="datetime-local" step="1"}}
+            </div>
+
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+            <button class="btn btn-danger cancel-button" type="button"><i class="material-icons">close</i> Abbrechen</button>
+        </div>
+    {{/autoForm}}
+</template>

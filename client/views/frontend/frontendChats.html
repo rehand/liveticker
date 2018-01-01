@@ -1,0 +1,25 @@
+<template name="frontendChats">
+    <div class="page-header col-xs-12">
+        <h1>Chats</h1>
+    </div>
+
+    <div class="row">
+      {{> errors}}
+    </div>
+
+    <div class="row">
+        <ul>
+          {{#each chats}}
+            {{> chatFrontend}}
+          {{/each}}
+        </ul>
+    </div>
+</template>
+
+<template name="chatFrontend">
+    <li class="col-xs-12">
+        <a href="{{pathFor 'frontendChatDetail'}}">
+            <span title="{{chatDate beginDate}}: {{title}}">{{chatDate beginDate}}: {{title}}</span>
+        </a>
+    </li>
+</template>
