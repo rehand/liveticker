@@ -48,6 +48,7 @@
                             </div>
                             <div id="teamHomeFormation" class="collapse in">
                                 {{> tickerFormation formation=ticker.teamHomeFormation tickerEntries=tickerEntries}}
+                                {{> teamCoach team=ticker.getHomeTeam ticker=ticker}}
                             </div>
                         </div>
                         <div class="col-xs-12">
@@ -81,6 +82,7 @@
                             </div>
                             <div id="teamAwayFormation" class="collapse in">
                                 {{> tickerFormation formation=ticker.teamAwayFormation tickerEntries=tickerEntries}}
+                                {{> teamCoach team=ticker.getAwayTeam ticker=ticker}}
                             </div>
                         </div>
                         <div class="col-xs-12">

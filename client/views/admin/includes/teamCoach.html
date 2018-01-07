@@ -1,0 +1,11 @@
+<template name="teamCoach">
+    {{#if showCoach ticker}}
+        <br/>
+        <b>Trainer: </b>
+        {{#if team.coach}}
+            {{team.coach}}
+        {{else}}
+            -
+        {{/if}}
+    {{/if}}
+</template>
