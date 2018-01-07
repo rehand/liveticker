@@ -1,6 +1,10 @@
 Template.tickerFormation.helpers({
     sortAndPopulateFormation: function (formation) {
-        return sortFormation(populateFormation(formation, this.tickerEntries.fetch()), false);
+        var entries = [];
+        if (this.tickerEntries) {
+            entries = this.tickerEntries.fetch();
+        }
+        return sortFormation(populateFormation(formation, entries), false);
     }
 });
 
