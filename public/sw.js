@@ -6,6 +6,7 @@ var urlsToCache = [
     '/images/red.png',
     '/images/yellow.png',
     '/images/yellowred.png',
+    '/image/captain.png',
     '/audio/hymne_sturm.mp3'
 ];
 
