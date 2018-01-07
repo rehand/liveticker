@@ -6,7 +6,7 @@
 
 <template name="tickerFormationEntry">
     {{#if isInFormation gamePosition}}
-        <div class="row">
+        <div class="row formation-{{gamePosition}}">
             <div class="col-xs-3 text-right">{{gamePosition}}</div>
             <div class="col-xs-9 text-left">
                 {{#if number}}
