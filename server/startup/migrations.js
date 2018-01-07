@@ -130,6 +130,7 @@ var swapVotingValuesForAllTickers = function() {
                     votings: votingsData
                 }
             }, resultFunction);
+            return false;
         }
     });
 };
@@ -144,6 +145,74 @@ Migrations.add({
         down: function () {
             console.log('Migrating voting values back...');
             swapVotingValuesForAllTickers();
+        }
+    }
+);
+
+Migrations.add({
+        version: 4,
+        name: 'Moved team objects into ticker',
+        up: function () {
+            console.log('Copying team objects into ticker...');
+
+            var tickers = Tickers.find({
+                $or: [ {
+                        'teamHomeObject': {
+                            $exists: false
+                        }
+                    }, {
+                        'teamAwayObject': {
+                            $exists: false
+                        }
+                    }
+                ]
+            }).fetch();
+
+            console.log('Found ' + tickers.length + " tickers to migrate");
+
+            tickers.forEach(function (ticker) {
+                var tickerId = ticker._id;
+                console.log('Copying teams for tickerId ' + tickerId);
+
+                var doUpdate = false;
+                var updateData = {
+                    $set: {}
+                };
+
+                if (ticker.teamHome && !ticker.teamHomeObject) {
+                    var teamHome = Teams.findOne(ticker.teamHome);
+                    if (teamHome) {
+                        updateData.$set.teamHomeObject = [teamHome];
+                        doUpdate = true;
+                    }
+                }
+
+                if (ticker.teamAway && !ticker.teamAwayObject) {
+                    var teamAway = Teams.findOne(ticker.teamAway);
+                    if (teamAway) {
+                        updateData.$set.teamAwayObject = [teamAway];
+                        doUpdate = true;
+                    }
+                }
+
+                if (doUpdate) {
+                    Tickers.update(tickerId, updateData, resultFunction);
+                }
+            });
+
+            console.log('Done copying team objects into ticker...');
+        },
+        down: function () {
+            console.log('Removing team objects from ticker...');
+
+            Tickers.update({}, {
+                $unset: {
+                    teamHomeObject: 1,
+                    teamAwayObject: 1
+                }
+            }, {
+                multi: true
+            }, resultFunction);
         }
     }
 );

@@ -220,12 +220,20 @@ Tickers.attachSchema(
                 options: teamsOptionMapper
             }
         },
+        teamHomeObject: {
+            type: [Teams],
+            optional: true
+        },
         teamAway: {
             type: String,
             label: 'Auswärtsmannschaft',
             autoform: {
                 options: teamsOptionMapper
             }
+        },
+        teamAwayObject: {
+            type: [Teams],
+            optional: true
         },
         published: {
             type: Boolean,
@@ -462,12 +470,32 @@ VotingFormSchema = new SimpleSchema({
     }
 });
 
+function convertPlainTeam (teamObject) {
+    // hack so that the plain team object is turned into a team object including all helpers
+    var tmpTeamObject = Teams.find({}, {limit: 1}).fetch();
+
+    if (tmpTeamObject && Array.isArray(tmpTeamObject) && tmpTeamObject.length > 0) {
+        tmpTeamObject = tmpTeamObject[0];
+        Object.assign(tmpTeamObject, teamObject);
+    } else {
+        console.error("Could not find team for teamId=" + teamObject._id);
+    }
+
+    return tmpTeamObject;
+}
+
 Tickers.helpers({
     getHomeTeam: function() {
-        return Teams.findOne(this.teamHome);
+        if (Array.isArray(this.teamHomeObject) && this.teamHomeObject.length > 0) {
+            return convertPlainTeam(this.teamHomeObject[0]);
+        }
+        return {};
     },
     getAwayTeam: function() {
-        return Teams.findOne(this.teamAway);
+        if (Array.isArray(this.teamAwayObject) && this.teamAwayObject.length > 0) {
+            return convertPlainTeam(this.teamAwayObject[0]);
+        }
+        return {};
     },
     countHomeFormation: function () {
         if (this.teamHomeFormation) {
@@ -554,6 +582,9 @@ if (Meteor.isServer) {
             if (!teamHome || !teamAway) {
                 throw new Meteor.Error("team-not-found", "Team nicht gefunden!");
             }
+
+            ticker.teamHomeObject = [teamHome];
+            ticker.teamAwayObject = [teamAway];
 
             var setPositionNotDefined = function (kicker) {
                 kicker.gameposition = POS_NA;
@@ -738,6 +769,16 @@ if (Meteor.isServer) {
             // remove null values from array formation array
             if (ticker.$set.teamAwayFormation && Array.isArray(ticker.$set.teamAwayFormation)) {
                 ticker.$set.teamAwayFormation = sortFormation(cleanFormation(ticker.$set.teamAwayFormation), true);
+            }
+
+            // keep teamHome ID and teamHomeObject in sync
+            if (ticker.$set.teamHome && thisTicker.teamHome !== ticker.$set.teamHome) {
+                ticker.$set.teamHomeObject = [Teams.findOne(ticker.$set.teamHome)];
+            }
+
+            // keep teamAway ID and teamAwayObject in sync
+            if (ticker.$set.teamAway && thisTicker.teamAway !== ticker.$set.teamAway) {
+                ticker.$set.teamAwayObject = [Teams.findOne(ticker.$set.teamAway)];
             }
 
             Tickers.update(tickerId, ticker);

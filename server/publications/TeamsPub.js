@@ -27,6 +27,16 @@ Meteor.publish('TickerTeams', function (tickerId, onlyPublic) {
 
     if (ticker) {
         ret = Teams.find({_id: {$in: [ticker.teamHome, ticker.teamAway]}});
+
+        // if both teams are already deleted, publish a random team without any useful fields so that at least one Team object is available
+        if (ret.count() === 0) {
+            ret = Teams.find({}, {
+                limit: 1,
+                fields: {
+                    createdAt: 1
+                }
+            });
+        }
     }
 
     return ret;
