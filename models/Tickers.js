@@ -593,6 +593,24 @@ Tickers.helpers({
     },
     awayScoreTotal: function () {
         return (this.scoreAway || 0) + (this.overtimePenaltyScoreAway || 0);
+    },
+    getEndTime: function () {
+        var endTime;
+
+        if (this.extraTimeAllowed) {
+            if (this.penaltyShootOutStart) {
+                endTime = this.penaltyShootOutEnd;
+                console.log('endTime = penalty');
+            } else {
+                endTime = this.extraTimeSecondHalfEnd;
+                console.log('endTime = extra');
+            }
+        } else {
+            endTime = this.timeSecondHalfEnd;
+            console.log('endTime = second half');
+        }
+
+        return endTime;
     }
 });
 
@@ -1006,7 +1024,7 @@ if (Meteor.isServer) {
             var ticker = Tickers.findOne(tickerId);
             if (ticker === null) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
-            } else if (ticker.timeSecondHalfEnd && ticker.timeSecondHalfEnd !== null) {
+            } else if (ticker.getEndTime() && new Date().getTime() - ticker.getEndTime().getTime() > COMMENTS_ALLOWED_AFTER_END_MILLIS) {
                 throw new Meteor.Error("ticker-finished", "Kommentar kann nicht hinzugefügt werden!");
             }
 
