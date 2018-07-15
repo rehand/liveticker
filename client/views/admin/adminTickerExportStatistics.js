@@ -186,10 +186,10 @@ function generateImage(ticker) {
             drawText(context, "center", stadiumViewersText, xCenter, 208, true);
         }
 
-        if (ticker.referee) {
+        if (ticker.getReferee()) {
             var header = "SR: ";
-            drawText(context, "center", header, xCenter - getTextWitdh(context, ticker.referee, false)/2, 236, true);
-            drawText(context, "center", ticker.referee, xCenter + getTextWitdh(context, header, true)/2, 236, false);
+            drawText(context, "center", header, xCenter - getTextWitdh(context, ticker.getReferee(), false)/2, 236, true);
+            drawText(context, "center", ticker.getReferee(), xCenter + getTextWitdh(context, header, true)/2, 236, false);
         }
 
         var goals = tickerEntries.filter(filterGoalEvents).sort(function (entry1, entry2) {

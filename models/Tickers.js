@@ -271,7 +271,14 @@ Tickers.attachSchema(
         referee: {
             type: String,
             optional: true,
-            label: 'Schiedsrichter'
+            label: 'Schiedsrichter',
+            autoform: {
+                options: refereesOptionMapper
+            }
+        },
+        refereeObject: {
+            type: [RefereeSchema],
+            optional: true
         },
         competition: {
             type: String,
@@ -600,17 +607,20 @@ Tickers.helpers({
         if (this.extraTimeAllowed) {
             if (this.penaltyShootOutStart) {
                 endTime = this.penaltyShootOutEnd;
-                console.log('endTime = penalty');
             } else {
                 endTime = this.extraTimeSecondHalfEnd;
-                console.log('endTime = extra');
             }
         } else {
             endTime = this.timeSecondHalfEnd;
-            console.log('endTime = second half');
         }
 
         return endTime;
+    },
+    getReferee: function () {
+        if (this.refereeObject && Array.isArray(this.refereeObject) && this.refereeObject.length > 0) {
+            return this.refereeObject[0].name;
+        }
+        return this.referee;
     }
 });
 
@@ -699,6 +709,14 @@ if (Meteor.isServer) {
 
             ticker.teamHomeObject = [teamHome];
             ticker.teamAwayObject = [teamAway];
+
+            if (ticker.referee) {
+                var referee = Referees.findOne(ticker.referee);
+                if (!referee) {
+                    throw new Meteor.Error("referee-not-found", "Schiedsrichter nicht gefunden!");
+                }
+                ticker.refereeObject = [referee];
+            }
 
             var setPositionNotDefined = function (kicker) {
                 kicker.gameposition = POS_NA;
@@ -906,6 +924,19 @@ if (Meteor.isServer) {
             // keep teamAway ID and teamAwayObject in sync
             if (ticker.$set.teamAway && thisTicker.teamAway !== ticker.$set.teamAway) {
                 ticker.$set.teamAwayObject = [Teams.findOne(ticker.$set.teamAway)];
+            }
+
+            // update referee
+            if ('referee' in ticker.$unset) {
+                ticker.$unset.refereeObject = true;
+            } else if (ticker.$set.referee && ticker.$set.referee !== thisTicker.referee) {
+                var referee = Referees.findOne(ticker.$set.referee);
+                if (!referee) {
+                    throw new Meteor.Error("referee-not-found", "Schiedsrichter nicht gefunden!");
+                }
+                // remove createdAt because it can not be set during an update
+                delete referee.createdAt;
+                ticker.$set.refereeObject = [referee];
             }
 
             Tickers.update(tickerId, ticker);

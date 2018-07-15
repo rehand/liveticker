@@ -49,14 +49,7 @@ TeamsSchema = new SimpleSchema({
     },
     coachObject: {
         type: [CoachSchema],
-        label: 'Trainer',
-        optional: true,
-        autoform: {
-            options: coachesOptionMapper,
-            afFieldInput: {
-                type: 'select'
-            }
-        }
+        optional: true
     },
     kickers: {
         type: [KickersSchema],
@@ -198,17 +191,21 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("team-duplicate-code", "Ein Team mit diesem Code existiert bereits!");
             }
 
-            var coach = Coaches.findOne(team.coach);
-            if (!coach) {
-                throw new Meteor.Error("coach-not-found", "Trainer nicht gefunden!");
-            }
-
-            Teams.insert({
+            var newTeam = {
                 name: team.name,
                 code: team.code,
-                coach: team.coach,
-                coachObject: [coach]
-            });
+                coach: team.coach
+            };
+
+            if (team.coach) {
+                var coach = Coaches.findOne(team.coach);
+                if (!coach) {
+                    throw new Meteor.Error("coach-not-found", "Trainer nicht gefunden!");
+                }
+                newTeam.coachObject = [coach];
+            }
+
+            Teams.insert(newTeam);
 
             var redirect = {
                 template: 'adminTeams'
@@ -245,10 +242,9 @@ if (Meteor.isServer) {
             }
 
             // update coach
-            console.log('updateTeam: ' + JSON.stringify(team) + ", DB: " + JSON.stringify(thisTeam));
-            if (team.$unset.coach) {
+            if ('coach' in team.$unset) {
                 team.$unset.coachObject = true;
-            } else if (team.$set.coach !== thisTeam.coach) {
+            } else if (team.$set.coach && team.$set.coach !== thisTeam.coach) {
                 var coach = Coaches.findOne(team.$set.coach);
                 if (!coach) {
                     throw new Meteor.Error("coach-not-found", "Trainer nicht gefunden!");

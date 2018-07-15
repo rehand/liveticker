@@ -93,7 +93,8 @@ if (Meteor.isClient) {
             waitOn: function() {
                 return [
                     Meteor.subscribe('Tickers'),
-                    Meteor.subscribe('Teams')
+                    Meteor.subscribe('Teams'),
+                    Meteor.subscribe('Referees')
                 ];
             }
         });
@@ -129,7 +130,8 @@ if (Meteor.isClient) {
                 return [
                     Meteor.subscribe('Ticker', this.params._id),
                     Meteor.subscribe('Teams'),
-                    Meteor.subscribe('Images')
+                    Meteor.subscribe('Images'),
+                    Meteor.subscribe('Referees')
                 ];
             },
             data: function() {

@@ -1,5 +1,14 @@
 Referees = new Mongo.Collection('Referees');
 
+refereesOptionMapper = function () {
+    return Referees.find({}, {sort: {name: 1}}).map(function (coach) {
+        return {
+            label: coach.name, 
+            value: coach._id
+        };
+    });
+};
+
 RefereeSchema = new SimpleSchema({
     name: {
         type: String,
