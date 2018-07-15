@@ -1,0 +1,32 @@
+<template name="adminRefereeEdit">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{referee.name}}
+            <a href="{{ pathFor 'adminRefereeDelete' _id=referee._id}}" class="btn btn-danger">
+                <i class="material-icons">delete</i> Schiedsrichter löschen
+            </a>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            {{> updateRefereeForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="updateRefereeForm">
+    {{#autoForm collection="Referees" id="updateRefereeForm" type="method-update" meteormethod="updateReferee" doc=referee}}
+        <div class="inputs">
+            <h2>Schiedsrichter bearbeiten</h2>
+            {{> afQuickField name='name'}}
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+        </div>
+    {{/autoForm}}
+</template>

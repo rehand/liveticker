@@ -325,6 +325,128 @@ if (Meteor.isClient) {
             }
         });
 
+        this.route('adminReferees', {
+            path: '/admin/referees',
+            waitOn: function() {
+                return [Meteor.subscribe('Referees')];
+            },
+            data: function() {
+                return {
+                    referees: Referees.find({}, {sort: {name: 1}})
+                };
+            }
+        });
+
+        this.route('adminRefereeCreate', {
+            path: '/admin/referees/create'
+        });
+
+        this.route('adminRefereeDetail', {
+            path: '/admin/referees/:_id',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Referee', this.params._id)
+                ];
+            },
+            notFoundTemplate: 'refereeNotFound',
+            data: function() {
+                return {
+                    referee: Referees.findOne({_id: this.params._id})
+                };
+            }
+        });
+
+        this.route('adminRefereeEdit', {
+            path: '/admin/referees/:_id/edit',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Referee', this.params._id)
+                ];
+            },
+            notFoundTemplate: 'refereeNotFound',
+            data: function() {
+                return {
+                    referee: Referees.findOne({_id: this.params._id})
+                };
+            }
+        });
+
+        this.route('adminRefereeDelete', {
+            path: '/admin/referees/:_id/delete',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Referee', this.params._id)
+                ];
+            },
+            notFoundTemplate: 'refereeNotFound',
+            data: function() {
+                return {
+                    referee: Referees.findOne({_id: this.params._id})
+                };
+            }
+        });
+
+        this.route('adminCoaches', {
+            path: '/admin/coaches',
+            waitOn: function() {
+                return [Meteor.subscribe('Coaches')];
+            },
+            data: function() {
+                return {
+                    coaches: Coaches.find({}, {sort: {name: 1}})
+                };
+            }
+        });
+
+        this.route('adminCoachCreate', {
+            path: '/admin/coaches/create'
+        });
+
+        this.route('adminCoachDetail', {
+            path: '/admin/coaches/:_id',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Coach', this.params._id)
+                ];
+            },
+            notFoundTemplate: 'coacheNotFound',
+            data: function() {
+                return {
+                    coach: Coaches.findOne({_id: this.params._id})
+                };
+            }
+        });
+
+        this.route('adminCoachEdit', {
+            path: '/admin/coaches/:_id/edit',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Coach', this.params._id)
+                ];
+            },
+            notFoundTemplate: 'coacheNotFound',
+            data: function() {
+                return {
+                    coach: Coaches.findOne({_id: this.params._id})
+                };
+            }
+        });
+
+        this.route('adminCoachDelete', {
+            path: '/admin/coaches/:_id/delete',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Coach', this.params._id)
+                ];
+            },
+            notFoundTemplate: 'coacheNotFound',
+            data: function() {
+                return {
+                    coach: Coaches.findOne({_id: this.params._id})
+                };
+            }
+        });
+
         this.route('adminUsers', {
             path: '/admin/users'
         });

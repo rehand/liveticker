@@ -1,0 +1,15 @@
+<template name="adminRefereeDetail">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{referee.name}}
+            <a href="{{ pathFor 'adminRefereeEdit' _id=referee._id}}" class="btn btn-primary">
+                <i class="material-icons">create</i> Bearbeiten
+            </a>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+</template>

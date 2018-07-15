@@ -1,0 +1,29 @@
+<template name="adminRefereeCreate">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Schiedsrichter erstellen</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {{> insertRefereeForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="insertRefereeForm">
+    {{#autoForm collection="Referees" id="insertRefereeForm" type="method" meteormethod="addReferee"}}
+        <div class="inputs">
+            <h2>Neuer Schiedsrichter</h2>
+            {{> afQuickField name='name'}}
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> OK</button>
+            <button class="btn btn-danger cancel-button" type="button"><i class="material-icons">close</i> Abbrechen</button>
+        </div>
+    {{/autoForm}}
+</template>

@@ -1,0 +1,32 @@
+<template name="adminCoachEdit">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{coach.name}}
+            <a href="{{ pathFor 'adminCoachDelete' _id=coach._id}}" class="btn btn-danger">
+                <i class="material-icons">delete</i> Trainer löschen
+            </a>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            {{> updateCoachForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="updateCoachForm">
+    {{#autoForm collection="Coaches" id="updateCoachForm" type="method-update" meteormethod="updateCoach" doc=coach}}
+        <div class="inputs">
+            <h2>Trainer bearbeiten</h2>
+            {{> afQuickField name='name'}}
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+        </div>
+    {{/autoForm}}
+</template>

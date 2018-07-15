@@ -1,0 +1,29 @@
+<template name="adminCoachCreate">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>Trainer erstellen</h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {{> insertCoachForm}}
+        </div>
+    </div>
+
+</template>
+
+<template name="insertCoachForm">
+    {{#autoForm collection="Coaches" id="insertCoachForm" type="method" meteormethod="addCoach"}}
+        <div class="inputs">
+            <h2>Neuer Trainer</h2>
+            {{> afQuickField name='name'}}
+            <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> OK</button>
+            <button class="btn btn-danger cancel-button" type="button"><i class="material-icons">close</i> Abbrechen</button>
+        </div>
+    {{/autoForm}}
+</template>
