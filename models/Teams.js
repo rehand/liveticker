@@ -42,7 +42,21 @@ TeamsSchema = new SimpleSchema({
     coach: {
         type: String,
         label: 'Trainer',
-        optional: true
+        optional: true,
+        autoform: {
+            options: coachesOptionMapper
+        }
+    },
+    coachObject: {
+        type: [CoachSchema],
+        label: 'Trainer',
+        optional: true,
+        autoform: {
+            options: coachesOptionMapper,
+            afFieldInput: {
+                type: 'select'
+            }
+        }
     },
     kickers: {
         type: [KickersSchema],
@@ -150,6 +164,12 @@ Teams.helpers({
             return foundAnthem.path;
         }
         return null;
+    },
+    getCoach: function () {
+        if (this.coachObject && Array.isArray(this.coachObject) && this.coachObject.length > 0) {
+            return this.coachObject[0].name;
+        }
+        return this.coach;
     }
 });
 
@@ -178,10 +198,16 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("team-duplicate-code", "Ein Team mit diesem Code existiert bereits!");
             }
 
+            var coach = Coaches.findOne(team.coach);
+            if (!coach) {
+                throw new Meteor.Error("coach-not-found", "Trainer nicht gefunden!");
+            }
+
             Teams.insert({
                 name: team.name,
                 code: team.code,
-                coach: team.coach
+                coach: team.coach,
+                coachObject: [coach]
             });
 
             var redirect = {
@@ -216,6 +242,20 @@ if (Meteor.isServer) {
                         throw new Error("logo-remove", "Während dem Löschen des Logos ist ein Fehler aufgetreten");
                     }
                 });
+            }
+
+            // update coach
+            console.log('updateTeam: ' + JSON.stringify(team) + ", DB: " + JSON.stringify(thisTeam));
+            if (team.$unset.coach) {
+                team.$unset.coachObject = true;
+            } else if (team.$set.coach !== thisTeam.coach) {
+                var coach = Coaches.findOne(team.$set.coach);
+                if (!coach) {
+                    throw new Meteor.Error("coach-not-found", "Trainer nicht gefunden!");
+                }
+                // remove createdAt because it can not be set during an update
+                delete coach.createdAt;
+                team.$set.coachObject = [coach];
             }
 
             // remove null values from kickers array

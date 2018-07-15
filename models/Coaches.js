@@ -1,5 +1,14 @@
 Coaches = new Mongo.Collection('Coaches');
 
+coachesOptionMapper = function () {
+    return Coaches.find({}, {sort: {name: 1}}).map(function (coach) {
+        return {
+            label: coach.name, 
+            value: coach._id
+        };
+    });
+};
+
 CoachSchema = new SimpleSchema({
     name: {
         type: String,

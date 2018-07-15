@@ -61,7 +61,7 @@ Template.adminTickerExportFormation.created = function () {
 };
 
 var drawCoachString = function (context, team, textAlign, xText, yText) {
-    if (team.coach) {
+    if (team.getCoach()) {
         context.textAlign = textAlign;
 
         // coach header
@@ -70,7 +70,7 @@ var drawCoachString = function (context, team, textAlign, xText, yText) {
 
         // coach name
         context.font = fontSize + "px FuturaEFME-Book";
-        context.fillText(team.coach, xText, yText);
+        context.fillText(team.getCoach(), xText, yText);
     }
 };
 

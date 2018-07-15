@@ -217,6 +217,8 @@ Migrations.add({
     }
 );
 
+// TODO add migration to create coaches and referees
+
 Meteor.startup(function () {
     Migrations.migrateTo('latest');
 });

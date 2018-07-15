@@ -17,7 +17,12 @@ if (Meteor.isClient) {
         });
 
         this.route('adminTeamCreate', {
-            path: '/admin/teams/create'
+            path: '/admin/teams/create',
+            waitOn: function() {
+                return [
+                    Meteor.subscribe('Coaches')
+                ];
+            }
         });
 
         this.route('adminTeamDetail', {
@@ -41,7 +46,8 @@ if (Meteor.isClient) {
             waitOn: function() {
                 return [
                     Meteor.subscribe('Team', this.params.code),
-                    Meteor.subscribe('TeamLogo', this.params.code)
+                    Meteor.subscribe('TeamLogo', this.params.code),
+                    Meteor.subscribe('Coaches')
                 ];
             },
             notFoundTemplate: 'teamNotFound',
