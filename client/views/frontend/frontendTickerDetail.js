@@ -27,16 +27,13 @@ var commentsAllowedDep = new Deps.Dependency();
 Template.registerHelper("allowComments", function () {
     var endTime = this.ticker.getEndTime();
 
-    console.log('Checking timeout first, Timeout reached:', (endTime && (new Date().getTime() - endTime.getTime() > COMMENTS_ALLOWED_AFTER_END_MILLIS)) === true, endTime);
     var timeoutReached;
     if (endTime && !(timeoutReached = (new Date().getTime() - endTime.getTime() > COMMENTS_ALLOWED_AFTER_END_MILLIS))) {
         var timeout = COMMENTS_ALLOWED_AFTER_END_MILLIS - (new Date().getTime() - endTime.getTime());
-        console.log('Timeout not reached, timeout:', timeout);
         if (timeout > 0) {
             commentsAllowedDep.depend();
 
             setTimeout(function () {
-                console.log('checking timeout');
                 commentsAllowedDep.changed();
             }, timeout);
         }
