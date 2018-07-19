@@ -217,7 +217,189 @@ Migrations.add({
     }
 );
 
-// TODO add migration to create coaches and referees
+Migrations.add({
+        version: 5,
+        name: 'Moved coach and referee into own collection',
+        up: function () {
+            console.log('Moving referess into own collection...');
+
+            var tickers = Tickers.find({
+                $and: [ {
+                        'referee': {
+                            $exists: true
+                        }
+                    }, {
+                        'refereeObject': {
+                            $exists: false
+                        }
+                    }
+                ]
+            }).fetch();
+
+            console.log('Found ' + tickers.length + " tickers to check and migrate");
+
+            tickers.forEach(function (ticker) {
+                var tickerId = ticker._id;
+
+                var referee = Referees.findOne({
+                    name: ticker.referee
+                });
+
+                if (!referee) {
+                    console.log('Creating refereee ' + ticker.referee);
+                    Referees.insert({
+                        name: ticker.referee
+                    }, function(error, affectedRows) {
+                        if (error) {
+                            console.error('Error creating referee ' + ticker.referee);
+                        } else {
+                            var referee = Referees.findOne({
+                                name: ticker.referee
+                            });
+
+                            if (referee) {
+                                delete referee.createdAt;
+                                Tickers.update(tickerId, {
+                                    $set: {
+                                        referee: referee._id,
+                                        refereeObject: [referee]
+                                    }
+                                });
+            
+                                console.log('Updated ticker ' + tickerId);
+                            } else {
+                                console.error('Referee ' + ticker.referee + ' not found!');
+                            }
+                        }
+                    });
+                }
+            });
+
+            console.log('Done moving referees into own collection.');
+
+            var teams = Teams.find({
+                $and: [ {
+                        'coach': {
+                            $exists: true
+                        }
+                    }, {
+                        'coachObject': {
+                            $exists: false
+                        }
+                    }
+                ]
+            }).fetch();
+
+            console.log('Found ' + tickers.length + " teams to check and migrate");
+
+            teams.forEach(function (team) {
+                var teamId = team._id;
+
+                var coach = Coaches.findOne({
+                    name: team.coach
+                });
+
+                if (!coach) {
+                    console.log('Creating coach ' + team.coach);
+                    Coaches.insert({
+                        name: team.coach
+                    }, function(error, affectedRows) {
+                        if (error) {
+                            console.error('Error creating coach ' + team.coach);
+                        } else {
+                            var coach = Coaches.findOne({
+                                name: team.coach
+                            });
+
+                            if (coach) {
+                                delete coach.createdAt;
+                                Teams.update(teamId, {
+                                    $set: {
+                                        coach: coach._id,
+                                        coachObject: [coach]
+                                    }
+                                });
+            
+                                console.log('Updated team ' + teamId + ' (' + team.name + ')');
+                            } else {
+                                console.error('Coach ' + team.coach + ' not found!');
+                            }
+                        }
+                    });
+                }
+            });
+
+            console.log('Done moving coaches into own collection.');
+        },
+        down: function () {
+            console.log('Removing coach objects from teams...');
+
+            var teams = Teams.find({
+                $and: [ {
+                        'coach': {
+                            $exists: true
+                        }
+                    }, {
+                        'coachObject': {
+                            $exists: true
+                        }
+                    }
+                ]
+            }).fetch();
+
+            teams.forEach(function (team) {
+                var teamId = team._id;
+
+                Teams.update(teamId, {
+                    $set: {
+                        coach: team.coachObject[0].name
+                    },
+                    $unset: {
+                        coachObject: true
+                    }
+                });
+
+                console.log('Updated team ' + teamId + ' (' + team.name + ')');
+            });
+
+            var tickers = Tickers.find({
+                $and: [ {
+                        'referee': {
+                            $exists: true
+                        }
+                    }, {
+                        'refereeObject': {
+                            $exists: true
+                        }
+                    }
+                ]
+            }).fetch();
+
+            tickers.forEach(function (ticker) {
+                var tickerId = ticker._id;
+
+                Tickers.update(tickerId, {
+                    $set: {
+                        referee: ticker.refereeObject[0].name
+                    },
+                    $unset: {
+                        refereeObject: true
+                    }
+                });
+
+                console.log('Updated ticker ' + tickerId);
+            });
+
+            console.log('Deleting all referees');
+            var refereesRemoved = Referees.remove({});
+            console.log('Result (referees) ', refereesRemoved)
+
+            console.log('Deleting all coaches');
+            var coachesRemoved = Coaches.remove({});
+            console.log('Result (coaches) ', coachesRemoved);
+        }
+    }
+);
 
 Meteor.startup(function () {
     Migrations.migrateTo('latest');
