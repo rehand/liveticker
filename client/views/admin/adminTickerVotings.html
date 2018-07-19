@@ -53,11 +53,15 @@
             <div id="votingsOverview" class="collapse in">
                 {{#if ticker.votings}}
                     {{#if ticker.teamHomeVoting}}
-                        {{ >tickerVotingsOverview team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                        {{ >tickerVotingsOverview team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings coachVoting=ticker.coachVoting}}
                     {{/if}}
 
                     {{#if ticker.teamAwayVoting}}
-                        {{ >tickerVotingsOverview team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                        {{ >tickerVotingsOverview team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries votings=ticker.votings coachVoting=ticker.coachVoting}}
+                    {{/if}}
+
+                    {{#if ticker.refereeVoting}}
+                        {{ >refereeVotingsOverview referee=ticker.refereeObject.[0] refereeId=ticker.referee votings=ticker.votings}}
                     {{/if}}
                 {{else}}
                     Keine Bewertungen vorhanden.
@@ -75,11 +79,15 @@
             <div id="votingDetails" class="collapse">
                 {{#if ticker.votings}}
                     {{#if ticker.teamHomeVoting}}
-                        {{ >tickerVotingDetails team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                        {{ >tickerVotingDetails team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries votings=ticker.votings coachVoting=ticker.coachVoting}}
                     {{/if}}
 
                     {{#if ticker.teamAwayVoting}}
-                        {{ >tickerVotingDetails team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries votings=ticker.votings}}
+                        {{ >tickerVotingDetails team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries votings=ticker.votings coachVoting=ticker.coachVoting}}
+                    {{/if}}
+
+                    {{#if ticker.refereeVoting}}
+                        {{ >refereeVotingDetails referee=ticker.refereeObject.[0] refereeId=ticker.referee votings=ticker.votings}}
                     {{/if}}
                 {{else}}
                     Keine Bewertungen vorhanden.
@@ -122,6 +130,37 @@
             </div>
         {{/if}}
     {{/with}}
+
+    {{#if coachVoting}}
+        {{#with mapCoachVotings tickerEntries votings team}}
+            {{#if this}}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <th>Trainer</th>
+                            <th>Ø Note</th>
+                            <th># gültige Bewertungen</th>
+                        </thead>
+                        <tbody>
+                        {{#each this}}
+                            <tr>
+                                <td>{{kicker.name}}</td>
+                                <td>
+                                    {{#if averageVoting}}
+                                        {{averageVoting}}
+                                    {{else}}
+                                        -
+                                    {{/if}}
+                                </td>
+                                <td>{{votings.length}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            {{/if}}
+        {{/with}}
+    {{/if}}
 </template>
 
 <template name="tickerVotingDetails">
@@ -133,12 +172,69 @@
             <thead>
                 <th>IP</th>
                 <th>Zeitpunkt</th>
-                {{#each getVotableKickers formation tickerEntries}}
+                {{#each getVotableKickers formation tickerEntries coachVoting team.coach team.coachObject.[0]}}
                     <th>{{name}}</th>
                 {{/each}}
             </thead>
             <tbody>
-            {{#each mapVotingDetails formation tickerEntries votings}}
+            {{#each mapVotingDetails formation tickerEntries votings coachVoting team.coach team.coachObject.[0]}}
+                <tr>
+                    <td>{{ipAddress}}</td>
+                    <td>{{kickoffDate timestamp}}</td>
+                    {{#each votings}}
+                        <td>{{this}}</td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<template name="refereeVotingsOverview">
+    {{#with mapRefereeVotings votings refereeId referee}}
+        {{#if this}}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <th>Schiedsrichterteam</th>
+                        <th>Ø Note</th>
+                        <th># gültige Bewertungen</th>
+                    </thead>
+                    <tbody>
+                    {{#each this}}
+                        <tr>
+                            <td>{{kicker.name}}</td>
+                            <td>
+                                {{#if averageVoting}}
+                                    {{averageVoting}}
+                                {{else}}
+                                    -
+                                {{/if}}
+                            </td>
+                            <td>{{votings.length}}</td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{/if}}
+    {{/with}}
+</template>
+
+<template name="refereeVotingDetails">
+    <div class="h3">
+        Schiedsrichterteam {{referee.name}}
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>IP</th>
+                <th>Zeitpunkt</th>
+                <th>Bewertung</th>
+            </thead>
+            <tbody>
+            {{#each mapRefereeVotingDetails refereeId votings}}
                 <tr>
                     <td>{{ipAddress}}</td>
                     <td>{{kickoffDate timestamp}}</td>

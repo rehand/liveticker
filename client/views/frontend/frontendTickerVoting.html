@@ -40,12 +40,14 @@
                     <input name="tickerId" type="hidden" value="{{ticker._id}}" />
 
                     {{#if ticker.teamHomeVoting}}
-                        {{> votingForm team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries}}
+                        {{> votingForm team=ticker.getHomeTeam formation=ticker.teamHomeFormation tickerEntries=tickerEntries coachVoting=ticker.coachVoting}}
                     {{/if}}
 
                     {{#if ticker.teamAwayVoting}}
-                        {{> votingForm team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries}}
+                        {{> votingForm team=ticker.getAwayTeam formation=ticker.teamAwayFormation tickerEntries=tickerEntries coachVoting=ticker.coachVoting}}
                     {{/if}}
+
+                    {{> referreeVotingForm refereeVoting=ticker.refereeVoting referee=ticker.referee refereeObject=ticker.refereeObject}}
 
                     <button class="btn btn-primary btn-raised" type="submit"><i class="material-icons">check</i> Absenden</button>
                     <a href="{{ pathFor 'frontendTickerDetail' _id=ticker._id }}" class="btn btn-danger btn-raised" type="button"><i class="material-icons">close</i> Abbrechen</a>
@@ -73,5 +75,41 @@
                 </div>
             {{/each}}
         {{/with}}
+
+        {{#if coachVoting}}
+            {{#if team.coachObject}}
+                <h3>Trainer</h3>
+                <div class="form-group">
+                    <label for="coachVoting" class="control-label">{{team.coachObject.[0].name}}</label>
+                    <input type="hidden" name="coachId" value={{team.coach}} />
+                    <select name="coachVoting" class="form-control" required>
+                        <option disabled selected value>Trainer bewerten</option>
+                        {{#each getVotingOptions}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            {{/if}}
+        {{/if}}
     </div>
+</template>
+
+<template name="referreeVotingForm">
+    {{#if refereeVoting}}
+        {{#if refereeObject}}
+            <div class="col-xs-12">
+                <h2>Schiedsrichterteam</h2>
+                <div class="form-group">
+                    <label for="refereeVoting" class="control-label">{{refereeObject.[0].name}}</label>
+                    <input type="hidden" name="refereeId" value={{referee}} />
+                    <select name="refereeVoting" class="form-control" required>
+                        <option disabled selected value>Schiedsrichterteam bewerten</option>
+                        {{#each getVotingOptions}}
+                            <option value="{{value}}">{{label}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+        {{/if}}
+    {{/if}}
 </template>

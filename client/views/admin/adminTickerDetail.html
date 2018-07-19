@@ -496,6 +496,10 @@
 
                         {{> afQuickField name="votingTickerLinkDisabled" value=ticker.votingTickerLinkDisabled}}
 
+                        {{> afQuickField name="coachVoting" value=ticker.coachVoting}}
+
+                        {{> afQuickField name="refereeVoting" value=ticker.refereeVoting}}
+
                         {{#with getVotingTeams ticker}}
                             {{> afQuickField name="teamIds" type="select-checkbox-inline" options=this value=selectedValues}}
                         {{/with}}

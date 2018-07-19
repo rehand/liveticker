@@ -18,10 +18,40 @@ KickerVotingSchema = new SimpleSchema({
     }
 });
 
+CoachVotingSchema = new SimpleSchema({
+    'coachId': {
+        type: String
+    },
+    'voting': {
+        type: String,
+        label: 'Bewertung',
+        allowedValues: VOTING_VALUES
+    }
+});
+
+RefereeVotingSchema = new SimpleSchema({
+    'refereeId': {
+        type: String
+    },
+    'voting': {
+        type: String,
+        label: 'Bewertung',
+        allowedValues: VOTING_VALUES
+    }
+});
+
 VotingSchema = new SimpleSchema({
     votings: {
         type: [KickerVotingSchema],
         label: 'Bewertungen'
+    },
+    coachVotings: {
+        type: [CoachVotingSchema],
+        optional: true
+    },
+    refereeVoting: {
+        type: RefereeVotingSchema,
+        optional: true
     },
     ipAddress: {
         type: String
@@ -436,6 +466,18 @@ Tickers.attachSchema(
             defaultValue: false,
             optional: true
         },
+        coachVoting: {
+            type: Boolean,
+            defaultValue: false,
+            label: 'Trainer bewerten',
+            optional: true
+        },
+        refereeVoting: {
+            type: Boolean,
+            defaultValue: false,
+            label: 'Schiedsrichter bewerten',
+            optional: true
+        },
         votings: {
             type: [VotingSchema],
             defaultValue: [],
@@ -539,6 +581,32 @@ VotingFormSchema = new SimpleSchema({
                 type: "boolean-select",
                 trueLabel: "Ausblenden",
                 falseLabel: "Anzeigen"
+            }
+        }
+    },
+    coachVoting: {
+        type: Boolean,
+        defaultValue: false,
+        label: 'Trainer bewerten',
+        optional: true,
+        autoform: {
+            afFieldInput: {
+                type: "boolean-select",
+                trueLabel: "Ja",
+                falseLabel: "Nein"
+            }
+        }
+    },
+    refereeVoting: {
+        type: Boolean,
+        defaultValue: false,
+        label: 'Schiedsrichter bewerten',
+        optional: true,
+        autoform: {
+            afFieldInput: {
+                type: "boolean-select",
+                trueLabel: "Ja",
+                falseLabel: "Nein"
             }
         }
     },
@@ -927,7 +995,7 @@ if (Meteor.isServer) {
             }
 
             // update referee
-            if ('referee' in ticker.$unset) {
+            if (ticker.$unset && 'referee' in ticker.$unset) {
                 ticker.$unset.refereeObject = true;
             } else if (ticker.$set.referee && ticker.$set.referee !== thisTicker.referee) {
                 var referee = Referees.findOne(ticker.$set.referee);
@@ -1151,16 +1219,20 @@ if (Meteor.isServer) {
                         votingDeadline: data.votingDeadline ? data.votingDeadline : null,
                         votingTickerLinkDisabled: data.votingTickerLinkDisabled,
                         teamHomeVoting: teamIds.indexOf(ticker.teamHome) !== -1,
-                        teamAwayVoting: teamIds.indexOf(ticker.teamAway) !== -1
+                        teamAwayVoting: teamIds.indexOf(ticker.teamAway) !== -1,
+                        coachVoting: data.coachVoting,
+                        refereeVoting: data.refereeVoting
                     }
                 });
             } else {
                 throw new Meteor.Error("no-teams-selected", "Es wurden keine Teams ausgewählt!");
             }
         },
-        tickerVoting: function (tickerId, votings) {
+        tickerVoting: function (tickerId, votings, coachVotings, refereeVoting) {
             check(tickerId, String);
             check(votings, Object);
+            check(coachVotings, Object);
+            check(refereeVoting, Object);
 
             var ticker = Tickers.findOne(tickerId);
             if (ticker === null) {
@@ -1169,7 +1241,6 @@ if (Meteor.isServer) {
 
             if (ticker.isVotingEnabled()) {
                 var votingsData = [];
-
                 for (var kickerId in votings) {
                     var voting = parseFloat(votings[kickerId]).toString();
 
@@ -1192,6 +1263,45 @@ if (Meteor.isServer) {
                     'votings': votingsData,
                     'timestamp': Date.now()
                 };
+
+                if (coachVotings) {
+                    var coachVotingsData = [];
+                    var coachIdHome = ticker.getHomeTeam().coach;
+                    var coachIdAway = ticker.getAwayTeam().coach;
+
+                    for (var coachId in coachVotings) {
+                        var voting = parseFloat(coachVotings[coachId]).toString();
+    
+                        if (isNaN(voting)) {
+                            throw new Meteor.Error("voting-incomplete-coach", "Bitte alle Trainer bewerten!");
+                        } else if (VOTING_VALUES.indexOf(voting) === -1) {
+                            throw new Meteor.Error("voting-invalid", "Die Trainerbewertung ist ungültig!");
+                        }
+                        
+                        if (!coachId || (coachIdHome && coachId != coachIdHome) || (coachIdAway && coachId != coachIdAway)) {
+                            throw new Meteor.Error("voting-invalid-coach", "Die Trainerbewertung ist ungültig!");
+                        }
+    
+                        coachVotingsData.push({
+                            'coachId': coachId,
+                            'voting': voting
+                        });
+                    }
+
+                    if (coachVotingsData) {
+                        votingsDataComplete['coachVotings'] = coachVotingsData;
+                    }
+                }
+
+                if (refereeVoting && 'refereeId' in refereeVoting && 'voting' in refereeVoting) {
+                    var refereeVotingData = {};
+                    refereeVotingData = {
+                        refereeId: refereeVoting.refereeId,
+                        voting: refereeVoting.voting
+                    };
+
+                    votingsDataComplete['refereeVoting'] = refereeVotingData;
+                }
 
                 // check if the user did not vote until now
                 if (Array.isArray(ticker.votings) && ticker.votings.find(function (voting) {
