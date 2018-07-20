@@ -134,3 +134,12 @@ h2, .h2, h2:first-child, .h2:first-child {
 .formation-Ersatz ~ .formation-Ersatz {
   margin-top: 0;
 }
+
+#iron-router-progress {
+  background-color : rgb(0, 0, 0);
+  box-shadow       : 0 0 5px rgba(0, 0, 0, .5);
+
+  &.spinner:before {
+    border             : 3px solid rgb(0, 0, 0);
+  }
+}
