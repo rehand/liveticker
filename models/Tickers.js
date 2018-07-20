@@ -627,9 +627,23 @@ function convertPlainTeam (teamObject) {
 
     if (tmpTeamObject && Array.isArray(tmpTeamObject) && tmpTeamObject.length > 0) {
         tmpTeamObject = tmpTeamObject[0];
+
+        // check which properties (except functions which we want to have) are not set in the original object
+        var propertiesToDelete = {};
+        for (property in tmpTeamObject) {
+            if (!teamObject.hasOwnProperty(property) && (typeof tmpTeamObject[property] !== 'function')) {
+                propertiesToDelete[property] = property;
+            }
+        }
+
         Object.assign(tmpTeamObject, teamObject);
+
+        // remove all properties which weren't set in the original object
+        for (property in propertiesToDelete) {
+            delete tmpTeamObject[property];
+        }
     } else {
-        console.error("Could not find team for teamId=" + teamObject._id);
+        console.error('Could not find team for teamId=', teamObject._id);
     }
 
     return tmpTeamObject;
@@ -1278,7 +1292,7 @@ if (Meteor.isServer) {
                             throw new Meteor.Error("voting-invalid", "Die Trainerbewertung ist ungültig!");
                         }
                         
-                        if (!coachId || (coachIdHome && coachId != coachIdHome) || (coachIdAway && coachId != coachIdAway)) {
+                        if (!coachId || ((coachIdHome && coachId != coachIdHome) && (coachIdAway && coachId != coachIdAway))) {
                             throw new Meteor.Error("voting-invalid-coach", "Die Trainerbewertung ist ungültig!");
                         }
     
