@@ -239,9 +239,9 @@ Migrations.add({
             console.log('Found ' + tickers.length + " tickers to check and migrate");
 
             tickers.forEach(function (ticker) {
-                var tickerId = ticker._id;
+                const tickerId = ticker._id;
 
-                var referee = Referees.findOne({
+                const referee = Referees.findOne({
                     name: ticker.referee
                 });
 
@@ -253,7 +253,7 @@ Migrations.add({
                         if (error) {
                             console.error('Error creating referee ' + ticker.referee);
                         } else {
-                            var referee = Referees.findOne({
+                            const referee = Referees.findOne({
                                 name: ticker.referee
                             });
 
@@ -265,13 +265,23 @@ Migrations.add({
                                         refereeObject: [referee]
                                     }
                                 });
-            
+
                                 console.log('Updated ticker ' + tickerId);
                             } else {
                                 console.error('Referee ' + ticker.referee + ' not found!');
                             }
                         }
                     });
+                } else {
+                    delete referee.createdAt;
+                    Tickers.update(tickerId, {
+                        $set: {
+                            referee: referee._id,
+                            refereeObject: [referee]
+                        }
+                    });
+
+                    console.log('Updated ticker ' + tickerId);
                 }
             });
 
@@ -290,12 +300,12 @@ Migrations.add({
                 ]
             }).fetch();
 
-            console.log('Found ' + tickers.length + " teams to check and migrate");
+            console.log('Found ' + teams.length + " teams to check and migrate");
 
             teams.forEach(function (team) {
-                var teamId = team._id;
+                const teamId = team._id;
 
-                var coach = Coaches.findOne({
+                const coach = Coaches.findOne({
                     name: team.coach
                 });
 
@@ -307,7 +317,7 @@ Migrations.add({
                         if (error) {
                             console.error('Error creating coach ' + team.coach);
                         } else {
-                            var coach = Coaches.findOne({
+                            const coach = Coaches.findOne({
                                 name: team.coach
                             });
 
@@ -319,13 +329,23 @@ Migrations.add({
                                         coachObject: [coach]
                                     }
                                 });
-            
+
                                 console.log('Updated team ' + teamId + ' (' + team.name + ')');
                             } else {
                                 console.error('Coach ' + team.coach + ' not found!');
                             }
                         }
                     });
+                } else {
+                    delete coach.createdAt;
+                    Teams.update(teamId, {
+                        $set: {
+                            coach: coach._id,
+                            coachObject: [coach]
+                        }
+                    });
+
+                    console.log('Updated team ' + teamId + ' (' + team.name + ')');
                 }
             });
 
@@ -348,7 +368,7 @@ Migrations.add({
             }).fetch();
 
             teams.forEach(function (team) {
-                var teamId = team._id;
+                const teamId = team._id;
 
                 Teams.update(teamId, {
                     $set: {
@@ -376,7 +396,7 @@ Migrations.add({
             }).fetch();
 
             tickers.forEach(function (ticker) {
-                var tickerId = ticker._id;
+                const tickerId = ticker._id;
 
                 Tickers.update(tickerId, {
                     $set: {
