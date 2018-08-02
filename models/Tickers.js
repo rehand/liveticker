@@ -468,13 +468,13 @@ Tickers.attachSchema(
         },
         coachVoting: {
             type: Boolean,
-            defaultValue: false,
+            defaultValue: true,
             label: 'Trainer bewerten',
             optional: true
         },
         refereeVoting: {
             type: Boolean,
-            defaultValue: false,
+            defaultValue: true,
             label: 'Schiedsrichter bewerten',
             optional: true
         },
