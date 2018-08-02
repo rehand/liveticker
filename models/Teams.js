@@ -242,9 +242,9 @@ if (Meteor.isServer) {
             }
 
             // update coach
-            if ('coach' in team.$unset) {
+            if (team.$unset !== undefined && 'coach' in team.$unset) {
                 team.$unset.coachObject = true;
-            } else if (team.$set.coach && team.$set.coach !== thisTeam.coach) {
+            } else if (team.$set !== undefined && team.$set.coach && team.$set.coach !== thisTeam.coach) {
                 var coach = Coaches.findOne(team.$set.coach);
                 if (!coach) {
                     throw new Meteor.Error("coach-not-found", "Trainer nicht gefunden!");
@@ -255,7 +255,7 @@ if (Meteor.isServer) {
             }
 
             // remove null values from kickers array
-            if (team.$set.kickers && Array.isArray(team.$set.kickers)) {
+            if (team.$set !== undefined && team.$set.kickers && Array.isArray(team.$set.kickers)) {
                 team.$set.kickers = team.$set.kickers.filter(function (kicker) {
                     return kicker !== null;
                 });
