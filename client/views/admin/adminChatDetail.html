@@ -68,7 +68,7 @@
             <h2>Kommentare <span class="badge">{{chat.comments.length}}</span></h2>
         </div>
         <div class="col-xs-12 collapse in" id="chatComments">
-            {{#each chat.comments}}
+            {{#each sortReverse chat.comments}}
                 {{> chatComment}}
             {{else}}
                 Keine Kommentare vorhanden

@@ -9,6 +9,12 @@ Template.adminChatDetail.rendered = function () {
     });
 };
 
+Template.adminChatDetail.helpers({
+    sortReverse: function (entries) {
+        return sortReverse(entries);
+    }
+});
+
 Template.addChatEntry.events({
     "submit .add-chat-entry": function (event) {
         event.preventDefault();

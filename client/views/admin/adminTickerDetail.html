@@ -277,7 +277,7 @@
             <h2>Kommentare <span class="badge">{{ticker.comments.length}}</span></h2>
         </div>
         <div class="col-xs-12 collapse in" id="tickerComments">
-            {{#each ticker.comments}}
+            {{#each sortReverse ticker.comments}}
                 {{> tickerComment}}
             {{else}}
                 Keine Kommentare vorhanden

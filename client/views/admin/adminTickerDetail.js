@@ -29,6 +29,12 @@ Template.adminTickerDetail.destroyed = function() {
     Meteor.clearInterval(timer);
 };
 
+Template.adminTickerDetail.helpers({
+    sortReverse: function (entries) {
+        return sortReverse(entries);
+    }
+});
+
 Template.addTickerEntry.events({
     "submit .add-ticker-entry": function (event) {
         event.preventDefault();
