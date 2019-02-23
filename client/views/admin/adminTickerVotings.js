@@ -61,6 +61,28 @@ Template.tickerVotingsOverview.helpers({
     },
     mapCoachVotings: function (entries, votings, team) {
         return mapVotings([], entries, votings, team);
+    },
+    getTeamAverage: function (votingsPerKicker) {
+        if (!votingsPerKicker || votingsPerKicker.length < 1) {
+            return "-";
+        }
+
+        var votingsSum = votingsPerKicker.reduce(function (result, currentVoting) {
+            return result + currentVoting.averageVoting;
+        }, 0);
+
+        return votingsSum / votingsPerKicker.length;
+    },
+    getVotingsAverage: function (votingsPerKicker) {
+        if (!votingsPerKicker || votingsPerKicker.length < 1) {
+            return "-";
+        }
+
+        var votingsCount = votingsPerKicker.reduce(function (result, currentVoting) {
+            return result + currentVoting.votings.length;
+        }, 0);
+
+        return votingsCount / votingsPerKicker.length;
     }
 });
 

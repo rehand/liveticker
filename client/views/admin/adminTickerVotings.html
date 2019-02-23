@@ -105,7 +105,7 @@
     {{#with mapVotings formation tickerEntries votings}}
         {{#if this}}
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover votings">
                     <thead>
                         <th>Spieler</th>
                         <th>Ø Note</th>
@@ -126,6 +126,13 @@
                         </tr>
                     {{/each}}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Mannschaftsdurchschnitt</td>
+                            <td>{{getTeamAverage this}}</td>
+                            <td>{{getVotingsAverage this}}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         {{/if}}
@@ -194,6 +201,9 @@
 <template name="refereeVotingsOverview">
     {{#with mapRefereeVotings votings refereeId referee}}
         {{#if this}}
+            <div class="h3">
+                Schiedsrichterteam
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>

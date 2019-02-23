@@ -147,7 +147,6 @@ function generateImage(ticker) {
             var inputFields = $("input[name='" + field + "']");
 
             var valueHome = 0;
-
             if (inputFields.length > 0) {
                 valueHome = inputFields.first().val();
             }
