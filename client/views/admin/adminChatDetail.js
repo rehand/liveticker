@@ -106,5 +106,22 @@ Template.adminChatDetail.events({
         }
 
         return false;
+    },
+    "click .delete-all-comments": function (event) {
+        event.preventDefault();
+
+        var timestampLimit = new Date();
+
+        if (confirm("Möchten Sie wirklich alle Kommentare löschen?")) {
+            var chatId = Router.current().params._id;
+
+            Meteor.call("deleteAllChatComments", chatId, timestampLimit, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
+        // Prevent default form submit
+        return false;
     }
 });

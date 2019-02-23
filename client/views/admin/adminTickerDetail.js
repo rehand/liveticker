@@ -174,6 +174,23 @@ Template.adminTickerDetail.events({
         }
 
         return false;
+    },
+    "click .delete-all-comments": function (event) {
+        event.preventDefault();
+
+        var timestampLimit = new Date();
+
+        if (confirm("Möchten Sie wirklich alle Kommentare löschen?")) {
+            var tickerId = Router.current().params._id;
+
+            Meteor.call("deleteAllTickerComments", tickerId, timestampLimit, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
+        // Prevent default form submit
+        return false;
     }
 });
 

@@ -1207,6 +1207,38 @@ if (Meteor.isServer) {
                 }
             });
         },
+        deleteAllTickerComments: function (tickerId, timestampLimit) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(timestampLimit, Date);
+
+            var ticker = Tickers.findOne(tickerId, {comments: 1});
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            var commentIds = ticker.comments.filter(function (comment) {
+                return comment.timestamp <= timestampLimit;
+            }).map(function (comment) {
+                return comment.id;
+            });
+
+            if (commentIds.length > 0) {
+                const params = {
+                    $pull: { // remove matched comments from comments
+                        comments: {
+                            id: { 
+                                $in: commentIds, 
+                            }
+                        }
+                    }
+                };
+                Tickers.update(tickerId, params);
+            }
+        },
         startVoting: function (data) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");

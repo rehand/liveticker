@@ -406,6 +406,38 @@ if (Meteor.isServer) {
                     }
                 }
             });
+        },
+        deleteAllChatComments: function (chatId, timestampLimit) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(chatId, String);
+            check(timestampLimit, Date);
+
+            var chat = Chats.findOne(chatId);
+            if (chat === null) {
+                throw new Meteor.Error("chat-not-found", "Chat nicht gefunden!");
+            }
+
+            var commentIds = chat.comments.filter(function (comment) {
+                return comment.timestamp <= timestampLimit;
+            }).map(function (comment) {
+                return comment.id;
+            });
+
+            if (commentIds.length > 0) {
+                const params = {
+                    $pull: { // remove matched comments from comments
+                        comments: {
+                            id: { 
+                                $in: commentIds, 
+                            }
+                        }
+                    }
+                };
+                Chats.update(chatId, params);
+            }
         }
     });
 }

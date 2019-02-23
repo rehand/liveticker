@@ -274,7 +274,11 @@
 
     <div class="row">
         <div class="col-xs-12" data-toggle="collapse" data-target="#tickerComments">
-            <h2>Kommentare <span class="badge">{{ticker.comments.length}}</span></h2>
+            <h2>Kommentare <span class="badge">{{ticker.comments.length}} </span>
+                <button class="btn btn-danger btn-raised btn-sm no-margin delete-all-comments" title="Alle Kommentare löschen">
+                    <i class="material-icons">delete</i>
+                </button>
+            </h2>
         </div>
         <div class="col-xs-12 collapse in" id="tickerComments">
             {{#each sortReverse ticker.comments}}
@@ -452,10 +456,10 @@
 <template name="tickerComment">
     <div class="tickerEntry row">
         <div class="col-xs-12 col-sm-3">
-            <button class="btn btn-danger btn-raised btn-sm no-margin delete-comment" data-comment-id="{{id}}">
+            <button class="btn btn-danger btn-raised btn-sm no-margin delete-comment" data-comment-id="{{id}}" title="Kommentar löschen">
                 <i class="material-icons">delete</i>
             </button>
-            <button class="btn btn-primary btn-raised btn-sm no-margin approve-comment" data-comment-id="{{id}}">
+            <button class="btn btn-primary btn-raised btn-sm no-margin approve-comment" data-comment-id="{{id}}" title="Kommentar freigeben">
                 <i class="material-icons">done</i>
             </button>
         </div>
