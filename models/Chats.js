@@ -232,6 +232,59 @@ if (Meteor.isServer) {
 
             ChatEntries.update({id: entryId}, value);
         },
+        moveChatEntry: function (chatId, entryId, entryIdTarget) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(chatId, String);
+            check(entryId, String);
+            check(entryIdTarget, String);
+
+            var chat = Chats.findOne(chatId);
+            if (chat === null) {
+                throw new Meteor.Error("chat-not-found", "Chat nicht gefunden!");
+            }
+
+            var chatEntry = ChatEntries.findOne({id: entryId});
+            if (chatEntry === null || chatEntry.chatId !== chatId) {
+                throw new Meteor.Error("entry-not-found", "Eintrag nicht gefunden!");
+            }
+
+            var chatEntryTarget = ChatEntries.findOne({id: entryIdTarget});
+            if (chatEntryTarget === null || chatEntryTarget.chatId !== chatId) {
+                throw new Meteor.Error("entry-not-found", "Ziel-Eintrag nicht gefunden!");
+            }
+
+            // move all entries which would collide (which are within a range of 10ms) one ms down
+            ChatEntries.find({
+                chatId: chatId, 
+                timestamp: {
+                    $gt: new Date(chatEntryTarget.timestamp - 11),
+                    $lt: chatEntryTarget.timestamp
+                }
+            }).fetch().forEach(function (entryToMove) {
+                if (entryToMove.id !== entryId) {
+                    ChatEntries.update({
+                        chatId: chatId,
+                        id: entryToMove.id
+                    }, {
+                        $set: {
+                            'timestamp': new Date(entryToMove.timestamp - 1)
+                        }
+                    });
+                }
+            });
+            
+            ChatEntries.update({
+                chatId: chatId, 
+                id: entryId
+            }, {
+                $set: {
+                    'timestamp': new Date(chatEntryTarget.timestamp - 1)
+                }
+            });
+        },
         deleteChatEntry: function (chatId, entryId) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");

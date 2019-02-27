@@ -939,6 +939,59 @@ if (Meteor.isServer) {
 
             TickerEntries.update({id: entryId}, value);
         },
+        moveTickerEntry: function (tickerId, entryId, entryIdTarget) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(entryId, String);
+            check(entryIdTarget, String);
+
+            var ticker = Tickers.findOne(tickerId, {comments: 1});
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            var tickerEntry = TickerEntries.findOne({id: entryId});
+            if (tickerEntry === null || tickerEntry.tickerId !== tickerId) {
+                throw new Meteor.Error("entry-not-found", "Eintrag nicht gefunden!");
+            }
+
+            var tickerEntryTarget = TickerEntries.findOne({id: entryIdTarget});
+            if (tickerEntryTarget === null || tickerEntryTarget.tickerId !== tickerId) {
+                throw new Meteor.Error("entry-not-found", "Ziel-Eintrag nicht gefunden!");
+            }
+
+            // move all entries which would collide (which are within a range of 10ms) one ms down
+            TickerEntries.find({
+                tickerId: tickerId, 
+                timestamp: {
+                    $gt: new Date(tickerEntryTarget.timestamp - 11),
+                    $lt: tickerEntryTarget.timestamp
+                }
+            }).fetch().forEach(function (entryToMove) {
+                if (entryToMove.id !== entryId) {
+                    TickerEntries.update({
+                        tickerId: tickerId,
+                        id: entryToMove.id
+                    }, {
+                        $set: {
+                            'timestamp': new Date(entryToMove.timestamp - 1)
+                        }
+                    });
+                }
+            });
+            
+            TickerEntries.update({
+                tickerId: tickerId, 
+                id: entryId
+            }, {
+                $set: {
+                    'timestamp': new Date(tickerEntryTarget.timestamp - 1)
+                }
+            });
+        },
         deleteTickerEntry: function (tickerId, entryId) {
             if (!this.userId) {
                 throw new Meteor.Error("not-authorized");

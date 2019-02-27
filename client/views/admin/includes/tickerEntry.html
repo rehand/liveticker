@@ -1,6 +1,12 @@
 <template name="tickerEntry">
-    <div class="tickerEntry row">
-
+    <div class="tickerEntry row" 
+            draggable="{{showButtons}}"
+            data-entry-id="{{entry.id}}"
+            ondragstart="onDragStart(event)"
+            ondragover="onDragOver(event)"
+            ondragenter="onDragEnter(event)"
+            ondragleave="onDragLeave(event)"
+            ondrop="onDrop(event)">
         <div class="{{getMinuteClasses}}">
             {{#if showButtons}}
                 <div class="row">
