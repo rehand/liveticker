@@ -854,6 +854,10 @@ if (Meteor.isServer) {
                 }
             }
 
+            if (data.kicker === KICKER_ID_COACH) {
+                kicker = [];
+            }
+
             if (data.eventType === EVENT_TYPE_SUBSTITUTION) {
                 if (!data.kicker2) {
                     throw new Meteor.Error("kicker-not-found", "2. Spieler nicht gefunden");

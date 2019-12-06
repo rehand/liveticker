@@ -67,15 +67,33 @@
                             {{else}}
                                 {{#if isYellowEntry}}
                                     <img class="entryIcon" src="/images/yellow.png"/>
-                                    Gelbe Karte für {{kicker.[0].name}} ({{getTeamCode}})!
+                                    Gelbe Karte für
+                                    {{#if kicker}}
+                                        {{kicker.[0].name}} 
+                                    {{else}}
+                                        {{getTeamCoach}}
+                                    {{/if}}
+                                    ({{getTeamCode}})!
                                 {{else}}
                                     {{#if isYellowRedEntry}}
                                         <img class="entryIcon" src="/images/yellowred.png"/>
-                                        Gelb-Rot für {{kicker.[0].name}} ({{getTeamCode}})!
+                                        Gelb-Rot für
+                                        {{#if kicker}}
+                                            {{kicker.[0].name}} 
+                                        {{else}}
+                                            {{getTeamCoach}}
+                                        {{/if}}
+                                        ({{getTeamCode}})!
                                     {{else}}
                                         {{#if isRedEntry}}
                                             <img class="entryIcon" src="/images/red.png"/>
-                                            Rote Karte für {{kicker.[0].name}} ({{getTeamCode}})!
+                                            Rote Karte für
+                                            {{#if kicker}}
+                                                {{kicker.[0].name}} 
+                                            {{else}}
+                                                {{getTeamCoach}}
+                                            {{/if}}
+                                            ({{getTeamCode}})!
                                         {{else}}
                                             {{#if isPenaltyEntry}}
                                                 <i class="fa fa-bolt"></i>

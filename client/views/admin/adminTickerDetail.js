@@ -230,18 +230,6 @@ var mapPlayingFormation = function (formation, entries) {
     }));
 };
 
-var mapEventType = function (eventType) {
-    return {
-        label: eventType.charAt(0).toUpperCase() + eventType.slice(1).toLowerCase(),
-        value: eventType
-    };
-};
-
-var closeModal = function (event, template) {
-    var formId = event.target.id;
-    $('#' + formId).find('button.close').click();
-};
-
 var substitutionEventFilter = function (entry) {
     return entry.eventType == EVENT_TYPE_SUBSTITUTION
 };

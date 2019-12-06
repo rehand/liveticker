@@ -25,6 +25,10 @@ imgOvertimePenaltyMissed.src = '/images/penalty_miss.png';
 
 var fontSize = 24;
 var maxTextLength = 150;
+var maxCoachLength = 250;
+var xImageWidth = 70;
+var xCardOffset = 20;
+var yCardOffset = 16;
 
 var abbreviatePositions = function (position) {
     if (position in POSITIONS_ABBR) {
@@ -60,17 +64,50 @@ Template.adminTickerExportFormation.created = function () {
     serverOffset = TimeSync.serverOffset();
 };
 
-var drawCoachString = function (context, team, textAlign, xText, yText) {
+var drawCoachString = function (context, ticker, team, tickerEntries, textAlign, xText, yText) {
     if (team.getCoach()) {
         context.textAlign = textAlign;
 
         // coach header
         context.font = "bold " + fontSize + "px FuturaEFME-Bold";
-        context.fillText("Trainer", xText, 1011);
+        context.fillText("Trainer", xText, yText - fontSize - 4);
 
         // coach name
-        context.font = fontSize + "px FuturaEFME-Book";
+        var tmpFontSize = fontSize;
+        do {
+            context.font = tmpFontSize + "px FuturaEFME-Book";
+            tmpFontSize--;
+        } while (context.measureText(team.getCoach()).width > maxCoachLength && tmpFontSize > 1);
         context.fillText(team.getCoach(), xText, yText);
+
+        // add coach cards
+        var direction = textAlign === "left" ? 1 : -1;
+        var xImageOffset = xImageWidth * direction;
+        var xCard = xText + context.measureText(team.getCoach()).width * direction + (direction === -1 ? xImageOffset : 0);
+        var yCard = yText - yCardOffset;
+        
+        context.font = fontSize + "px FuturaEFME-Book";
+        context.textAlign = "left";
+        
+        var coachEvents = mapCoachEvents(team, tickerEntries);
+        var imgCount = 0;
+        if (coachEvents.yellowCard) {
+            context.drawImage(imgYellowCard, xCard + imgCount * xImageOffset, yCard);
+            drawEventTime(context, ticker, coachEvents.yellowCard, xCard + xCardOffset + imgCount * xImageOffset, yText);
+            imgCount++;
+        }
+        
+        if (coachEvents.yellowRedCard) {
+            context.drawImage(imgYellowRedCard, xCard + imgCount * xImageOffset, yCard);
+            drawEventTime(context, ticker, coachEvents.yellowRedCard, xCard + xCardOffset + imgCount * xImageOffset, yText);
+            imgCount++;
+        }
+        
+        if (coachEvents.redCard) {
+            context.drawImage(imgRedCard, xCard + imgCount * xImageOffset, yCard);
+            drawEventTime(context, ticker, coachEvents.redCard, xCard + xCardOffset + imgCount * xImageOffset, yText);
+            imgCount++;
+        }
     }
 };
 
@@ -125,7 +162,7 @@ function generateImage(ticker) {
         var xPosLogoAway = 648;
         drawLogos(context, ticker, maxLogoWidth, maxLogoHeight, yPosLogo, xPosLogoHome, xPosLogoAway);
 
-        function drawKicker(index, kickerFormationEntry, textAlign, xText, xCard) {
+        var drawKicker = function (index, kickerFormationEntry, textAlign, xText, xCard) {
             // don't draw more than 14 kickers (11+3)
             if (index > 13) {
                 return;
@@ -149,13 +186,10 @@ function generateImage(ticker) {
             } while (context.measureText(kickerName).width > maxTextLength && tmpFontSize > 1);
             context.fillText(kickerName, xText + xTextOffset, yText);
 
-            var xCardOffset = 20;
-            var yCard = yText - 16;
+            var yCard = yText - yCardOffset;
 
             context.font = fontSize + "px FuturaEFME-Book";
             context.textAlign = "left";
-
-            var xImageWidth = 70;
 
             var xImageOffset = xImageWidth * direction;
             var imgCount = 0;
@@ -215,8 +249,8 @@ function generateImage(ticker) {
         });
 
         // coaches
-        drawCoachString(context, ticker.getHomeTeam(), "left", leftPos, 1039);
-        drawCoachString(context, ticker.getAwayTeam(), "right", rightPos, 1039);
+        drawCoachString(context, ticker, ticker.getHomeTeam(), tickerEntries, "left", leftPos, 1039);
+        drawCoachString(context, ticker, ticker.getAwayTeam(), tickerEntries, "right", rightPos, 1039);
 
         var yPosFormationString = 350;
         drawFormationString(context, formationHome, 74 + 100 / 2, yPosFormationString);

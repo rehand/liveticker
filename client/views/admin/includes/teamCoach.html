@@ -4,6 +4,50 @@
         <b>Trainer: </b>
         {{#if team.getCoach}}
             {{team.getCoach}}
+
+            {{#with getCoachEvents team}}
+                {{#if redCard}}
+                    <img class="entryIcon" src="/images/red.png"/>
+                {{else}}
+                    {{#if yellowRedCard}}
+                        <img class="entryIcon" src="/images/yellowred.png"/>
+                    {{else}}
+                        {{#if yellowCard}}
+                            <img class="entryIcon" src="/images/yellow.png"/>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            {{/with}}
+
+            {{#if showButtons}}
+                <button class="btn btn-primary btn-raised coach-card-button" data-toggle="modal" data-target="#coachEventModal{{team.code}}" data-type="{{team._id}}">
+                    <i class="fa fa-square"></i>
+                    Karte
+                </button>
+                <div class="modal fade" id="coachEventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="coachEventModal{{team.code}}Label">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            {{#autoForm schema="EventSchema" id=team.getCoachEventFormName class="addCoachEventForm" type="method" meteormethod="addEvent"}}
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="coachEventModal{{team.code}}Label">Karte für {{team.getCoach}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    {{> afQuickField name="eventType" value=getCoachDefaultEventType options=getCoachEventTypes type="select-radio-inline"}}
+
+                                    {{> afFieldInput name="kicker" type="hidden" value="COACH"}}
+                                    {{> afFieldInput name="teamId" type="hidden" value=team._id}}
+                                    {{> afFieldInput name="tickerId" type="hidden" value=ticker._id}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" type="submit"><i class="material-icons">check</i> Speichern</button>
+                                    <button class="btn btn-danger" type="button" data-dismiss="modal"><i class="material-icons">close</i> Abbrechen</button>
+                                </div>
+                            {{/autoForm}}
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
         {{else}}
             -
         {{/if}}
