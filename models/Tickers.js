@@ -1355,7 +1355,10 @@ if (Meteor.isServer) {
                     });
                 }
 
-                var ipAddress = this.connection.clientAddress;
+                var ipAddress = this.connection.httpHeaders['x-real-ip'] || this.connection.clientAddress;
+                if (!ipAddress) {
+                    throw new Meteor.Error("voting-identity-unknown", "Interner Fehler: Bewertung nicht eindeutig!");
+                }
 
                 var votingsDataComplete = {
                     'ipAddress': ipAddress,
