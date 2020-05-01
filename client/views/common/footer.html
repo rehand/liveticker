@@ -1,6 +1,13 @@
 <template name="footer">
-    <div class="ui inverted padding-wrapper footer segment">
-        by <a href="https://github.com/rehand">Reinhard Handler</a>
+    <div class="ui inverted padding-wrapper footer segment row">
+        <div class="col-xs-12 visible-xs">
+            <span title="{{getConnectionState}}">Verbindung <i class="fa {{getConnectionStateIcon}}"></i></span>
+        </div>
+        <div class="col-xs-12 col-sm-9">
+            by <a href="https://github.com/rehand">Reinhard Handler</a>
+        </div>
+        <div class="hidden-xs col-sm-3 text-right">
+            <span title="{{getConnectionState}}">Verbindung <i class="fa {{getConnectionStateIcon}}"></i></span>
+        </div>
     </div>
 </template>
-
