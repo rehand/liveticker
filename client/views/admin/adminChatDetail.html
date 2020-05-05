@@ -6,6 +6,9 @@
             <a href="{{ pathFor 'adminChatEdit' _id=chat._id}}" class="btn btn-primary">
                 <i class="material-icons">create</i> Bearbeiten
             </a>
+            <a href="{{ pathFor 'adminChatStatistics' _id=chat._id}}" class="btn btn-primary">
+                <i class="material-icons">share</i> Statistiken
+            </a>
             <br/>
             <small>
                 Beginn: {{chatDate chat.beginDate}} Uhr

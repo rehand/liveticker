@@ -1,0 +1,28 @@
+<template name="adminChatStatistics">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{chat.title}}
+            <a href="{{ pathFor 'adminChatDetail' _id=chat._id }}" class="btn btn-primary btn-raised">
+                <i class="fa fa-arrow-left"></i>
+                zurück zum Chat
+            </a>
+            <br/>
+            <small>
+                Beginn: {{chatDate chat.beginDate}} Uhr
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Aktuelle Statistiken</h2>
+            {{userPresence.connections}} Verbindung(en) aktuell ({{userPresence.frontend}}&nbsp;Frontend, {{userPresence.backend}}&nbsp;Backend)<br/>
+            Aufrufe Frontend: {{userPresence.visitsFrontend}}
+        </div>
+    </div>
+</template>

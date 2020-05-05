@@ -1,3 +1,15 @@
+var presenceFilterFrontend = function (entry) {
+    return entry.state.route.indexOf('frontend') === 0;
+};
+
+var presenceFilterBackend = function (entry) {
+    return entry.state.route.indexOf('admin') === 0;
+};
+
+var presenceFilterOnline = function (entry) {
+    return !entry.session_expired;
+};
+
 if (Meteor.isClient) {
     Router.map( function () {
         this.route('admin', {
@@ -232,23 +244,13 @@ if (Meteor.isClient) {
             data: function() {
                 var presences = Presences.find().fetch();
 
-                var presencesOnline = presences.filter( function (entry) {
-                    return !entry.session_expired;
-                });
-
-                var filterFrontend = function (entry) {
-                    return entry.state.route.indexOf('frontend') === 0;
-                };
-
-                var filterBackend = function (entry) {
-                    return entry.state.route.indexOf('admin') === 0;
-                };
+                var presencesOnline = presences.filter(presenceFilterOnline);
 
                 var userPresence = {
                     connections: presencesOnline.length,
-                    frontend: presencesOnline.filter(filterFrontend).length,
-                    backend: presencesOnline.filter(filterBackend).length,
-                    visitsFrontend: presences.filter(filterFrontend).length
+                    frontend: presencesOnline.filter(presenceFilterFrontend).length,
+                    backend: presencesOnline.filter(presenceFilterBackend).length,
+                    visitsFrontend: presences.filter(presenceFilterFrontend).length
                 };
 
                 return {
@@ -329,6 +331,35 @@ if (Meteor.isClient) {
             data: function() {
                 return {
                     chat: Chats.findOne(this.params._id)
+                };
+            }
+        });
+
+        this.route('adminChatStatistics', {
+            path: '/admin/chats/:_id/statistics',
+            notFoundTemplate: 'chatNotFound',
+            waitOn: function() {
+                var chatId = this.params._id;
+                return [
+                    Meteor.subscribe('Chat', chatId),
+                    Meteor.subscribe('UserPresence', chatId)
+                ];
+            },
+            data: function() {
+                var presences = Presences.find().fetch();
+
+                var presencesOnline = presences.filter(presenceFilterOnline);
+
+                var userPresence = {
+                    connections: presencesOnline.length,
+                    frontend: presencesOnline.filter(presenceFilterFrontend).length,
+                    backend: presencesOnline.filter(presenceFilterBackend).length,
+                    visitsFrontend: presences.filter(presenceFilterFrontend).length
+                };
+
+                return {
+                    chat: Chats.findOne(this.params._id),
+                    userPresence: userPresence
                 };
             }
         });
