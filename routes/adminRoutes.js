@@ -359,7 +359,8 @@ if (Meteor.isClient) {
 
                 return {
                     chat: Chats.findOne(this.params._id),
-                    userPresence: userPresence
+                    userPresence: userPresence,
+                    presences: presences
                 };
             }
         });

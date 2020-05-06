@@ -51,3 +51,4 @@ fezvrasta:bootstrap-material-design
 percolate:migrations
 standard-minifier-css
 standard-minifier-js
+ecmascript
