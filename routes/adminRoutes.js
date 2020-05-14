@@ -228,16 +228,14 @@ if (Meteor.isClient) {
             }
         });
 
-        this.route('adminTickerExportStatistics', {
-            path: '/admin/tickers/:_id/statistics/export',
+        this.route('adminTickerStatistics', {
+            path: '/admin/tickers/:_id/statistics',
             notFoundTemplate: 'tickerNotFound',
             waitOn: function() {
                 var tickerId = this.params._id;
                 return [
                     Meteor.subscribe('Ticker', tickerId),
                     Meteor.subscribe('TickerTeams', tickerId),
-                    Meteor.subscribe('TickerEntries', tickerId),
-                    Meteor.subscribe('TickerImages', tickerId),
                     Meteor.subscribe('UserPresence', tickerId)
                 ];
             },
@@ -255,7 +253,27 @@ if (Meteor.isClient) {
 
                 return {
                     ticker: Tickers.findOne(this.params._id),
-                    userPresence: userPresence
+                    userPresence: userPresence,
+                    presences: presences
+                };
+            }
+        });
+
+        this.route('adminTickerExportStatistics', {
+            path: '/admin/tickers/:_id/statistics/export',
+            notFoundTemplate: 'tickerNotFound',
+            waitOn: function() {
+                var tickerId = this.params._id;
+                return [
+                    Meteor.subscribe('Ticker', tickerId),
+                    Meteor.subscribe('TickerTeams', tickerId),
+                    Meteor.subscribe('TickerEntries', tickerId),
+                    Meteor.subscribe('TickerImages', tickerId)
+                ];
+            },
+            data: function() {
+                return {
+                    ticker: Tickers.findOne(this.params._id)
                 };
             }
         });

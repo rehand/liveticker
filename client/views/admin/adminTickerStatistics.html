@@ -1,0 +1,35 @@
+<template name="adminTickerStatistics">
+    {{> adminNavigation}}
+
+    <div class="page-header col-xs-12">
+        <h1>{{ticker.getHomeTeam.name}} vs. {{ticker.getAwayTeam.name}}
+            <a href="{{ pathFor 'adminTickerDetail' _id=ticker._id }}" class="btn btn-primary btn-raised">
+                <i class="fa fa-arrow-left"></i>
+                zurück zum Ticker
+            </a>
+            <br/>
+            <small>
+                Kickoff: {{kickoffDate ticker.kickoff}} Uhr{{#if ticker.getReferee}}, Schiedsrichter: {{ticker.getReferee}}{{/if}}{{#if ticker.competition}}, {{ticker.competition}}{{/if}}
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        {{> errors}}
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Aktuelle Statistiken</h2>
+            {{userPresence.connections}} Verbindung(en) aktuell ({{userPresence.frontend}}&nbsp;Frontend, {{userPresence.backend}}&nbsp;Backend)<br/>
+            Aufrufe Frontend: {{userPresence.visitsFrontend}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Diagramm Online User</h2>
+            <div id="chart" class="col-xs-12"></div>
+        </div>
+    </div>
+</template>
