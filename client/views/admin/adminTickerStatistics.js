@@ -59,3 +59,13 @@ var showChart = function(targetId, ticker, presences) {
 Template.adminTickerStatistics.rendered = function () {
     showChart("chart", this.data.ticker, this.data.presences);
 };
+
+Template.adminTickerStatistics.events({
+    "click button.refresh": function (event) {
+        event.preventDefault();
+
+        showChart("chart", this.ticker, this.presences);
+
+        return false;
+    }
+});

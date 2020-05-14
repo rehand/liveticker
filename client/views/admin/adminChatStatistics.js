@@ -33,3 +33,13 @@ var showChart = function(targetId, chat, presences) {
 Template.adminChatStatistics.rendered = function () {
     showChart("chart", this.data.chat, this.data.presences);
 };
+
+Template.adminChatStatistics.events({
+    "click .refresh": function (event) {
+        event.preventDefault();
+
+        showChart("chart", this.chat, this.presences);
+
+        return false;
+    }
+});
