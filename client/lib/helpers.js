@@ -76,10 +76,13 @@ onDrop = function (event) {
     }
 }
 
-getChartData = function(presences, startDate, additionalDates, maxDateLimit) {
+getChartData = function(presences, startDate, additionalDates, intervalMinutes, maxDateLimit) {
     var maxDate = Math.max(...ensureArray(presences).filter(presence => !!presence.session_created && (!maxDateLimit || presence.session_created < maxDateLimit)).map(presence => presence.session_created), 
         ...ensureArray(presences).filter(presence => !!presence.session_expired && (!maxDateLimit || presence.session_expired < maxDateLimit)).map(presence => presence.session_expired));
-    var interval = 1 * 60 * 1000;
+    if (!maxDate || !isFinite(maxDate)) {
+        maxDate = maxDateLimit;
+    }
+    var interval = intervalMinutes * 60 * 1000;
     var currentDate = startDate;
     var dateValues = [currentDate];
     while (currentDate + interval < maxDate) {

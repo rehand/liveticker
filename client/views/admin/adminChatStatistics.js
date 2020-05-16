@@ -3,7 +3,19 @@ import Dygraph from 'dygraphs';
 var graph;
 
 var showChart = function(targetId, chat, presences) {
-    var data = getChartData(presences, chat.createdAt.getTime(), [chat.beginDate.getTime()]);
+    var limit = new Date(chat.createdAt.getTime());
+    var daysLimit = parseInt($('#statisticsDaysLimit').val());
+    if (!daysLimit || isNaN(daysLimit) || daysLimit <= 0) {
+        daysLimit = 3;
+    }
+    limit.setDate(limit.getDate() + daysLimit);
+
+    var interval = parseInt($('#statisticsInterval').val());
+    if (!interval || isNaN(interval) || interval <= 0) {
+        interval = 1;
+    }
+
+    var data = getChartData(presences, chat.createdAt.getTime(), [chat.beginDate.getTime()], interval, limit.getTime());
 
     if (graph) {
         graph.updateOptions({
@@ -13,10 +25,10 @@ var showChart = function(targetId, chat, presences) {
         graph = new Dygraph(
             document.getElementById(targetId),
             data, {
-            ylabel: 'Benutzer',
-            legend: 'follow',
-            height: 500,
-            showRangeSelector: true
+                ylabel: 'Benutzer',
+                legend: 'follow',
+                height: 500,
+                showRangeSelector: true
             }
         );
 
@@ -42,20 +54,25 @@ Template.adminChatStatistics.rendered = function () {
     showChart("chart", this.data.chat, this.data.presences);
 };
 
+var redrawGraphOnEvent = function (event) {
+    event.preventDefault();
+    graph = undefined;
+    showChart("chart", this.chat, this.presences);
+    return false;
+}
+
 Template.adminChatStatistics.events({
     "click .refresh": function (event) {
         event.preventDefault();
-
         showChart("chart", this.chat, this.presences);
-
         return false;
-    }
-});
-
-Template.adminChatStatistics.events({
-    'change #tickerStatisticsAutoRefresh': function(event) {
+    },
+    "change #statisticsDaysLimit": redrawGraphOnEvent,
+    "change #statisticsInterval": redrawGraphOnEvent,
+    'change #statisticsAutoRefresh': function(event) {
         event.preventDefault();
         Session.set(SESSION_STATISTICS_AUTO_REFRESH, !!event.target.checked);
+        return false;
     }
 });
 

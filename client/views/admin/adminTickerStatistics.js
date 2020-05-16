@@ -17,7 +17,11 @@ var graph;
 
 var showChart = function(targetId, ticker, presences) {
     var limit = new Date(ticker.kickoff.getTime());
-    limit.setDate(limit.getDate() + 3);
+    var daysLimit = parseInt($('#statisticsDaysLimit').val());
+    if (!daysLimit || isNaN(daysLimit) || daysLimit <= 0) {
+        daysLimit = 3;
+    }
+    limit.setDate(limit.getDate() + daysLimit);
 
     var annotations = [];
     var additionalDates = [];
@@ -41,7 +45,12 @@ var showChart = function(targetId, ticker, presences) {
         addAnnotationIfPresent(annotations, additionalDates, ticker.votingDeadline, "V", "Ende Spielerbewertung");
     }
 
-    var data = getChartData(presences, ticker.createdAt.getTime(), additionalDates, limit.getTime());
+    var interval = parseInt($('#statisticsInterval').val());
+    if (!interval || isNaN(interval) || interval <= 0) {
+        interval = 1;
+    }
+
+    var data = getChartData(presences, ticker.createdAt.getTime(), additionalDates, interval, limit.getTime());
 
     if (graph) {
         graph.updateOptions({
@@ -69,20 +78,25 @@ Template.adminTickerStatistics.rendered = function () {
     showChart("chart", this.data.ticker, this.data.presences);
 };
 
+var redrawGraphOnEvent = function (event) {
+    event.preventDefault();
+    graph = undefined;
+    showChart("chart", this.ticker, this.presences);
+    return false;
+}
+
 Template.adminTickerStatistics.events({
     "click button.refresh": function (event) {
         event.preventDefault();
-
         showChart("chart", this.ticker, this.presences);
-
         return false;
-    }
-});
-
-Template.adminTickerStatistics.events({
-    'change #tickerStatisticsAutoRefresh': function(event) {
+    },
+    "change #statisticsDaysLimit": redrawGraphOnEvent,
+    "change #statisticsInterval": redrawGraphOnEvent,
+    'change #statisticsAutoRefresh': function(event) {
         event.preventDefault();
         Session.set(SESSION_STATISTICS_AUTO_REFRESH, !!event.target.checked);
+        return false;
     }
 });
 
