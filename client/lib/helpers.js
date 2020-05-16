@@ -92,13 +92,18 @@ getChartData = function(presences, startDate, additionalDates, intervalMinutes, 
     dateValues.push(maxDate);
     dateValues.push(...additionalDates);
 
+    // get distinct values and sort them
+    dateValues = dateValues.filter(function (value, index, self) { 
+        return self.indexOf(value) === index;
+    }).sort();
+
     var presenceSessionTimestampFilter = function (presence, dateValue) {
         return presence.session_created <= dateValue && (!presence.session_expired || presence.session_expired >= dateValue);
     };
 
     var presencesFrontend = presences.filter(presence => presence.state.route.indexOf("frontend") === 0);
     var presencesBackend = presences.filter(presence => presence.state.route.indexOf("admin") === 0);
-    var data = "Datum,Frontend,Backend\n" + dateValues.sort().map(dateValue => {
+    var data = "Datum,Frontend,Backend\n" + dateValues.map(dateValue => {
         return new Date(dateValue).toISOString() + "," +
             presencesFrontend.filter(presence => presenceSessionTimestampFilter(presence, dateValue)).length + "," +
             presencesBackend.filter(presence => presenceSessionTimestampFilter(presence, dateValue)).length;

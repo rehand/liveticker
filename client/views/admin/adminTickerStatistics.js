@@ -2,7 +2,7 @@ import Dygraph from 'dygraphs';
 
 var addAnnotationIfPresent = function(annotations, additionalDates, timestamp, shortText, text) {
     if (timestamp) {
-        additionalDates.push(timestamp);
+        additionalDates.push(timestamp.getTime());
         annotations.push({
             series: "Frontend",
             x: timestamp.toISOString(),
