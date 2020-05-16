@@ -13,6 +13,8 @@ var addAnnotationIfPresent = function(annotations, additionalDates, timestamp, s
     }
 }
 
+var graph;
+
 var showChart = function(targetId, ticker, presences) {
     var limit = new Date(ticker.kickoff.getTime());
     limit.setDate(limit.getDate() + 3);
@@ -41,19 +43,26 @@ var showChart = function(targetId, ticker, presences) {
 
     var data = getChartData(presences, ticker.createdAt.getTime(), additionalDates, limit.getTime());
 
-    var graph = new Dygraph(
-        document.getElementById(targetId),
-        data, {
-          ylabel: 'Benutzer',
-          legend: 'follow',
-          height: 500,
-          showRangeSelector: true
-        }
-    );
-
-    graph.ready(function() {
+    if (graph) {
+        graph.updateOptions({
+            'file': data
+        });
         graph.setAnnotations(annotations);
-    });
+    } else {
+        graph = new Dygraph(
+            document.getElementById(targetId),
+            data, {
+                ylabel: 'Benutzer',
+                legend: 'follow',
+                height: 500,
+                showRangeSelector: true
+            }
+        );
+
+        graph.ready(function() {
+            graph.setAnnotations(annotations);
+        });
+    }
 }
 
 Template.adminTickerStatistics.rendered = function () {
@@ -67,5 +76,53 @@ Template.adminTickerStatistics.events({
         showChart("chart", this.ticker, this.presences);
 
         return false;
+    }
+});
+
+Template.adminTickerStatistics.events({
+    'change #tickerStatisticsAutoRefresh': function(event) {
+        event.preventDefault();
+        Session.set(SESSION_STATISTICS_AUTO_REFRESH, !!event.target.checked);
+    }
+});
+
+Template.adminTickerStatistics.helpers({
+    'sessionStatisticsAutoRefresh': function () {
+        return Session.get(SESSION_STATISTICS_AUTO_REFRESH);
+    }
+});
+
+
+var refreshTimer;
+var presencesTracker;
+var hasChanged = false;
+
+Tracker.autorun(function (c) {
+    if (!Session.equals(SESSION_STATISTICS_AUTO_REFRESH, true)) {
+        if (refreshTimer) {
+            Meteor.clearInterval(refreshTimer);
+            refreshTimer = false;
+        }
+        if (presencesTracker) {
+            presencesTracker.stop();
+            presencesTracker = false;
+        }
+    } else if (!refreshTimer) {
+        Tracker.autorun(function (c) {
+            Presences.find().fetch();
+
+            if (presencesTracker) {
+                hasChanged = true;
+            } else {
+                presencesTracker = c;
+            }
+        });
+
+        refreshTimer = Meteor.setInterval(function () {
+            if (hasChanged) {
+                hasChanged = false;
+                $('button.refresh').click();
+            }
+        }, 5000);
     }
 });
