@@ -30,13 +30,18 @@ if (Meteor.isClient) {
             },
             action: function () {
                 var currentTicker;
+                var targetRoute = 'frontendTickerDetail';
 
-                if (this.params.target === 'currentTicker') {
+                if (this.params.target === 'currentTicker' || this.params.target === 'currentVoting') {
                     currentTicker = Tickers.findOne();
+
+                    if (this.params.target === 'currentVoting') {
+                        targetRoute = 'frontendTickerVoting';
+                    }
                 }
 
-                if (currentTicker && currentTicker._id) {
-                    Router.go('frontendTickerDetail', {_id: currentTicker._id});
+                if (currentTicker && currentTicker._id && targetRoute) {
+                    Router.go(targetRoute, {_id: currentTicker._id});
                 } else {
                     this.render('tickerNotFound');
                 }
