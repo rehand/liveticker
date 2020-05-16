@@ -75,6 +75,7 @@ var showChart = function(targetId, ticker, presences) {
 }
 
 Template.adminTickerStatistics.rendered = function () {
+    graph = undefined;
     showChart("chart", this.data.ticker, this.data.presences);
 };
 

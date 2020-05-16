@@ -51,6 +51,7 @@ var showChart = function(targetId, chat, presences) {
 }
 
 Template.adminChatStatistics.rendered = function () {
+    graph = undefined;
     showChart("chart", this.data.chat, this.data.presences);
 };
 
