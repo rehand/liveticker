@@ -42,23 +42,82 @@ Template.addTickerEntry.events({
         var tickerEntryText = event.target[0].value;
         var tickerId = Router.current().params._id;
 
-        Meteor.call("addTickerEntry", {tickerId: tickerId, tickerEntryText: tickerEntryText}, function (error) {
-            if (error) {
-                console.error('error ' + error.reason);
-                //throwError(error.reason);
-            }
-        });
+        var files = $('#tickerEntryImageUpload')[0].files;
+        if (files && files.length > 0) {
+            var file = files[0];
+            var fr = new FileReader();
+            fr.onload = function () {
+                img = new Image();
+                img.onload = function () {
+                    var width = img.width;
+                    var height = img.height;
+                    
+                    if (width > height) {
+                        if (width > MAX_IMAGE_UPLOAD_WIDTH) {
+                            height *= MAX_IMAGE_UPLOAD_WIDTH / width;
+                            width = MAX_IMAGE_UPLOAD_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_IMAGE_UPLOAD_HEIGHT) {
+                            width *= MAX_IMAGE_UPLOAD_HEIGHT / height;
+                            height = MAX_IMAGE_UPLOAD_HEIGHT;
+                        }
+                    }
+                    
+                    var canvas = document.createElement("canvas");
+                    canvas.width = width;
+                    canvas.height = height;
 
-        // Clear form
-        event.target[0].value = "";
+                    var ctx = canvas.getContext("2d");
+                    ctx.fillStyle = "white";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, width, height);
 
-        // Resize form
-        Stretchy.resizeAll('textarea');
+                    var dataUrl = canvas.toDataURL("image/jpeg", 0.5);
+        
+                    Images.insert(dataUrl, function (err, fileObj) {
+                        if (err) {
+                            console.error('error during image upload', err);
+                            alert('Bild konnte nicht hochgeladen werden');
+                            return;
+                        }
+
+                        callAddTickerEntry(tickerId, tickerEntryText, event, fileObj._id);
+                    });
+                };
+                img.src = fr.result;
+            };
+            fr.readAsDataURL(file);
+        } else {
+            callAddTickerEntry(tickerId, tickerEntryText, event);
+        }
 
         // Prevent default form submit
         return false;
     }
 });
+
+var callAddTickerEntry = function (tickerId, tickerEntryText, event, imageId) {
+    try {
+        Meteor.call("addTickerEntry", {
+            tickerId: tickerId,
+            tickerEntryText: tickerEntryText,
+            imageId: imageId
+        });
+    } catch (e) {
+        console.error("addTickerEntry failed due to", e);
+    }
+
+    // Clear form
+    event.target[0].value = "";
+
+    // Clear image upload
+    $('#tickerEntryImagePreview').empty();
+    $('#tickerEntryImageUpload').val(null);
+
+    // Resize form
+    Stretchy.resizeAll('textarea');
+}
 
 Template.tickerComment.events({
     "click .delete-comment": function (event) {
@@ -328,3 +387,47 @@ Template.startVoting.helpers({
 Template.startVoting.events({
     "submit .startVotingForm": closeModal
 });
+
+Template.addTickerEntry.events({
+    "change #tickerEntryImageUpload": function (event) {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            var files = event.target.files;
+     
+            var target = $('#tickerEntryImagePreview');
+            target.empty();
+
+            var file = files[0];
+            if (!file.type.match('image.*')) {
+                return;
+            }
+    
+            var reader = new FileReader();
+            reader.onload = (function (file) {
+                return function (event) {
+                    var clearButton = $('<button />', {
+                        id: 'clearTickerEntryImageUpload',
+                        title: 'Bild entfernen',
+                        class: 'btn btn-primary btn-raised no-margin'
+                    });
+                    clearButton.click(function () {
+                        $('#tickerEntryImageUpload').val(null);
+                        target.empty();
+                    });
+                    clearButton.appendTo(target);
+
+                    $('<i class="material-icons">delete_forever</i>').appendTo(clearButton);
+
+                    var img = $('<img />', {
+                        id: 'tickerEntryImagePreviewImage',
+                        class: 'img-responsive',
+                        src: event.target.result
+                    });
+                    img.appendTo(target);
+                };
+            }(file));
+            reader.readAsDataURL(file);
+        } else {
+            alert('Dieser Browser wird für den Bild-Upload nicht unterstützt.');
+        }
+    }
+})

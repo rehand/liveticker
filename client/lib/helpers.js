@@ -93,9 +93,7 @@ getChartData = function(presences, startDate, additionalDates, intervalMinutes, 
     dateValues.push(...additionalDates);
 
     // get distinct values and sort them
-    dateValues = dateValues.filter(function (value, index, self) { 
-        return self.indexOf(value) === index;
-    }).sort();
+    dateValues = arrayDistinct(dateValues).sort();
 
     var presenceSessionTimestampFilter = function (presence, dateValue) {
         return presence.session_created <= dateValue && (!presence.session_expired || presence.session_expired >= dateValue);
