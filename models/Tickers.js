@@ -147,7 +147,15 @@ TickerEntriesSchema = new SimpleSchema({
     },
     text: {
         type: String,
-        label: 'Text'
+        label: 'Text',
+        optional: true,
+        custom: function (entry) {
+            if (this.isSet || this.field('image').isSet) {
+                return undefined;
+            }
+
+            return 'required';
+        }
     },
     eventType: {
         type: String,
@@ -164,6 +172,11 @@ TickerEntriesSchema = new SimpleSchema({
     },
     tickerId: {
         type: String
+    },
+    image: {
+        type: String,
+        label: 'Bild',
+        optional: true
     }
 });
 
@@ -905,7 +918,21 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
             }
 
-            var tickerEntry = {text: data.tickerEntryText, eventType: EVENT_TYPE_TEXT, tickerId: tickerId};
+            var tickerEntry = {
+                text: data.tickerEntryText, 
+                eventType: EVENT_TYPE_TEXT, 
+                tickerId: tickerId
+            };
+
+            var imageId = data.imageId;
+            if (imageId) {
+                var image = Images.findOne(imageId);
+                if (!image) {
+                    throw new Meteor.Error("image-not-found", "Bild nicht gefunden!");
+                }
+                tickerEntry['image'] = imageId;
+            }
+
             check(tickerEntry, TickerEntriesSchema);
 
             TickerEntries.insert(tickerEntry);
@@ -1030,6 +1057,11 @@ if (Meteor.isServer) {
                 }
             }
 
+            // delete image
+            if (entry.image) {
+                Images.remove({_id: entry.image});
+            }
+
             TickerEntries.remove({id: entryId});
         },
         updateTicker: function (ticker, tickerId) {
@@ -1097,6 +1129,30 @@ if (Meteor.isServer) {
             Tickers.remove(tickerId, function (error) {
                 if (error) {
                     throw new Meteor.Error("ticker-remove", "Während dem Löschen ist ein Fehler aufgetreten!");
+                }
+            });
+
+            var imageIds = [];
+            TickerEntries.find({
+                image: {
+                    $ne: null
+                }
+            }).fetch().forEach(entry => imageIds.push(entry.image));
+            Images.remove({
+                _id: {
+                    $in: imageIds
+                }
+            }, (err, result) => {
+                if (err) {
+                    console.error("Error during removing images of " + tickerId, err);
+                }
+            });
+
+            TickerEntries.remove({
+                tickerId: tickerId
+            }, (err, result) => {
+                if (err) {
+                    console.error("Error during removing ticker entries of " + tickerId, err);
                 }
             });
 

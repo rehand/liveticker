@@ -38,6 +38,17 @@
             {{#with entry}}
                 {{#if isTextEntry}}
                     {{text}}
+                    {{#if hasImage}}
+                        {{#with getImage}}
+                            {{#if isUploaded}}
+                                <a data-fancybox="ticker-images-{{tickerId}}" data-caption="{{text}}" href="{{url}}">
+                                    <img class="teamLogo img-responsive img-rounded" loading="lazy" src="{{url}}" alt="Upload {{uploadedAt}}" />
+                                </a>
+                            {{else}}
+                                {{> FS.UploadProgressBar bootstrap=true}}
+                            {{/if}}
+                        {{/with}}
+                    {{/if}}
                 {{else}}
                     {{#if isGoalEntry}}
                         <i class="fa fa-futbol-o"></i>

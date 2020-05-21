@@ -70,10 +70,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 var tickerId = this.params._id;
                 return [
-                    Meteor.subscribe('Ticker', tickerId, true, true),
-                    Meteor.subscribe('TickerTeams', tickerId, true),
-                    Meteor.subscribe('TickerImages', tickerId, true),
-                    Meteor.subscribe('TickerEntries', tickerId)
+                    Meteor.subscribe('TickerWithData', tickerId, true, true)
                 ];
             },
             data: function() {
@@ -95,10 +92,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 var tickerId = this.params._id;
                 return [
-                    Meteor.subscribe('Ticker', tickerId, true, true),
-                    Meteor.subscribe('TickerTeams', tickerId, true),
-                    Meteor.subscribe('TickerImages', tickerId, true),
-                    Meteor.subscribe('TickerEntries', tickerId)
+                    Meteor.subscribe('TickerWithData', tickerId, true, true)
                 ];
             },
             data: function() {

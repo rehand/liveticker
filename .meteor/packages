@@ -52,3 +52,5 @@ percolate:migrations
 standard-minifier-css
 standard-minifier-js
 ecmascript
+cfs:ui
+reywood:publish-composite

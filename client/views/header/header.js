@@ -1,6 +1,18 @@
+import fancybox from '@fancyapps/fancybox';
+
 Template.header.created = function () {
   Session.set('isActive', false);
   Session.set('showLogin', false);
+
+  $.fancybox.defaults.buttons = [
+    "zoom",
+    //"share",
+    "slideShow",
+    "fullScreen",
+    //"download",
+    "thumbs",
+    "close"
+  ];
 };
 
 Template['header'].helpers({
