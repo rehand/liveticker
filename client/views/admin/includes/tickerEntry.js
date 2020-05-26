@@ -45,7 +45,7 @@ Template.tickerEntry.helpers({
         return Teams.findOne(this.teamId).code;
     },
     getTeamCoach: function () {
-        return Teams.findOne(this.teamId).coach;
+        return Teams.findOne(this.teamId).getCoach();
     },
     isCurrentEntry: function () {
         var currentDate = new Date();
