@@ -26,6 +26,17 @@
                 Aktualisieren
             </button>
         </h1>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Hintergrund</label>
+            <div class="col-sm-10">
+                <select name="adminTickerExportFormationBackground" class="form-control">
+                    {{#each getBackgrounds}}
+                        <option value="{{@index}}" class="form-control">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
     </div>
 
     <div class="row">

@@ -64,6 +64,12 @@ Template.adminTickerExportFormation.created = function () {
     serverOffset = TimeSync.serverOffset();
 };
 
+Template.adminTickerExportFormation.helpers({
+    getBackgrounds: function () {
+        return FORMATION_EXPORT_BACKGROUNDS;
+    }
+});
+
 var drawCoachString = function (context, ticker, team, tickerEntries, textAlign, xText, yText) {
     if (team.getCoach()) {
         context.textAlign = textAlign;
@@ -147,7 +153,7 @@ var drawFormationString = function (context, formation, xPos, yPos) {
     context.fillText(formationString, xPos, yPos);
 };
 
-function generateImage(ticker) {
+function generateImage(ticker, imageSettings) {
     var context = $('#formationExport').get(0).getContext('2d');
     var tickerEntries = TickerEntries.find().fetch();
 
@@ -157,14 +163,13 @@ function generateImage(ticker) {
 
         var maxLogoWidth = 100;
         var maxLogoHeight = 100;
-        var yPosLogo = 312;
         var xPosLogoHome = 74;
         var xPosLogoAway = 648;
-        drawLogos(context, ticker, maxLogoWidth, maxLogoHeight, yPosLogo, xPosLogoHome, xPosLogoAway);
+        drawLogos(context, ticker, maxLogoWidth, maxLogoHeight, imageSettings.yPosLogo, xPosLogoHome, xPosLogoAway);
 
         var drawKicker = function (index, kickerFormationEntry, textAlign, xText, xCard) {
-            // don't draw more than 14 kickers (11+3)
-            if (index > 13) {
+            // don't draw more kickers than supported
+            if (index > imageSettings.maxIndex) {
                 return;
             }
 
@@ -172,7 +177,7 @@ function generateImage(ticker) {
 
             context.textAlign = textAlign;
             context.font = "bold " + fontSize + "px FuturaEFME-Bold";
-            var yText = 380 + index * 42 + 9 + fontSize;
+            var yText = imageSettings.yPosText + index * 42 + 9 + fontSize;
             var position = kickerFormationEntry.exchanged ? kickerFormationEntry.position : kickerFormationEntry.gamePosition;
             context.fillText(abbreviatePositions(position), xText, yText);
 
@@ -249,17 +254,20 @@ function generateImage(ticker) {
         });
 
         // coaches
-        drawCoachString(context, ticker, ticker.getHomeTeam(), tickerEntries, "left", leftPos, 1039);
-        drawCoachString(context, ticker, ticker.getAwayTeam(), tickerEntries, "right", rightPos, 1039);
+        drawCoachString(context, ticker, ticker.getHomeTeam(), tickerEntries, "left", leftPos, imageSettings.yPosCoach);
+        drawCoachString(context, ticker, ticker.getAwayTeam(), tickerEntries, "right", rightPos, imageSettings.yPosCoach);
 
-        var yPosFormationString = 350;
-        drawFormationString(context, formationHome, 74 + 100 / 2, yPosFormationString);
-        drawFormationString(context, formationAway, 648 + 100 / 2, yPosFormationString);
+        drawFormationString(context, formationHome, 74 + 100 / 2, imageSettings.yPosFormationString);
+        drawFormationString(context, formationAway, 648 + 100 / 2, imageSettings.yPosFormationString);
     };
-    background.src = FORMATION_EXPORT_BACKGROUND;
+    background.src = imageSettings.url;
 }
 Template.adminTickerExportFormation.onRendered(function () {
-    generateImage(this.data.ticker);
+    $("select[name='adminTickerExportFormationBackground']").change(event => {
+        $("button.refresh").click();
+    });
+
+    generateImage(this.data.ticker, FORMATION_EXPORT_BACKGROUNDS[0]);
 });
 
 Template.adminTickerExportFormation.events({
@@ -281,7 +289,7 @@ Template.adminTickerExportFormation.events({
     "click .refresh": function (event) {
         event.preventDefault();
 
-        generateImage(this.ticker);
+        generateImage(this.ticker, FORMATION_EXPORT_BACKGROUNDS[parseInt($("select[name='adminTickerExportFormationBackground']").val())]);
 
         return false;
     }
