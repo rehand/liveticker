@@ -101,14 +101,19 @@
 <template name="addChatEntry">
     <form class="add-chat-entry form-horizontal">
         <div class="form-group">
-            <div class="col-xs-10">
+            <div class="col-xs-8 col-sm-10">
                 <textarea class="form-control no-padding" name="text" rows="1" placeholder="Schreiben..."></textarea>
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-4 col-sm-2">
+                <label class="btn btn-primary no-padding-top-bottom no-margin" for="chatEntryImageUpload"><i class="material-icons">add_a_photo</i></label>
+                <input class="hidden" type="file" accept="image/*" name="chatEntryImageUpload" id="chatEntryImageUpload"/>
                 <button class="btn btn-primary no-padding no-margin" type="submit"><i class="material-icons">send</i> Senden</button>
             </div>
         </div>
     </form>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6" id="chatEntryImagePreview"></div>
+    </div>
 </template>
 
 <template name="chatComment">

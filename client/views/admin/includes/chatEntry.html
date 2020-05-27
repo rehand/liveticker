@@ -38,6 +38,17 @@
             {{#with entry}}
                 {{#if isTextEntry}}
                     {{text}}
+                    {{#if hasImage}}
+                        {{#with getImage}}
+                            {{#if isUploaded}}
+                                <a data-fancybox="chat-images-{{chatId}}" data-caption="{{text}}" href="{{url}}">
+                                    <img class="teamLogo img-responsive img-rounded" loading="lazy" src="{{url}}" alt="Upload {{uploadedAt}}" />
+                                </a>
+                            {{else}}
+                                {{> FS.UploadProgressBar bootstrap=true}}
+                            {{/if}}
+                        {{/with}}
+                    {{/if}}
                 {{else}}
                     {{#if isCommentEntry}}
                         <i class="userComment">Userkommentar von {{text}}</i>

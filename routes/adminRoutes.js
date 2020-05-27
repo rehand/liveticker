@@ -295,8 +295,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 var chatId = this.params._id;
                 return [
-                    Meteor.subscribe('Chat', chatId),
-                    Meteor.subscribe('ChatEntries', chatId)
+                    Meteor.subscribe('ChatWithData', chatId)
                 ];
             },
             data: function() {
@@ -347,7 +346,7 @@ if (Meteor.isClient) {
             waitOn: function() {
                 var chatId = this.params._id;
                 return [
-                    Meteor.subscribe('Chat', chatId),
+                    Meteor.subscribe('ChatWithData', chatId),
                     Meteor.subscribe('UserPresence', chatId)
                 ];
             },

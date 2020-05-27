@@ -28,7 +28,15 @@ ChatEntriesSchema = new SimpleSchema({
     },
     text: {
         type: String,
-        label: 'Text'
+        label: 'Text',
+        optional: true,
+        custom: function (entry) {
+            if (this.isSet || this.field('image').isSet) {
+                return undefined;
+            }
+
+            return 'required';
+        }
     },
     eventType: {
         type: String,
@@ -37,6 +45,11 @@ ChatEntriesSchema = new SimpleSchema({
     },
     chatId: {
         type: String
+    },
+    image: {
+        type: String,
+        label: 'Bild',
+        optional: true
     }
 });
 
@@ -194,7 +207,21 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("chat-not-found", "Chat nicht gefunden!");
             }
 
-            var chatEntry = {text: data.chatEntryText, eventType: EVENT_TYPE_TEXT, chatId: chatId};
+            var chatEntry = {
+                text: data.chatEntryText, 
+                eventType: EVENT_TYPE_TEXT, 
+                chatId: chatId
+            };
+
+            var imageId = data.imageId;
+            if (imageId) {
+                var image = Images.findOne(imageId);
+                if (!image) {
+                    throw new Meteor.Error("image-not-found", "Bild nicht gefunden!");
+                }
+                chatEntry['image'] = imageId;
+            }
+
             check(chatEntry, ChatEntriesSchema);
 
             ChatEntries.insert(chatEntry);
@@ -298,6 +325,13 @@ if (Meteor.isServer) {
                 throw new Meteor.Error("chat-not-found", "Chat nicht gefunden!");
             }
 
+            var entry = ChatEntries.findOne({id: entryId});
+
+            // delete image
+            if (entry && entry.image) {
+                Images.remove({_id: entry.image});
+            }
+
             ChatEntries.remove({id: entryId});
         },
         updateChat: function (chat, chatId) {
@@ -328,6 +362,30 @@ if (Meteor.isServer) {
             }
 
             check(chatId, String);
+
+            var imageIds = [];
+            ChatEntries.find({
+                image: {
+                    $ne: null
+                }
+            }).fetch().forEach(entry => imageIds.push(entry.image));
+            Images.remove({
+                _id: {
+                    $in: imageIds
+                }
+            }, (err, result) => {
+                if (err) {
+                    console.error("Error during removing images of " + chatId, err);
+                }
+            });
+
+            ChatEntries.remove({
+                chatId: chatId
+            }, (err, result) => {
+                if (err) {
+                    console.error("Error during removing chat entries of " + chatId, err);
+                }
+            });
 
             Chats.remove(chatId, function (error) {
                 if (error) {

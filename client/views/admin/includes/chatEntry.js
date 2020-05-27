@@ -18,6 +18,15 @@ Template.chatEntry.helpers({
         } else {
             return "col-xs-offset-1 col-xs-11 col-sm-offset-0 col-sm-9";
         }
+    },
+    hasImage: function () {
+        return this.image && Images.findOne(this.image);
+    },
+    getImage: function () {
+        if (this.image) {
+            return Images.findOne(this.image);
+        }
+        return null;
     }
 });
 

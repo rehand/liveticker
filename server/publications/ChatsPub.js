@@ -41,10 +41,49 @@ Meteor.publish('CurrentPublicChat', function () {
 
 var chatEntriesFieldsExclude = {fields: {chatId: 0}};
 
-Meteor.publish('ChatEntries', function (chatId) {
-    check(chatId, String);
+Meteor.publishComposite('ChatWithData', function (_id, onlyPublic, isFrontend) {
+    check(_id, String);
+    onlyPublic = !!onlyPublic;
+    check(onlyPublic, Boolean);
+    isFrontend = !!isFrontend;
+    check(isFrontend, Boolean);
 
-    return ChatEntries.find({
-        chatId: chatId
-    }, chatEntriesFieldsExclude);
+    var filter = {
+        _id: _id
+    };
+
+    if (onlyPublic) {
+        filter.published = true;
+    }
+    
+    var excludeFields = {
+        fields: {
+            updatedAt: 0
+        }
+    };
+    if (isFrontend) {
+        excludeFields.fields.comments = 0;
+        excludeFields.fields.votings = 0;
+    }
+
+    return {
+        find () {
+            return Chats.find(filter, excludeFields);
+        },
+        children: [{
+            find (chat) {
+                return ChatEntries.find({
+                    chatId: chat._id
+                }, chatEntriesFieldsExclude);
+            },
+            children: [{
+                find (chatEntry) {
+                    if (chatEntry && chatEntry.image) {
+                        return Images.find({_id: chatEntry.image});
+                    }
+                    return this.ready();
+                }
+            }]
+        }]
+    };
 });

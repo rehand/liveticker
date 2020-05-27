@@ -21,6 +21,12 @@ Meteor.startup(function () {
         }
     }).fetch().forEach(entry => imageIds.push(entry.image));
 
+    ChatEntries.find({
+        image: {
+            $ne: null
+        }
+    }).fetch().forEach(entry => imageIds.push(entry.image));
+
     imageIds = arrayDistinct(imageIds);
 
     console.log("Removing unused images except " + imageIds.length + " IDs", imageIds);

@@ -22,23 +22,82 @@ Template.addChatEntry.events({
         var chatEntryText = event.target[0].value;
         var chatId = Router.current().params._id;
 
-        Meteor.call("addChatEntry", {chatId: chatId, chatEntryText: chatEntryText}, function (error) {
-            if (error) {
-                console.error('error ' + error.reason);
-                //throwError(error.reason);
-            }
-        });
+        var files = $('#chatEntryImageUpload')[0].files;
+        if (files && files.length > 0) {
+            var file = files[0];
+            var fr = new FileReader();
+            fr.onload = function () {
+                img = new Image();
+                img.onload = function () {
+                    var width = img.width;
+                    var height = img.height;
 
-        // Clear form
-        event.target[0].value = "";
+                    if (width > height) {
+                        if (width > MAX_IMAGE_UPLOAD_WIDTH) {
+                            height *= MAX_IMAGE_UPLOAD_WIDTH / width;
+                            width = MAX_IMAGE_UPLOAD_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_IMAGE_UPLOAD_HEIGHT) {
+                            width *= MAX_IMAGE_UPLOAD_HEIGHT / height;
+                            height = MAX_IMAGE_UPLOAD_HEIGHT;
+                        }
+                    }
 
-        // Resize form
-        Stretchy.resizeAll('textarea');
+                    var canvas = document.createElement("canvas");
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    var ctx = canvas.getContext("2d");
+                    ctx.fillStyle = "white";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    var dataUrl = canvas.toDataURL("image/jpeg", 0.5);
+
+                    Images.insert(dataUrl, function (err, fileObj) {
+                        if (err) {
+                            console.error('error during image upload', err);
+                            alert('Bild konnte nicht hochgeladen werden');
+                            return;
+                        }
+
+                        callAddChatEntry(chatId, chatEntryText, event, fileObj._id);
+                    });
+                };
+                img.src = fr.result;
+            };
+            fr.readAsDataURL(file);
+        } else {
+            callAddChatEntry(chatId, chatEntryText, event);
+        }
 
         // Prevent default form submit
         return false;
     }
 });
+
+var callAddChatEntry = function (chatId, chatEntryText, event, imageId) {
+    try {
+        Meteor.call("addChatEntry", {
+            chatId: chatId,
+            chatEntryText: chatEntryText,
+            imageId: imageId
+        });
+    } catch (e) {
+        console.error("addChatEntry failed due to", e);
+    }
+
+    // Clear form
+    event.target[0].value = "";
+
+    // Clear image upload
+    $('#chatEntryImagePreview').empty();
+    $('#chatEntryImageUpload').val(null);
+
+    // Resize form
+    Stretchy.resizeAll('textarea');
+}
 
 Template.chatComment.events({
     "click .delete-comment": function (event) {
@@ -125,3 +184,47 @@ Template.adminChatDetail.events({
         return false;
     }
 });
+
+Template.addChatEntry.events({
+    "change #chatEntryImageUpload": function (event) {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            var files = event.target.files;
+
+            var target = $('#chatEntryImagePreview');
+            target.empty();
+
+            var file = files[0];
+            if (!file.type.match('image.*')) {
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = (function (file) {
+                return function (event) {
+                    var clearButton = $('<button />', {
+                        id: 'clearChatEntryImageUpload',
+                        title: 'Bild entfernen',
+                        class: 'btn btn-primary btn-raised no-margin'
+                    });
+                    clearButton.click(function () {
+                        $('#chatEntryImageUpload').val(null);
+                        target.empty();
+                    });
+                    clearButton.appendTo(target);
+
+                    $('<i class="material-icons">delete_forever</i>').appendTo(clearButton);
+
+                    var img = $('<img />', {
+                        id: 'chatEntryImagePreviewImage',
+                        class: 'img-responsive',
+                        src: event.target.result
+                    });
+                    img.appendTo(target);
+                };
+            }(file));
+            reader.readAsDataURL(file);
+        } else {
+            alert('Dieser Browser wird für den Bild-Upload nicht unterstützt.');
+        }
+    }
+}) 
