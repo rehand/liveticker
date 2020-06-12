@@ -81,7 +81,6 @@ Meteor.publishComposite('ChatWithData', function (_id, onlyPublic, isFrontend) {
                     if (chatEntry && chatEntry.image) {
                         return Images.find({_id: chatEntry.image});
                     }
-                    return this.ready();
                 }
             }]
         }]

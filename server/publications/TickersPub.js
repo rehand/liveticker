@@ -79,7 +79,6 @@ Meteor.publishComposite('TickerWithData', function (_id, onlyPublic, isFrontend)
                     if (team.logo) {
                         return Images.find({_id: team.logo});
                     }
-                    return this.ready();
                 }
             }]
         }, {
@@ -93,7 +92,6 @@ Meteor.publishComposite('TickerWithData', function (_id, onlyPublic, isFrontend)
                     if (tickerEntry && tickerEntry.image) {
                         return Images.find({_id: tickerEntry.image});
                     }
-                    return this.ready();
                 }
             }]
         }]
