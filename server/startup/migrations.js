@@ -421,6 +421,157 @@ Migrations.add({
     }
 );
 
+Migrations.add({
+    version: 6,
+    name: 'Added collection indexes',
+    up: function () {
+        console.log('Adding index published to Tickers');
+        Tickers.rawCollection().createIndex({published: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during creating index published on Tickers', error);
+            } else {
+                console.log('Created index published on Tickers:', result);
+            }
+        });
+
+        console.log('Adding index published to Chats');
+        Chats.rawCollection().createIndex({published: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during creating index published on Chats', error);
+            } else {
+                console.log('Created index published on Chats:', result);
+            }
+        });
+
+        console.log('Adding index code to Teams');
+        Teams.rawCollection().createIndex({code: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during creating index code on Teams', error);
+            } else {
+                console.log('Created index code on Teams:', result);
+            }
+        });
+
+        console.log('Adding index id to TickerEntries');
+        TickerEntries.rawCollection().createIndex({id: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during creating index id on TickerEntries', error);
+            } else {
+                console.log('Created index id on TickerEntries:', result);
+            }
+        });
+
+        console.log('Adding index tickerId to TickerEntries');
+        TickerEntries.rawCollection().createIndex({tickerId: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during creating index tickerId on TickerEntries', error);
+            } else {
+                console.log('Created index tickerId on TickerEntries:', result);
+            }
+        });
+
+        console.log('Adding index id to ChatEntries');
+        ChatEntries.rawCollection().createIndex({id: 1},  (error, result) => {
+            if (error) {
+                console.error('Error during creating index id on ChatEntries', error);
+            } else {
+                console.log('Created index id on ChatEntries:', result);
+            }
+        });
+
+        console.log('Adding index chatId to ChatEntries');
+        ChatEntries.rawCollection().createIndex({chatId: 1},  (error, result) => {
+            if (error) {
+                console.error('Error during creating index chatId on ChatEntries', error);
+            } else {
+                console.log('Created index chatId on ChatEntries:', result);
+            }
+        });
+
+        console.log('Adding index state.tickerId to Presences');
+        Presences.rawCollection().createIndex({'state.tickerId': 1},  (error, result) => {
+            if (error) {
+                console.error('Error during creating index state.tickerId on Presences', error);
+            } else {
+                console.log('Created index state.tickerId on Presences:', result);
+            }
+        });
+    },
+    down: function () {
+        console.log('Removing index published from Tickers');
+        Tickers.rawCollection().dropIndex({published: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index published from Tickers', error);
+            } else {
+                console.log('Removed index published from Tickers:', result);
+            }
+        });
+
+        console.log('Removing index published from Chat');
+        Chats.rawCollection().dropIndex({published: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index published from Chats', error);
+            } else {
+                console.log('Removed index published from Chats:', result);
+            }
+        });
+
+        console.log('Removing index code from Teams');
+        Teams.rawCollection().dropIndex({code: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index code from Teams', error);
+            } else {
+                console.log('Removed index code from Teams:', result);
+            }
+        });
+
+        console.log('Removing index id from TickerEntries');
+        TickerEntries.rawCollection().dropIndex({id: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index id from TickerEntries', error);
+            } else {
+                console.log('Removed index id from TickerEntries:', result);
+            }
+        });
+
+        console.log('Removing index tickerId from TickerEntries');
+        TickerEntries.rawCollection().dropIndex({tickerId: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index tickerId from TickerEntries', error);
+            } else {
+                console.log('Removed index tickerId from TickerEntries:', result);
+            }
+        });
+
+        console.log('Removing index id from ChatEntries');
+        ChatEntries.rawCollection().dropIndex({id: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index id from ChatEntries', error);
+            } else {
+                console.log('Removed index id from ChatEntries:', result);
+            }
+        });
+
+        console.log('Removing index chatId from ChatEntries');
+        ChatEntries.rawCollection().dropIndex({chatId: 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index chatId from ChatEntries', error);
+            } else {
+                console.log('Removed index chatId from ChatEntries:', result);
+            }
+        });
+
+        console.log('Removing index state.tickerId from Presences');
+        Presences.rawCollection().dropIndex({'state.tickerId': 1}, (error, result) => {
+            if (error) {
+                console.error('Error during removing index state.tickerId from Presences', error);
+            } else {
+                console.log('Removed index state.tickerId from Presences:', result);
+            }
+        });
+    }
+});
+
 Meteor.startup(function () {
     Migrations.migrateTo('latest');
 });
