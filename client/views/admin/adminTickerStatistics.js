@@ -15,7 +15,8 @@ var addAnnotationIfPresent = function(annotations, additionalDates, timestamp, s
 
 var graph;
 
-var showChart = function(targetId, ticker, presences) {
+var showChart = function(targetId, ticker) {
+    var presences = PresencesLocal.find().fetch();
     var limit = new Date(ticker.kickoff.getTime());
     var daysLimit = parseInt($('#statisticsDaysLimit').val());
     if (!daysLimit || isNaN(daysLimit) || daysLimit <= 0) {
@@ -76,20 +77,54 @@ var showChart = function(targetId, ticker, presences) {
 
 Template.adminTickerStatistics.rendered = function () {
     graph = undefined;
-    showChart("chart", this.data.ticker, this.data.presences);
+    var ticker = this.data.ticker;
+    fetchDataFromServer(ticker, () => showChart("chart", ticker));
 };
 
 var redrawGraphOnEvent = function (event) {
     event.preventDefault();
     graph = undefined;
-    showChart("chart", this.ticker, this.presences);
+    showChart("chart", this.ticker);
     return false;
+}
+
+PresencesLocal = new Mongo.Collection(null);
+UserPresencesLocal = new Mongo.Collection(null);
+var fetchDataFromServer = function (ticker, callback) {
+    $('#spinnerLoadingStatistics').show();
+
+    PresencesLocal.remove({});
+
+    Meteor.call("getUserPresences", ticker._id, function(error, data) {
+        if (error) {
+            console.error('error ' + error.reason);
+        } else if (data) {
+            data.presences.forEach(presence => {
+                PresencesLocal.insert(presence);
+            });
+
+            UserPresencesLocal.remove({});
+            var userPresences = data.userPresences;
+            UserPresencesLocal.insert(userPresences);
+
+            userPresencesDep.changed();
+
+            callback();
+
+            $('#spinnerLoadingStatistics').hide();
+        }
+    });
 }
 
 Template.adminTickerStatistics.events({
     "click button.refresh": function (event) {
         event.preventDefault();
-        showChart("chart", this.ticker, this.presences);
+        if ($('#spinnerLoadingStatistics').is(':hidden')) {
+            var ticker = this.ticker;
+            fetchDataFromServer(ticker, () => showChart("chart", ticker));
+        } else {
+            console.log('currently loading...');
+        }
         return false;
     },
     "change #statisticsDaysLimit": redrawGraphOnEvent,
@@ -101,16 +136,30 @@ Template.adminTickerStatistics.events({
     }
 });
 
+var userPresencesDep = new Deps.Dependency();
+
 Template.adminTickerStatistics.helpers({
     'sessionStatisticsAutoRefresh': function () {
         return Session.get(SESSION_STATISTICS_AUTO_REFRESH);
+    }, 'getUserPresences': function () {
+        userPresencesDep.depend();
+
+        var userPresences = UserPresencesLocal.findOne();
+        if (userPresences) {
+            return userPresences;;
+        }
+
+        return {
+            connections: '-',
+            frontend: '-',
+            backend: '-',
+            visitsFrontend: '-'
+        };
     }
 });
 
 
 var refreshTimer;
-var presencesTracker;
-var hasChanged = false;
 
 Tracker.autorun(function (c) {
     if (!Session.equals(SESSION_STATISTICS_AUTO_REFRESH, true)) {
@@ -118,26 +167,9 @@ Tracker.autorun(function (c) {
             Meteor.clearInterval(refreshTimer);
             refreshTimer = false;
         }
-        if (presencesTracker) {
-            presencesTracker.stop();
-            presencesTracker = false;
-        }
     } else if (!refreshTimer) {
-        Tracker.autorun(function (c) {
-            Presences.find().fetch();
-
-            if (presencesTracker) {
-                hasChanged = true;
-            } else {
-                presencesTracker = c;
-            }
-        });
-
         refreshTimer = Meteor.setInterval(function () {
-            if (hasChanged) {
-                hasChanged = false;
-                $('button.refresh').click();
-            }
-        }, 5000);
+            $('button.refresh').click();
+        }, 30000);
     }
 });

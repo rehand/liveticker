@@ -16,13 +16,16 @@
 
     <div class="row">
         {{> errors}}
+        <div id="spinnerLoadingStatistics">
+            {{>spinner}}
+        </div>
     </div>
 
     <div class="row">
         <div class="col-xs-12">
             <h2>Aktuelle Statistiken</h2>
-            {{userPresence.connections}} Verbindung(en) aktuell ({{userPresence.frontend}}&nbsp;Frontend, {{userPresence.backend}}&nbsp;Backend)<br/>
-            Aufrufe Frontend: {{userPresence.visitsFrontend}}
+            {{getUserPresences.connections}} Verbindung(en) aktuell ({{getUserPresences.frontend}}&nbsp;Frontend, {{getUserPresences.backend}}&nbsp;Backend)<br/>
+            Aufrufe Frontend: {{getUserPresences.visitsFrontend}}
         </div>
     </div>
 
@@ -51,7 +54,7 @@
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" id="statisticsAutoRefresh" checked="{{sessionStatisticsAutoRefresh}}"/>
-                            <span class="checkbox-material"><span class="check"></span></span> <i class="material-icons">autorenew</i> automatisch aktualisieren
+                            <span class="checkbox-material"><span class="check"></span></span> <i class="material-icons">autorenew</i> automatisch aktualisieren (30s)
                         </label>
                     </div>
                 </div>

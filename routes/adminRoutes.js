@@ -1,15 +1,3 @@
-var presenceFilterFrontend = function (entry) {
-    return entry.state.route.indexOf('frontend') === 0;
-};
-
-var presenceFilterBackend = function (entry) {
-    return entry.state.route.indexOf('admin') === 0;
-};
-
-var presenceFilterOnline = function (entry) {
-    return !entry.session_expired;
-};
-
 if (Meteor.isClient) {
     Router.map( function () {
         this.route('admin', {
@@ -226,26 +214,12 @@ if (Meteor.isClient) {
                 var tickerId = this.params._id;
                 return [
                     Meteor.subscribe('Ticker', tickerId),
-                    Meteor.subscribe('TickerTeams', tickerId),
-                    Meteor.subscribe('UserPresence', tickerId)
+                    Meteor.subscribe('TickerTeams', tickerId)
                 ];
             },
             data: function() {
-                var presences = Presences.find().fetch();
-
-                var presencesOnline = presences.filter(presenceFilterOnline);
-
-                var userPresence = {
-                    connections: presencesOnline.length,
-                    frontend: presencesOnline.filter(presenceFilterFrontend).length,
-                    backend: presencesOnline.filter(presenceFilterBackend).length,
-                    visitsFrontend: presences.filter(presenceFilterFrontend).length
-                };
-
                 return {
-                    ticker: Tickers.findOne(this.params._id),
-                    userPresence: userPresence,
-                    presences: presences
+                    ticker: Tickers.findOne(this.params._id)
                 };
             }
         });
@@ -346,26 +320,12 @@ if (Meteor.isClient) {
             waitOn: function() {
                 var chatId = this.params._id;
                 return [
-                    Meteor.subscribe('ChatWithData', chatId),
-                    Meteor.subscribe('UserPresence', chatId)
+                    Meteor.subscribe('ChatWithData', chatId)
                 ];
             },
             data: function() {
-                var presences = Presences.find().fetch();
-
-                var presencesOnline = presences.filter(presenceFilterOnline);
-
-                var userPresence = {
-                    connections: presencesOnline.length,
-                    frontend: presencesOnline.filter(presenceFilterFrontend).length,
-                    backend: presencesOnline.filter(presenceFilterBackend).length,
-                    visitsFrontend: presences.filter(presenceFilterFrontend).length
-                };
-
                 return {
-                    chat: Chats.findOne(this.params._id),
-                    userPresence: userPresence,
-                    presences: presences
+                    chat: Chats.findOne(this.params._id)
                 };
             }
         });
