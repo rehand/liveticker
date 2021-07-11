@@ -29,7 +29,7 @@ var drawText = function (context, textAlign, text, xPos, yPos, bold, tmpFontSize
 
 var GOAL_EVENT_TYPES = [EVENT_TYPE_GOAL, EVENT_TYPE_OWN_GOAL, EVENT_TYPE_PENALTY_GOAL];
 filterGoalEvents = function (formationEntry) {
-    return GOAL_EVENT_TYPES.indexOf(formationEntry.eventType) !== -1;
+    return GOAL_EVENT_TYPES.indexOf(formationEntry.eventType) !== -1 && !formationEntry.varEventId;
 };
 
 var abbreviateKickerName = function (kickerName) {

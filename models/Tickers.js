@@ -177,6 +177,10 @@ TickerEntriesSchema = new SimpleSchema({
         type: String,
         label: 'Bild',
         optional: true
+    },
+    varEventId: {
+        type: String,
+        optional: true
     }
 });
 
@@ -1040,12 +1044,17 @@ if (Meteor.isServer) {
 
             if (entry && entry.teamId) {
                 if (isGoalEvent(entry)) {
-                    // reduce score if goal event
-                    var isHomeScore = entry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
-                    if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
-                        Tickers.update({_id: tickerId}, {
-                            $inc: getChangeScoreUpdateValue(-1, isHomeScore)
-                        });
+                    if (!entry.varEventId) {
+                        // reduce score if goal event and no VAR entry set
+                        var isHomeScore = entry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
+                        if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
+                            Tickers.update({_id: tickerId}, {
+                                $inc: getChangeScoreUpdateValue(-1, isHomeScore)
+                            });
+                        }
+                    } else {
+                        // remove VAR event
+                        TickerEntries.remove({id: entry.varEventId});
                     }
                 } else if (isOvertimePenaltyGoalEvent(entry)) {
                     var isHomeScore = entry.teamId === ticker.teamHome;
@@ -1062,7 +1071,80 @@ if (Meteor.isServer) {
                 Images.remove({_id: entry.image});
             }
 
+            if (entry.eventType === EVENT_TYPE_VAR_NO_GOAL) {
+                var goalEntry = TickerEntries.findOne({id: entry.varEventId});
+                if (!!goalEntry) {
+                    // increase score and remove VAR event ID from goal event
+                    var isHomeScore = goalEntry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
+                    Tickers.update({_id: tickerId}, {
+                        $inc: getChangeScoreUpdateValue(1, isHomeScore)
+                    });
+
+                    // update goal entry
+                    var value = {
+                        $unset: {
+                            'varEventId': true
+                        }
+                    };
+
+                    TickerEntries.update({id: entry.varEventId}, value);
+                }
+            }
+
             TickerEntries.remove({id: entryId});
+        },
+        varNoGoalEntry: function (tickerId, entryId) {
+            if (!this.userId) {
+                throw new Meteor.Error("not-authorized");
+            }
+
+            check(tickerId, String);
+            check(entryId, String);
+
+            var ticker = Tickers.findOne(tickerId);
+            if (ticker === null) {
+                throw new Meteor.Error("ticker-not-found", "Ticker nicht gefunden!");
+            }
+
+            var entry = TickerEntries.findOne({id: entryId});
+
+            if (!entry || !entry.teamId || !isGoalEvent(entry) || !!entry.varEventId) {
+                throw new Meteor.Error("invalid-entry", "Ungültiger Eintrag!");
+            }
+
+            // insert new entry
+            var tickerEntry = {
+                text: EVENT_TYPE_VAR_NO_GOAL, 
+                eventType: EVENT_TYPE_VAR_NO_GOAL, 
+                tickerId: tickerId,
+                varEventId: entryId
+            };
+
+            check(tickerEntry, TickerEntriesSchema);
+
+            var internalId = TickerEntries.insert(tickerEntry);
+            
+            var varEntry = TickerEntries.findOne({_id: internalId});
+            if (!varEntry) {
+                throw new Meteor.Error("entry-not-found", "VAR Eintrag nicht gefunden!");
+            }
+
+            // update goal entry
+            var value = {
+                $set: {
+                    'varEventId': varEntry.id
+                }
+            };
+
+            TickerEntries.update({id: entryId}, value);
+
+            // reduce score
+            var isHomeScore = entry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
+            if ((isHomeScore ? ticker.scoreHome : ticker.scoreAway) > 0) {
+                Tickers.update({_id: tickerId}, {
+                    $inc: getChangeScoreUpdateValue(-1, isHomeScore)
+                });
+            }
         },
         updateTicker: function (ticker, tickerId) {
             if (!this.userId) {

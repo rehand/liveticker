@@ -8,6 +8,12 @@ Template.tickerEntry.helpers({
     isOwnGoalEntry: function () {
         return this.eventType === EVENT_TYPE_OWN_GOAL;
     },
+    hasVarEvent: function () {
+        return !!this.varEventId;
+    },
+    isVarNoGoalEntry: function () {
+        return this.eventType === EVENT_TYPE_VAR_NO_GOAL;
+    },
     isPenaltyGoalEntry: function () {
         return this.eventType == EVENT_TYPE_PENALTY_GOAL;
     },
@@ -132,6 +138,26 @@ Template.adminTickerDetail.events({
         editDialog.find('input[name="entryTimestamp"]').first().val(entryTimestamp);
 
         return true;
+    },
+    "click .var-no-goal-entry": function (event, template) {
+        event.preventDefault();
+
+        var entryId = event.target.getAttribute('data-entry-id');
+        if (!entryId) {
+            entryId = event.target.parentNode.getAttribute('data-entry-id');
+        }
+
+        if (confirm("Möchten Sie das Tor wirklich vom VAR zurücknehmen lassen?")) {
+            var tickerId = Router.current().params._id;
+
+            Meteor.call("varNoGoalEntry", tickerId, entryId, function (error) {
+                if (error) {
+                    console.error('error ' + error.reason);
+                }
+            });
+        }
+
+        return false;
     }
 });
 

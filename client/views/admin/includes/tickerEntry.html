@@ -20,6 +20,16 @@
                                 data-entry-id="{{entry.id}}">
                             <i class="material-icons material-icon-xs">delete</i>
                         </button>
+                        {{#with entry}}
+                            {{#if isGoalEntry}}
+                                {{#unless hasVarEvent}}
+                                    <button class="btn btn-default btn-xs no-margin var-no-goal-entry remove-padding"
+                                            data-entry-id="{{id}}">
+                                        <i class="material-icons material-icon-xs">undo</i>
+                                    </button>
+                                {{/unless}}
+                            {{/if}}
+                        {{/with}}
                     </div>
                     <div class="col-xs-8">
                         {{#with entry}}
@@ -52,7 +62,7 @@
                 {{else}}
                     {{#if isGoalEntry}}
                         <i class="fa fa-futbol-o"></i>
-                        <strong>
+                        <strong class="{{#if hasVarEvent}}var-no-goal{{/if}}">
                             {{#if hasGoalText}}
                                 {{getGoalText}}
                             {{else}}
@@ -139,6 +149,13 @@
                                                                     {{/if}}
                                                                 {{/if}}
                                                             </strong>
+                                                        {{else}}
+                                                            {{#if isVarNoGoalEntry}}
+                                                                <i class="fa fa-undo"></i>
+                                                                <strong>
+                                                                    VAR-Entscheidung: kein Tor!
+                                                                </strong>
+                                                            {{/if}}
                                                         {{/if}}
                                                     {{/if}}
                                                 {{/if}}
