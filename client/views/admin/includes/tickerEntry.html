@@ -21,7 +21,7 @@
                             <i class="material-icons material-icon-xs">delete</i>
                         </button>
                         {{#with entry}}
-                            {{#if isGoalEntry}}
+                            {{#if isGoalOrOwnGoalEntry}}
                                 {{#unless hasVarEvent}}
                                     <button class="btn btn-default btn-xs no-margin var-no-goal-entry remove-padding"
                                             data-entry-id="{{id}}">
@@ -80,7 +80,7 @@
                     {{else}}
                         {{#if isOwnGoalEntry}}
                             <i class="fa fa-futbol-o"></i>
-                            <strong>Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!</strong>
+                            <strong class="{{#if hasVarEvent}}var-no-goal{{/if}}">Eigentor von {{kicker.[0].name}} ({{getTeamCode}})!</strong>
                         {{else}}
                             {{#if isPenaltyGoalEntry}}
                                 <i class="fa fa-futbol-o"></i>

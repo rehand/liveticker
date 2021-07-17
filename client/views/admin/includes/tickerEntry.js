@@ -1,12 +1,23 @@
+var isGoalEntry = function (event) {
+    return event.eventType === EVENT_TYPE_GOAL;
+};
+
+var isOwnGoalEntry = function (event) {
+    return event.eventType === EVENT_TYPE_OWN_GOAL;
+};
+
 Template.tickerEntry.helpers({
     isTextEntry: function (entry) {
         return (entry ? entry : this).eventType === EVENT_TYPE_TEXT;
     },
     isGoalEntry: function () {
-        return this.eventType === EVENT_TYPE_GOAL;
+        return isGoalEntry(this);
     },
     isOwnGoalEntry: function () {
-        return this.eventType === EVENT_TYPE_OWN_GOAL;
+        return isOwnGoalEntry(this);
+    },
+    isGoalOrOwnGoalEntry: function () {
+        return isGoalEntry(this) || isOwnGoalEntry(this);
     },
     hasVarEvent: function () {
         return !!this.varEventId;

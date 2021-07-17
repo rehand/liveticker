@@ -1075,7 +1075,7 @@ if (Meteor.isServer) {
                 var goalEntry = TickerEntries.findOne({id: entry.varEventId});
                 if (!!goalEntry) {
                     // increase score and remove VAR event ID from goal event
-                    var isHomeScore = goalEntry.teamId === ticker.teamHome && entry.eventType !== EVENT_TYPE_OWN_GOAL;
+                    var isHomeScore = goalEntry.teamId === ticker.teamHome && goalEntry.eventType !== EVENT_TYPE_OWN_GOAL;
                     Tickers.update({_id: tickerId}, {
                         $inc: getChangeScoreUpdateValue(1, isHomeScore)
                     });
