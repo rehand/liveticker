@@ -180,7 +180,7 @@ if (Meteor.isClient) {
             notFoundTemplate: 'tickerNotFound',
             waitOn: function() {
                 return [
-                    Meteor.subscribe('Ticker', this.params._id),
+                    Meteor.subscribe('Ticker', this.params._id, false, true),
                     Meteor.subscribe('TickerTeams', this.params._id)
                 ];
             },
