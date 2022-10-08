@@ -110,6 +110,14 @@ TeamsSchema = new SimpleSchema({
 
 Teams.attachSchema(TeamsSchema);
 
+var escapedCode = function (team) {
+    if (!team || !team.code) {
+        return undefined;
+    }
+    
+    return team.code.replace(/\s/g, '_');
+}
+
 Teams.helpers({
     countKickers: function () {
         if (this.kickers) {
@@ -124,16 +132,16 @@ Teams.helpers({
         return "dummy.jpg";
     },
     getAddEventFormName: function () {
-        return "addEventForm" + this.code;
+        return "addEventForm" + escapedCode(this);
     },
     getSubstitionEventFormName: function () {
-        return "changeEventForm" + this.code;
+        return "changeEventForm" + escapedCode(this);
     },
     getAddOvertimePenaltyEventFormName: function () {
-        return "addOvertimePenaltyEventForm" + this.code;
+        return "addOvertimePenaltyEventForm" + escapedCode(this);
     },
     getCoachEventFormName: function () {
-        return "coachEventForm" + this.code;
+        return "coachEventForm" + escapedCode(this);
     },
     getAnthem: function () {
         if (this.anthem) {
@@ -166,6 +174,9 @@ Teams.helpers({
             return this.coachObject[0].name;
         }
         return this.coach;
+    },
+    escapedCode: function () {
+        return escapedCode(this);
     }
 });
 

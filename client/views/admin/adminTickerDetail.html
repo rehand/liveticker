@@ -331,16 +331,16 @@
 </template>
 
 <template name="addEvent">
-    <button class="btn btn-primary btn-raised goal-button" data-toggle="modal" data-target="#eventModal{{team.code}}">
+    <button class="btn btn-primary btn-raised goal-button" data-toggle="modal" data-target="#eventModal{{team.escapedCode}}">
         <i class="fa fa-futbol-o"></i> Event
     </button>
-    <div class="modal fade" id="eventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="eventModal{{team.code}}Label">
+    <div class="modal fade" id="eventModal{{team.escapedCode}}" tabindex="-1" role="dialog" aria-labelledby="eventModal{{team.escapedCode}}Label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 {{#autoForm schema="EventSchema" id=team.getAddEventFormName class="addEventForm" type="method" meteormethod="addEvent"}}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="eventModal{{team.code}}Label">Event {{team.name}}</h4>
+                        <h4 class="modal-title" id="eventModal{{team.escapedCode}}Label">Event {{team.name}}</h4>
                     </div>
                     <div class="modal-body">
                         {{> afQuickField name="eventType" options=getEventTypes type="select"}}
@@ -395,16 +395,16 @@
 </template>
 
 <template name="addSubstitutionEvent">
-    <button class="btn btn-primary btn-raised substitution-event-button" data-toggle="modal" data-target="#substitutionEventModal{{team.code}}">
+    <button class="btn btn-primary btn-raised substitution-event-button" data-toggle="modal" data-target="#substitutionEventModal{{team.escapedCode}}">
         <i class="fa fa-exchange"></i> Spielerwechsel
     </button>
-    <div class="modal fade" id="substitutionEventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="substitutionEventModal{{team.code}}Label">
+    <div class="modal fade" id="substitutionEventModal{{team.escapedCode}}" tabindex="-1" role="dialog" aria-labelledby="substitutionEventModal{{team.escapedCode}}Label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 {{#autoForm schema="SubstitutionEventSchema" id=team.getSubstitionEventFormName class="substitutionEventForm" type="method" meteormethod="addEvent"}}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="substitutionEventModal{{team.code}}Label">Spielerwechsel {{team.name}}</h4>
+                        <h4 class="modal-title" id="substitutionEventModal{{team.escapedCode}}Label">Spielerwechsel {{team.name}}</h4>
                     </div>
                     <div class="modal-body">
                         {{> afQuickField name="eventType" value=getSubstitutionDefaultEventType options=getSubstitutionEventTypes type="select-radio-inline"}}
@@ -431,16 +431,16 @@
 </template>
 
 <template name="addOvertimePenaltyEvent">
-    <button class="btn btn-primary btn-raised goal-button" data-toggle="modal" data-target="#overtimePenaltyEventModal{{team.code}}">
+    <button class="btn btn-primary btn-raised goal-button" data-toggle="modal" data-target="#overtimePenaltyEventModal{{team.escapedCode}}">
         <i class="fa fa-futbol-o"></i> Elfmeter
     </button>
-    <div class="modal fade" id="overtimePenaltyEventModal{{team.code}}" tabindex="-1" role="dialog" aria-labelledby="overtimePenaltyEventModal{{team.code}}Label">
+    <div class="modal fade" id="overtimePenaltyEventModal{{team.escapedCode}}" tabindex="-1" role="dialog" aria-labelledby="overtimePenaltyEventModal{{team.escapedCode}}Label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 {{#autoForm schema="OvertimePenaltyEventSchema" id=team.getAddOvertimePenaltyEventFormName class="addOvertimePenaltyEvent" type="method" meteormethod="addEvent"}}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="overtimePenaltyEventModal{{team.code}}Label">Elfmeter {{team.name}}</h4>
+                        <h4 class="modal-title" id="overtimePenaltyEventModal{{team.escapedCode}}Label">Elfmeter {{team.name}}</h4>
                     </div>
                     <div class="modal-body">
                         {{> afQuickField name="eventType" options=getEventTypes type="select"}}
