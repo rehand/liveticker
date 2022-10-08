@@ -163,10 +163,18 @@ var listener = function(evt) {
 	}
 };
 
-document.body.addEventListener("input", listener);
+var debounce = function(func, timeout = 50){
+	let timer;
+	return (...args) => {
+	  clearTimeout(timer);
+	  timer = setTimeout(() => { func.apply(this, args); }, timeout);
+	};
+}
+
+document.body.addEventListener("input", debounce((evt) => listener(evt)));
 
 // Firefox fires a change event instead of an input event
-document.body.addEventListener("change", listener);
+document.body.addEventListener("change", debounce((evt) => listener(evt)));
 
 // Listen for new elements
 if (self.MutationObserver) {

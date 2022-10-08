@@ -116,7 +116,7 @@ var callAddTickerEntry = function (tickerId, tickerEntryText, event, imageId) {
     $('#tickerEntryImageUpload').val(null);
 
     // Resize form
-    Stretchy.resizeAll('textarea');
+    Stretchy.resize('#addTickerEntryArea');
 }
 
 Template.tickerComment.events({

@@ -96,7 +96,7 @@ var callAddChatEntry = function (chatId, chatEntryText, event, imageId) {
     $('#chatEntryImageUpload').val(null);
 
     // Resize form
-    Stretchy.resizeAll('textarea');
+    Stretchy.resize('#addChatEntryArea');
 }
 
 Template.chatComment.events({
