@@ -55,6 +55,26 @@ var mapVotings = function (formation, entries, votings, team) {
     }
 };
 
+Template.tickerVotingsOverview.rendered = function () {
+    $("button.copyTickerVotingsOverview").click((event) => {
+        var targetId = $(event.currentTarget).attr("data-target-id");
+
+        var entries = $("#" + targetId).find("table.votings tbody tr");
+
+        var result = [];
+
+        entries.each((index, entry) => {
+            var columns = $(entry).find("td");
+            var kicker = columns.get(0);
+            var voting = columns.get(1);
+
+            result.push(kicker.innerText + ":\t" + voting.innerText);
+        });
+
+        navigator.clipboard.writeText(result.join('\n'));
+    });
+};
+
 Template.tickerVotingsOverview.helpers({
     mapVotings: function (formation, entries, votings) {
         return mapVotings(formation, entries, votings);
@@ -71,7 +91,7 @@ Template.tickerVotingsOverview.helpers({
             return result + currentVoting.averageVoting;
         }, 0);
 
-        return votingsSum / votingsPerKicker.length;
+        return Number(votingsSum / votingsPerKicker.length).toFixed(2);
     },
     getVotingsAverage: function (votingsPerKicker) {
         if (!votingsPerKicker || votingsPerKicker.length < 1) {
@@ -82,7 +102,10 @@ Template.tickerVotingsOverview.helpers({
             return result + currentVoting.votings.length;
         }, 0);
 
-        return votingsCount / votingsPerKicker.length;
+        return Number(votingsCount / votingsPerKicker.length).toFixed(2);
+    },
+    formatAverage: function (average) {
+        return Number(average).toFixed(2);
     }
 });
 
