@@ -17,8 +17,11 @@
   },
   "homepage": "https://github.com/rehand/liveticker",
   "dependencies": {
+    "@babel/runtime": "^7.24.8",
     "@fancyapps/fancybox": "^3.5.7",
+    "babel-runtime": "^6.26.0",
     "dygraphs": "^2.1.0",
-    "jquery": "^3.5.1"
+    "jquery": "^2.2.4",
+    "meteor-node-stubs": "^1.2.1"
   }
 }
