@@ -1,7 +1,7 @@
 var CACHE_NAME = 'liveticker-cache-v1';
 var urlsToCache = [
     '/images/captain.png',
-    '/images/header.jpg',
+    '/images/header_new.jpg',
     '/images/in.png',
     '/images/out.png',
     '/images/penalty_miss.png',
@@ -9,6 +9,7 @@ var urlsToCache = [
     '/images/red.png',
     '/images/yellow.png',
     '/images/yellowred.png',
+    '/images/Muenzer-Logo_small.png',
     '/audio/hymne_sturm.mp3'
 ];
 
