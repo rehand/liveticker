@@ -472,7 +472,7 @@ if (Meteor.isClient) {
             this.next();
         }
     };
-
+/*
     Router.onBeforeAction(requireLogin, {
         except: [
             'frontendOverview',
@@ -484,4 +484,5 @@ if (Meteor.isClient) {
             'frontendChatDetail'
         ]
     });
+    */
 }
